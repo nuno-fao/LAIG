@@ -37,6 +37,7 @@ class XMLscene extends CGFscene {
         this.loadingProgress=0;
 
         this.defaultAppearance=new CGFappearance(this);
+        this.triangle = new MyRectangle(this,0,0,1,1);
     }
 
     /**
@@ -44,8 +45,8 @@ class XMLscene extends CGFscene {
      */    
     initCameras() {
     	//this.setCamera(this.graph.views[0]);
-    	this.camera = this.graph.views[0];
-    	this.interface.setActiveCamera(this.graph.views[0]);
+    	this.camera = this.graph.views[1];
+    	this.interface.setActiveCamera(this.graph.views[1]);
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -129,7 +130,7 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) {
             // Draw axis
             this.axis.display();
- 
+ 	    this.triangle.display();
             this.defaultAppearance.apply();
 
             // Displays the scene (MySceneGraph function).
