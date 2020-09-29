@@ -265,12 +265,34 @@ class MySceneGraph {
     					target.push(0);
     				}
     			}
-    			console.log(angle);
-    			console.log(near);
-    			console.log(far);
-    			console.log(position);
-    			console.log(target);
     			this.views.push(new CGFcamera(angle, near, far, position, target));
+    		}
+    		if(children[i].nodeName=="ortho"){
+    			let near = this.reader.getFloat(children[i], 'near')
+    			let far = this.reader.getFloat(children[i], 'far')
+    			let left = this.reader.getFloat(children[i], 'left')
+    			let right = this.reader.getFloat(children[i], 'right')
+    			let top = this.reader.getFloat(children[i], 'top')
+    			let bottom = this.reader.getFloat(children[i], 'bottom')
+    			let position = vec3.fromValues(0, 0, 0);
+    			let target = vec3.fromValues(0, 0, 0);
+    			let up = vec3.fromValues(0, 0, 0);
+    			var grandChildren = viewsNode.children[i].children;
+    			for(var u=0; u<grandChildren.length; u++){
+    				if(grandChildren[u].nodeName=="from"){
+    					position = this.parseCoordinates3D(grandChildren[u],"view position error");
+    					position.push(0);
+    				}
+    				if(grandChildren[u].nodeName=="to"){
+    					target = this.parseCoordinates3D(grandChildren[u],"view target error");
+    					target.push(0);
+    				}
+    				if(grandChildren[u].nodeName=="up"){
+    					up = this.parseCoordinates3D(grandChildren[u],"view direction error");
+    					up.push(0);
+    				}
+    			}
+    			this.views.push(new CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up ));
     		}
     	}
     		

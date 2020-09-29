@@ -41,15 +41,11 @@ class XMLscene extends CGFscene {
 
     /**
      * Initializes the scene cameras.
-     */
+     */    
     initCameras() {
-    	console.log(this.camera);
-    	this.camera.far = this.graph.views[0].far;
-    	this.camera.near = this.graph.views[0].near;
-    	this.camera.fov = this.graph.views[0].fov;
-    	this.camera.position = this.graph.views[0].position;
-    	this.camera.target = this.graph.views[0].target;
-    	console.log(this.camera);
+    	//this.setCamera(this.graph.views[0]);
+    	this.camera = this.graph.views[0];
+    	this.interface.setActiveCamera(this.graph.views[0]);
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
