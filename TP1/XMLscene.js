@@ -83,7 +83,12 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.axis = new CGFaxis(this, this.graph.referenceLength);
+    	if(this.graph.referenceLength>0){
+        	this.axis = new MyAxis(new CGFaxis(this, this.graph.referenceLength),true);
+    	}
+    	else{
+        	this.axis = new MyAxis(new CGFaxis(this, 1),false);    
+    	}
 
         this.gl.clearColor(...this.graph.background);
 

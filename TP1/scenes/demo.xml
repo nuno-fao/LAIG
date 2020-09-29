@@ -1,6 +1,6 @@
 <lsf>
     <initials>
-        <reference length="2" />
+        <reference length="0" />
         <!-- axis length; "0" means no axis displayed -->
         <root id="demoRoot" />
         <!-- identifier of root node of the scene graph; this node -->
