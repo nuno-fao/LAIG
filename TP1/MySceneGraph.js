@@ -409,9 +409,16 @@ class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
-
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        let children = texturesNode.children;
+        this.textures = [];
+        for (var i = 0; i < children.length; i++) {
+            let key = this.reader.getString(children[i],"id");
+            let path = this.reader.getString(children[i],"path")
+            if(this.textures[key] != null){
+                return "ID must be unique for each texture (conflict: ID = " + key + ")";                
+            }
+            this.textures[key] = new CGFtexture(this.scene, path);
+        }
         return null;
     }
 
@@ -444,11 +451,25 @@ class MySceneGraph {
             if (this.materials[materialID] != null)
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
-        }
+            let grandChildren = children[i].children;
+            this.materials[materialID] = new CGFappearance(this.scene);
+            for (var u= 0;u<grandChildren.length;u++){
+                if(grandChildren[u].nodeName=="ambient")
+                    this.materials[materialID].setAmbient(this.parseColor(grandChildren[u],"Color ERROR"));
 
-        //this.log("Parsed materials");
+                if(grandChildren[u].nodeName=="diffuse")
+                    this.materials[materialID].setDiffuse(this.parseColor(grandChildren[u],"Color ERROR"));
+
+                if(grandChildren[u].nodeName=="specular")
+                    this.materials[materialID].setSpecular(this.parseColor(grandChildren[u],"Color ERROR"));
+
+                if(grandChildren[u].nodeName=="emissive")
+                    this.materials[materialID].setEmission(this.parseColor(grandChildren[u],"Color ERROR"));
+
+                if(grandChildren[u].nodeName=="shininess")
+                    this.materials[materialID].setShininess(this.reader.getFloat(grandChildren[u],"value"));
+            }
+        }
         return null;
     }
 
