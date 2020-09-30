@@ -248,6 +248,10 @@ class MySceneGraph {
     	this.views = [];
     	let children = viewsNode.children;
     	for(var i=0;i<children.length; i++){
+            let key = this.reader.getString(children[i],"id");
+            if(this.views[key]!=null){
+                return "ID must be unique for each camera (conflict: ID = " + key + ")";                
+            }
     		let near = this.reader.getFloat(children[i], 'near')
     		let far = this.reader.getFloat(children[i], 'far')
     		let position = vec3.fromValues(0, 0, 0);
@@ -270,14 +274,14 @@ class MySceneGraph {
     		}
     		if(children[i].nodeName=="perspective"){
     			let angle = this.reader.getFloat(children[i], 'angle')/180.0*3.1415;
-    			this.views.push(new CGFcamera(angle, near, far, position, target));
+    			this.views[key] = new CGFcamera(angle, near, far, position, target);
     		}
     		if(children[i].nodeName=="ortho"){
     			let left = this.reader.getFloat(children[i], 'left')
     			let right = this.reader.getFloat(children[i], 'right')
     			let top = this.reader.getFloat(children[i], 'top')
     			let bottom = this.reader.getFloat(children[i], 'bottom')
-    			this.views.push(new CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up ));
+    			this.views[key] = new CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up );
     		}
     	}
     		

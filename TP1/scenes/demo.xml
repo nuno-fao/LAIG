@@ -12,7 +12,7 @@
             <from x="15" y="15" z="15" />
             <to x="0" y="-5" z="0" />
         </perspective>
-        <ortho id="demoOrtho" near="0.2" far="100" left="-8" right="8" top="8" bottom="-8">
+        <ortho id="defaultOrtho" near="0.2" far="100" left="-8" right="8" top="8" bottom="-8">
             <from x="2" y="0" z="10" />
             <to x="2" y="0" z="0" />
             <up x="0" y="3" z="0" /><!-- optional, default 0,1,0 -->
