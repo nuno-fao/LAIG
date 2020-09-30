@@ -1,6 +1,6 @@
 # LAIG 2020/2021
 
-## Group T2xG0y
+## Group T02G05
 | Name                      | Number    | E-Mail               |
 | ------------------------- | --------- | ------------------   |
 | Luís Miguel Pinto         | 201806206 | up201806206@fe.up.pt |
