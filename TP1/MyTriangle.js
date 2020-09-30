@@ -37,7 +37,7 @@ class MyTriangle     extends CGFobject {
 			0, 1, 2
 		];
 
-		//Facing Z positive NEED TO CHANGE THIS ONE
+		//Facing Z positive
 		this.normals = [
 			0, 0, 1,
 			0, 0, 1,
@@ -67,7 +67,7 @@ class MyTriangle     extends CGFobject {
 			0, 0,
 			a, 0,
 			c*cosalpha , c*sinalpha
-		]
+		];
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}

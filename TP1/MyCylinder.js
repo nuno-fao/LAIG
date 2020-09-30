@@ -7,55 +7,46 @@
  * @param x2 - x coordinate corner 2
  * @param y2 - y coordinate corner 2
  */
-class MyRectangle extends CGFobject {
-	constructor(scene, x1, y1, x2, y2) {
+class MyCylinder extends CGFobject {
+	constructor(scene, bottomRadius, topRadius, height, slices, stacks) {
 		super(scene);
-		this.x1 = x1;
-		this.x2 = x2;
-		this.y1 = y1;
-		this.y2 = y2;
+        this.bottomRadius=bottomRadius;
+        this.topRadius=topRadius;
+        this.height=height;
+        this.slices=slices;
+        this.stacks=stacks;
 
 		this.initBuffers();
 	}
 	
 	initBuffers() {
-		this.vertices = [
-			this.x1, this.y1, 0,	//0
-			this.x2, this.y1, 0,	//1
-			this.x1, this.y2, 0,	//2
-			this.x2, this.y2, 0		//3
-		];
+		this.vertices = [];
 
-		//Counter-clockwise reference of vertices
-		this.indices = [
-			0, 1, 2,
-			1, 3, 2
-		];
+		this.indices = [];
 
-		//Facing Z positive
-		this.normals = [
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1
-		];
-		
-		/*
-		Texture coords (s,t)
-		+----------> s
-        |
-        |
-		|
-		v
-        t
-        */
+		this.normals = [];
 
-		this.texCoords = [
-			0, 1,
-			1, 1,
-			0, 0,
-			1, 0
-		]
+        this.texCoords = [];
+        
+        
+        for (var i=0;i<=this.stacks;i++){
+            var trueRadius = i/this.stacks*(this.bottomRadius-this.topRadius) + this.topRadius;      //Radius of stack i
+
+            for(var j=0;j<=this.slices;j++){
+                var ang = j/this.slices*Math.PI*2;
+                var cos = Math.cos(ang);
+                var sin = Math.sin(ang);
+
+                this.vertices.push(trueRadius*cos, trueRadius*sin, (1-i/this.stacks)*this.height);
+                this.normals.push(cos,sin,(this.bottomRadius-this.topRadius)/this.height);
+                this.texCoords.push(j/this.slices,i/this.slices);
+                
+            }
+        }
+
+        
+
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
