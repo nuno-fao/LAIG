@@ -42,7 +42,19 @@ class MyCylinder extends CGFobject {
                 this.texCoords.push(j/this.slices,i/this.slices);
                 
             }
-        }
+		}
+		
+		for(var i=0;i=this.slices;i++){
+			for(var j=0;stack<=this.stacks;stack++){
+				var vert1 = (j)*(this.slices+1) + i;
+				var vert2 = (j)*(this.slices+1) + i+1;
+				var vert3 = (j+1)*(this.slices+1) + i;
+				var vert4 = (j+1)*(this.slices+1) + i+1;
+				
+				this.indices.push(vert1,vert3,vert2);
+				this.indices.push(vert3,vert4,vert2);
+			}
+		}
 
         
 
