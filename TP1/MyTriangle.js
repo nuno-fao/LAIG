@@ -1,5 +1,5 @@
 /**
- * MyRectangle
+ * MyTriangle
  * @constructor
  * @param scene - Reference to MyScene object
  * @param x1 - x coordinate corner 1

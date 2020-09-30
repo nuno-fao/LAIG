@@ -1,11 +1,12 @@
 /**
- * MyRectangle
+ * MyCylinder
  * @constructor
  * @param scene - Reference to MyScene object
- * @param x1 - x coordinate corner 1
- * @param y1 - y coordinate corner 1
- * @param x2 - x coordinate corner 2
- * @param y2 - y coordinate corner 2
+ * @param bottomRadius - radius of the base (at z=0)
+ * @param topRadius - radius of the top
+ * @param height - height of the cylinder (at z axis)
+ * @param slices - number of divisions in a circumference
+ * @param stacks - number of divisions along its height
  */
 class MyCylinder extends CGFobject {
 	constructor(scene, bottomRadius, topRadius, height, slices, stacks) {
@@ -28,7 +29,7 @@ class MyCylinder extends CGFobject {
 
         this.texCoords = [];
         
-        
+        //drawing body from top to bottom
         for (var i=0;i<=this.stacks;i++){
             var trueRadius = i/this.stacks*(this.bottomRadius-this.topRadius) + this.topRadius;      //Radius of stack i
 
@@ -43,7 +44,15 @@ class MyCylinder extends CGFobject {
                 
             }
 		}
-		
+
+		//set indices for drawing
+		/*
+		*	vert3->	 _______	<-vert4
+		*			|		|
+		*	vert1->	|_______|	<-vert2
+		*
+		*
+		*/
 		for(var i=0;i=this.slices;i++){
 			for(var j=0;stack<=this.stacks;stack++){
 				var vert1 = (j)*(this.slices+1) + i;
@@ -55,9 +64,6 @@ class MyCylinder extends CGFobject {
 				this.indices.push(vert3,vert4,vert2);
 			}
 		}
-
-        
-
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
