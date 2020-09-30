@@ -451,11 +451,25 @@ class MySceneGraph {
             if (this.materials[materialID] != null)
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
-        }
+            let grandChildren = children[i].children;
+            this.materials[materialID] = new CGFappearance(this.scene);
+            for (var u= 0;u<grandChildren.length;u++){
+                if(grandChildren[u].nodeName=="ambient")
+                    this.materials[materialID].setAmbient(this.parseColor(grandChildren[u],"Color ERROR"));
 
-        //this.log("Parsed materials");
+                if(grandChildren[u].nodeName=="diffuse")
+                    this.materials[materialID].setDiffuse(this.parseColor(grandChildren[u],"Color ERROR"));
+
+                if(grandChildren[u].nodeName=="specular")
+                    this.materials[materialID].setSpecular(this.parseColor(grandChildren[u],"Color ERROR"));
+
+                if(grandChildren[u].nodeName=="emissive")
+                    this.materials[materialID].setEmission(this.parseColor(grandChildren[u],"Color ERROR"));
+
+                if(grandChildren[u].nodeName=="shininess")
+                    this.materials[materialID].setShininess(this.reader.getFloat(grandChildren[u],"value"));
+            }
+        }
         return null;
     }
 
