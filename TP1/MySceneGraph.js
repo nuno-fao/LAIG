@@ -409,9 +409,16 @@ class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
-
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        let children = texturesNode.children;
+        this.textures = [];
+        for (var i = 0; i < children.length; i++) {
+            let key = this.reader.getString(children[i],"id");
+            let path = this.reader.getString(children[i],"path")
+            if(this.textures[key] != null){
+                return "ID must be unique for each texture (conflict: ID = " + key + ")";                
+            }
+            this.textures[key] = new CGFtexture(this.scene, path);
+        }
         return null;
     }
 
