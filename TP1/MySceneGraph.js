@@ -254,9 +254,9 @@ class MySceneGraph {
             }
     		let near = this.reader.getFloat(children[i], 'near')
     		let far = this.reader.getFloat(children[i], 'far')
-    		let position = vec3.fromValues(0, 0, 0);
-    		let target = vec3.fromValues(0, 0, 0);
-    		let up = vec3.fromValues(0, 0, 0);
+    		let position;
+    		let target;
+    		let up ;
     		var grandChildren = viewsNode.children[i].children;
     		for(var u=0; u<grandChildren.length; u++){
     			if(grandChildren[u].nodeName=="from"){
