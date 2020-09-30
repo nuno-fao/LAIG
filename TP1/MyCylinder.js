@@ -5,7 +5,7 @@
  * @param bottomRadius - radius of the base (at z=0)
  * @param topRadius - radius of the top
  * @param height - height of the cylinder (at z axis)
- * @param slices - number of divisions in a circumference
+ * @param slices - number of divisions around z axis
  * @param stacks - number of divisions along its height
  */
 class MyCylinder extends CGFobject {
@@ -30,10 +30,10 @@ class MyCylinder extends CGFobject {
         this.texCoords = [];
         
         //drawing body from top to bottom
-        for (var i=0;i<=this.stacks;i++){
+        for (let i=0;i<=this.stacks;i++){
             var trueRadius = i/this.stacks*(this.bottomRadius-this.topRadius) + this.topRadius;      //Radius of stack i
 
-            for(var j=0;j<=this.slices;j++){
+            for(let j=0;j<=this.slices;j++){
                 var ang = j/this.slices*Math.PI*2;
                 var cos = Math.cos(ang);
                 var sin = Math.sin(ang);
@@ -53,8 +53,8 @@ class MyCylinder extends CGFobject {
 		*
 		*
 		*/
-		for(var i=0;i=this.slices;i++){
-			for(var j=0;stack<=this.stacks;stack++){
+		for(let i=0;i=this.slices;i++){
+			for(let j=0;stack<=this.stacks;stack++){
 				var vert1 = (j)*(this.slices+1) + i;
 				var vert2 = (j)*(this.slices+1) + i+1;
 				var vert3 = (j+1)*(this.slices+1) + i;
