@@ -41,7 +41,6 @@ class MyCylinder extends CGFobject {
                 this.vertices.push(trueRadius*cos, trueRadius*sin, (1-i/this.stacks)*this.height);
                 this.normals.push(cos,sin,(this.bottomRadius-this.topRadius)/this.height);
                 this.texCoords.push(j/this.slices,i/this.slices);
-                
             }
 		}
 
@@ -54,8 +53,9 @@ class MyCylinder extends CGFobject {
 		*
 		*/
 		console.log(this.slices);
-		for(let i=0;i<=this.slices;i++){
-			for(let j=0;j<=this.stacks;j++){
+		let i;
+		for(i=0;i<this.slices;i++){
+			for(let j=0;j<this.stacks;j++){
 				var vert1 = (j)*(this.slices+1) + i;
 				var vert2 = (j)*(this.slices+1) + i+1;
 				var vert3 = (j+1)*(this.slices+1) + i;
@@ -63,8 +63,12 @@ class MyCylinder extends CGFobject {
 				
 				this.indices.push(vert1,vert3,vert2);
 				this.indices.push(vert3,vert4,vert2);
+
+				this.indices.push(vert3,vert1,vert2);
+				this.indices.push(vert4,vert3,vert2);
 			}
 		}
+		
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
