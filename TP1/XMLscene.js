@@ -37,7 +37,8 @@ class XMLscene extends CGFscene {
         this.loadingProgress=0;
 
         this.defaultAppearance=new CGFappearance(this);
-        this.triangle = new MyRectangle(this,0,0,1,1);
+
+        
     }
 
     /**
@@ -133,8 +134,9 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) {
             // Draw axis
             this.axis.display();
- 	    this.triangle.display();
             this.defaultAppearance.apply();
+            var key;
+            this.graph.rootNode.display();
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();

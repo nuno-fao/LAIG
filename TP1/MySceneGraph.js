@@ -31,6 +31,7 @@ class MySceneGraph {
         this.idRoot = null; // The id of the root element.
 
         this.axisCoords = [];
+        this.rootNode = null ;
         this.axisCoords['x'] = [1, 0, 0];
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
@@ -214,7 +215,7 @@ class MySceneGraph {
         var referenceIndex = nodeNames.indexOf("reference");
 
         // Get root of the scene.
-        if(rootIndex == -1)
+        if (rootIndex == -1)
             return "No root id defined for scene.";
 
         var rootNode = children[rootIndex];
@@ -225,7 +226,7 @@ class MySceneGraph {
         this.idRoot = id;
 
         // Get axis length        
-        if(referenceIndex == -1)
+        if (referenceIndex == -1)
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
 
         var refNode = children[referenceIndex];
@@ -245,46 +246,46 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseViews(viewsNode) {
-    	this.views = [];
-    	let children = viewsNode.children;
-    	for(var i=0;i<children.length; i++){
-            let key = this.reader.getString(children[i],"id");
-            if(this.views[key]!=null){
-                return "ID must be unique for each camera (conflict: ID = " + key + ")";                
+        this.views = [];
+        let children = viewsNode.children;
+        for (var i = 0; i < children.length; i++) {
+            let key = this.reader.getString(children[i], "id");
+            if (this.views[key] != null) {
+                return "ID must be unique for each camera (conflict: ID = " + key + ")";
             }
-    		let near = this.reader.getFloat(children[i], 'near')
-    		let far = this.reader.getFloat(children[i], 'far')
-    		let position;
-    		let target;
-    		let up ;
-    		var grandChildren = viewsNode.children[i].children;
-    		for(var u=0; u<grandChildren.length; u++){
-    			if(grandChildren[u].nodeName=="from"){
-    				position = this.parseCoordinates3D(grandChildren[u],"view position error");
-    				position.push(0);
-    			}
-    			if(grandChildren[u].nodeName=="to"){
-    				target = this.parseCoordinates3D(grandChildren[u],"view target error");
-    				target.push(0);
-    			}
-    			if(grandChildren[u].nodeName=="up"){
-    				up = this.parseCoordinates3D(grandChildren[u],"view direction error");
-    				up.push(0);
-    			}
-    		}
-    		if(children[i].nodeName=="perspective"){
-    			let angle = this.reader.getFloat(children[i], 'angle')/180.0*3.1415;
-    			this.views[key] = new CGFcamera(angle, near, far, position, target);
-    		}
-    		if(children[i].nodeName=="ortho"){
-    			let left = this.reader.getFloat(children[i], 'left')
-    			let right = this.reader.getFloat(children[i], 'right')
-    			let top = this.reader.getFloat(children[i], 'top')
-    			let bottom = this.reader.getFloat(children[i], 'bottom')
-    			this.views[key] = new CGFcameraOrtho( left, right, bottom, top, near, far, position, target, up );
-    		}
-    	}
-    		
+            let near = this.reader.getFloat(children[i], 'near')
+            let far = this.reader.getFloat(children[i], 'far')
+            let position;
+            let target;
+            let up;
+            var grandChildren = viewsNode.children[i].children;
+            for (var u = 0; u < grandChildren.length; u++) {
+                if (grandChildren[u].nodeName == "from") {
+                    position = this.parseCoordinates3D(grandChildren[u], "view position error");
+                    position.push(0);
+                }
+                if (grandChildren[u].nodeName == "to") {
+                    target = this.parseCoordinates3D(grandChildren[u], "view target error");
+                    target.push(0);
+                }
+                if (grandChildren[u].nodeName == "up") {
+                    up = this.parseCoordinates3D(grandChildren[u], "view direction error");
+                    up.push(0);
+                }
+            }
+            if (children[i].nodeName == "perspective") {
+                let angle = this.reader.getFloat(children[i], 'angle') / 180.0 * 3.1415;
+                this.views[key] = new CGFcamera(angle, near, far, position, target);
+            }
+            if (children[i].nodeName == "ortho") {
+                let left = this.reader.getFloat(children[i], 'left')
+                let right = this.reader.getFloat(children[i], 'right')
+                let top = this.reader.getFloat(children[i], 'top')
+                let bottom = this.reader.getFloat(children[i], 'bottom')
+                this.views[key] = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
+            }
+        }
+
         return null;
     }
 
@@ -352,7 +353,7 @@ class MySceneGraph {
             }
             else {
                 attributeNames.push(...["enable", "position", "ambient", "diffuse", "specular"]);
-                attributeTypes.push(...["boolean","position", "color", "color", "color"]);
+                attributeTypes.push(...["boolean", "position", "color", "color", "color"]);
             }
 
             // Get id of the current light.
@@ -412,10 +413,10 @@ class MySceneGraph {
         let children = texturesNode.children;
         this.textures = [];
         for (var i = 0; i < children.length; i++) {
-            let key = this.reader.getString(children[i],"id");
-            let path = this.reader.getString(children[i],"path")
-            if(this.textures[key] != null){
-                return "ID must be unique for each texture (conflict: ID = " + key + ")";                
+            let key = this.reader.getString(children[i], "id");
+            let path = this.reader.getString(children[i], "path")
+            if (this.textures[key] != null) {
+                return "ID must be unique for each texture (conflict: ID = " + key + ")";
             }
             this.textures[key] = new CGFtexture(this.scene, path);
         }
@@ -453,21 +454,21 @@ class MySceneGraph {
 
             let grandChildren = children[i].children;
             this.materials[materialID] = new CGFappearance(this.scene);
-            for (var u= 0;u<grandChildren.length;u++){
-                if(grandChildren[u].nodeName=="ambient")
-                    this.materials[materialID].setAmbient(this.parseColor(grandChildren[u],"Color ERROR"));
+            for (var u = 0; u < grandChildren.length; u++) {
+                if (grandChildren[u].nodeName == "ambient")
+                    this.materials[materialID].setAmbient(this.parseColor(grandChildren[u], "Color ERROR"));
 
-                if(grandChildren[u].nodeName=="diffuse")
-                    this.materials[materialID].setDiffuse(this.parseColor(grandChildren[u],"Color ERROR"));
+                if (grandChildren[u].nodeName == "diffuse")
+                    this.materials[materialID].setDiffuse(this.parseColor(grandChildren[u], "Color ERROR"));
 
-                if(grandChildren[u].nodeName=="specular")
-                    this.materials[materialID].setSpecular(this.parseColor(grandChildren[u],"Color ERROR"));
+                if (grandChildren[u].nodeName == "specular")
+                    this.materials[materialID].setSpecular(this.parseColor(grandChildren[u], "Color ERROR"));
 
-                if(grandChildren[u].nodeName=="emissive")
-                    this.materials[materialID].setEmission(this.parseColor(grandChildren[u],"Color ERROR"));
+                if (grandChildren[u].nodeName == "emissive")
+                    this.materials[materialID].setEmission(this.parseColor(grandChildren[u], "Color ERROR"));
 
-                if(grandChildren[u].nodeName=="shininess")
-                    this.materials[materialID].setShininess(this.reader.getFloat(grandChildren[u],"value"));
+                if (grandChildren[u].nodeName == "shininess")
+                    this.materials[materialID].setShininess(this.reader.getFloat(grandChildren[u], "value"));
             }
         }
         return null;
@@ -477,10 +478,8 @@ class MySceneGraph {
    * Parses the <nodes> block.
    * @param {nodes block element} nodesNode
    */
-  parseNodes(nodesNode) {
+    parseNodes(nodesNode) {
         var children = nodesNode.children;
-
-        this.nodes = [];
 
         var grandChildren = [];
         var grandgrandChildren = [];
@@ -513,21 +512,89 @@ class MySceneGraph {
             var transformationsIndex = nodeNames.indexOf("transformations");
             var materialIndex = nodeNames.indexOf("material");
             var textureIndex = nodeNames.indexOf("texture");
-            var descendantsIndex = nodeNames.indexOf("descendants");
 
-            this.onXMLMinorError("To do: Parse nodes.");
-            // Transformations
+            this.nodes[nodeID]=new MyNode(
+                this.scene,
+                children[i].children[transformationsIndex],
+                children[i].children[textureIndex],
+                children[i].children[materialIndex]
+                );
 
-            // Material
-
-            // Texture
-
-            // Descendants
         }
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "node") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current node.
+            var nodeID = this.reader.getString(children[i], 'id');
+            if (nodeID == null){
+                return "node not define";
+            }
+            grandChildren = children[i].children;
+
+            nodeNames = [];
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            var descendants = nodeNames.indexOf("descendants");
+
+            for( var j=0;j<children[i].children[descendants].children.length;j++){
+                if(children[i].children[descendants].children[j].nodeName=="noderef"){
+                    this.nodes[nodeID].addDescendente(this.nodes[this.reader.getString(grandChildren[descendants].children[j],'id')]);
+                    this.nodes[this.reader.getString(grandChildren[descendants].children[j],'id')].notRoot = true;
+                }
+                else{
+                    switch(this.reader.getString(children[i].children[descendants].children[j],'type')){
+                        case "triangle":{
+                            let x1 = this.reader.getFloat(children[i].children[descendants].children[j],'x1');
+                            let x2 = this.reader.getFloat(children[i].children[descendants].children[j],'x2');
+                            let x3 = this.reader.getFloat(children[i].children[descendants].children[j],'x3');
+                            let y1 = this.reader.getFloat(children[i].children[descendants].children[j],'y1');
+                            let y2 = this.reader.getFloat(children[i].children[descendants].children[j],'y2');
+                            let y3 = this.reader.getFloat(children[i].children[descendants].children[j],'y3');
+                            this.nodes[nodeID].addDescendente(new MyTriangle(this.scene,x1,y1,x2,y2,x3,y3));
+                            break;
+                        }
+                        case "rectangle":{
+                            let x1 = this.reader.getFloat(children[i].children[descendants].children[j],'x1');
+                            let x2 = this.reader.getFloat(children[i].children[descendants].children[j],'x2');
+                            let y1 = this.reader.getFloat(children[i].children[descendants].children[j],'y1');
+                            let y2 = this.reader.getFloat(children[i].children[descendants].children[j],'y2');
+                            this.nodes[nodeID].addDescendente(new MyRectangle(this.scene,x1,y1,x2,y2));
+                            break;
+                        }
+                        case "cylinder":{
+                            let height = this.reader.getFloat(children[i].children[descendants].children[j],'height');
+                            let topRadius = this.reader.getFloat(children[i].children[descendants].children[j],'topRadius');
+                            let bottomRadius = this.reader.getFloat(children[i].children[descendants].children[j],'bottomRadius');
+                            let stacks = this.reader.getFloat(children[i].children[descendants].children[j],'stacks');
+                            let slices = this.reader.getFloat(children[i].children[descendants].children[j],'slices');
+                            this.nodes[nodeID].addDescendente(new MyCylinder(this.scene,height,topRadius,bottomRadius,stacks,slices));
+                            break;
+                        }
+                        case "sphere":{
+                            let radius = this.reader.getFloat(children[i].children[descendants].children[j],'radius');
+                            let stacks = this.reader.getFloat(children[i].children[descendants].children[j],'stacks');
+                            let slices = this.reader.getFloat(children[i].children[descendants].children[j],'slices');
+                            this.nodes[nodeID].addDescendente(new MySphere(this.scene,radius,stacks,slices));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        for(var key in this.nodes){
+            if(this.nodes[key].notRoot==false)
+            this.rootNode = this.nodes[key];
+        }
+        console.log(this.nodes);
     }
 
-
-    parseBoolean(node, name, messageError){
+    parseBoolean(node, name, messageError) {
         var boolVal = true;
         boolVal = this.reader.getBoolean(node, name);
         if (!(boolVal != null && !isNaN(boolVal) && (boolVal == true || boolVal == false)))
@@ -625,9 +692,9 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        
+
         //To do: Create display loop for transversing the scene graph, calling the root node's display function
-        
+
         //this.nodes[this.idRoot].display()
     }
 }

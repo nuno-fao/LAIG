@@ -100,7 +100,10 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="triangle" x1="ff" y1="ff" x2="ff" y2="ff" x3="ff" y3="ff" z3="ff"/>
+                <leaf type="triangle" x1="-3" y1="-3" x2="0" y2="0" x3="-3" y3="0"/>
+                <leaf type="rectangle" x1="-0" y1="-1" x2="-1" y2="-0" />
+                <leaf type="cylinder" height="5" topRadius="5" bottomRadius="3" stacks="10" slices="10"/>
+                <leaf type="sphere" radius="0.53" slices="10" stacks="100"/>
                 <!-- x y z coordinates of each vertex -->
             </descendants>
         </node>

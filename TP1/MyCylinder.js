@@ -53,8 +53,9 @@ class MyCylinder extends CGFobject {
 		*
 		*
 		*/
-		for(let i=0;i=this.slices;i++){
-			for(let j=0;stack<=this.stacks;stack++){
+		console.log(this.slices);
+		for(let i=0;i<=this.slices;i++){
+			for(let j=0;j<=this.stacks;j++){
 				var vert1 = (j)*(this.slices+1) + i;
 				var vert2 = (j)*(this.slices+1) + i+1;
 				var vert3 = (j+1)*(this.slices+1) + i;
