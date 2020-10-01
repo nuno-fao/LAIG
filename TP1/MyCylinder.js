@@ -43,6 +43,7 @@ class MyCylinder extends CGFobject {
                 this.texCoords.push(j/this.slices,i/this.slices);
             }
 		}
+		
 
 		//set indices for drawing
 		/*
@@ -52,7 +53,6 @@ class MyCylinder extends CGFobject {
 		*
 		*
 		*/
-		console.log(this.slices);
 		let i;
 		for(i=0;i<this.slices;i++){
 			for(let j=0;j<this.stacks;j++){
@@ -68,6 +68,8 @@ class MyCylinder extends CGFobject {
 				this.indices.push(vert4,vert3,vert2);
 			}
 		}
+		
+		
 		
 
 		this.primitiveType = this.scene.gl.TRIANGLES;

@@ -573,14 +573,14 @@ class MySceneGraph {
                             let bottomRadius = this.reader.getFloat(children[i].children[descendants].children[j],'bottomRadius');
                             let stacks = this.reader.getFloat(children[i].children[descendants].children[j],'stacks');
                             let slices = this.reader.getFloat(children[i].children[descendants].children[j],'slices');
-                            this.nodes[nodeID].addDescendente(new MyCylinder(this.scene,height,topRadius,bottomRadius,stacks,slices));
+                            this.nodes[nodeID].addDescendente(new MyCylinder(this.scene,bottomRadius,topRadius,height,stacks,slices));
                             break;
                         }
                         case "sphere":{
                             let radius = this.reader.getFloat(children[i].children[descendants].children[j],'radius');
                             let stacks = this.reader.getFloat(children[i].children[descendants].children[j],'stacks');
                             let slices = this.reader.getFloat(children[i].children[descendants].children[j],'slices');
-                            this.nodes[nodeID].addDescendente(new MySphere(this.scene,radius,stacks,slices));
+                            this.nodes[nodeID].addDescendente(new MySphere(this.scene,radius,slices,stacks));
                             break;
                         }
                     }
