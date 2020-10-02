@@ -13,7 +13,6 @@ class MyTorus extends CGFobject {
 		super(scene);
 		this.innerRadius = innerRadius;
 		this.outerRadius = outerRadius;
-		this.height = height;
 		this.slices = slices;
 		this.loops = loops;
 
@@ -30,19 +29,23 @@ class MyTorus extends CGFobject {
 		this.texCoords = [];
 
 
-		//drawing body from top to bottom
-		for (let i = 0; i <= this.stacks; i++) {
+		let u, v, vertX, vertY, vertZ;
+		//thank god for google
+		for (let i = 0; i <= this.slices; i++) {
 
 			for (let j = 0; j <= this.loops; j++) {
-				
-                var u = (j/this.loops)*Math.PI*2;
-                var v = (i/this.slices)*Math.PI*2;
 
-				this.vertices.push(
-                    (this.outerRadius + this.innerRadius*Math.cos(v))*Math.cos(u),
-                    (this.outerRadius + this.innerRadius*Math.cos(v))*Math.sin(u),
-                    Math.sin(v)*this.inner
-                );
+                u = (j/this.loops)*Math.PI*2;
+				v = (i/this.slices)*Math.PI*2;
+				
+				vertX=(this.outerRadius + this.innerRadius*Math.cos(v))*Math.cos(u);
+				vertY=(this.outerRadius + this.innerRadius*Math.cos(v))*Math.sin(u);
+				vertZ=Math.sin(v)*this.innerRadius;
+
+				this.vertices.push(vertX,vertY,vertZ);
+				this.normals.push(vertX,vertY,vertZ);	//THESE ARE NOT CORRECT
+				this.texCoords.push(j / this.loops, i / this.slices);
+				
 			}
 		}
 
@@ -56,15 +59,15 @@ class MyTorus extends CGFobject {
 		*
 		*/
 		
-		for (i = 0; i < this.slices; i++) {
+		for (let i = 0; i < this.slices; i++) {
 			for (let j = 0; j < this.loops; j++) {
 				var vert1 = (j) * (this.slices + 1) + i;
 				var vert2 = (j) * (this.slices + 1) + i + 1;
 				var vert3 = (j + 1) * (this.slices + 1) + i;
 				var vert4 = (j + 1) * (this.slices + 1) + i + 1;
 
-				this.indices.push(vert1, vert3, vert2);
-				this.indices.push(vert3, vert4, vert2);
+				this.indices.push(vert2, vert3, vert1);
+				this.indices.push(vert2, vert4, vert3);
 			}
 		}
 
