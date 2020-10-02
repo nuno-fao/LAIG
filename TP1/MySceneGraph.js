@@ -542,55 +542,14 @@ class MySceneGraph {
 
             var descendants = nodeNames.indexOf("descendants");
 
-            for( var j=0;j<children[i].children[descendants].children.length;j++){
-                if(children[i].children[descendants].children[j].nodeName=="noderef"){
-                    this.nodes[nodeID].addDescendente(this.nodes[this.reader.getString(grandChildren[descendants].children[j],'id')]);
-                    this.nodes[this.reader.getString(grandChildren[descendants].children[j],'id')].notRoot = true;
+            for( var j=0;j<grandChildren[descendants].children.length;j++){
+                let grandgrandChildren = grandChildren[descendants].children[j];
+                if(grandgrandChildren.nodeName=="noderef"){
+                    this.nodes[nodeID].addDescendente(this.nodes[this.reader.getString(grandgrandChildren,'id')]);
+                    this.nodes[this.reader.getString(grandgrandChildren,'id')].notRoot = true;
                 }
                 else{
-                    switch(this.reader.getString(children[i].children[descendants].children[j],'type')){
-                        case "triangle":{
-                            let x1 = this.reader.getFloat(children[i].children[descendants].children[j],'x1');
-                            let x2 = this.reader.getFloat(children[i].children[descendants].children[j],'x2');
-                            let x3 = this.reader.getFloat(children[i].children[descendants].children[j],'x3');
-                            let y1 = this.reader.getFloat(children[i].children[descendants].children[j],'y1');
-                            let y2 = this.reader.getFloat(children[i].children[descendants].children[j],'y2');
-                            let y3 = this.reader.getFloat(children[i].children[descendants].children[j],'y3');
-                            this.nodes[nodeID].addDescendente(new MyTriangle(this.scene,x1,y1,x2,y2,x3,y3));
-                            break;
-                        }
-                        case "rectangle":{
-                            let x1 = this.reader.getFloat(children[i].children[descendants].children[j],'x1');
-                            let x2 = this.reader.getFloat(children[i].children[descendants].children[j],'x2');
-                            let y1 = this.reader.getFloat(children[i].children[descendants].children[j],'y1');
-                            let y2 = this.reader.getFloat(children[i].children[descendants].children[j],'y2');
-                            this.nodes[nodeID].addDescendente(new MyRectangle(this.scene,x1,y1,x2,y2));
-                            break;
-                        }
-                        case "cylinder":{
-                            let height = this.reader.getFloat(children[i].children[descendants].children[j],'height');
-                            let topRadius = this.reader.getFloat(children[i].children[descendants].children[j],'topRadius');
-                            let bottomRadius = this.reader.getFloat(children[i].children[descendants].children[j],'bottomRadius');
-                            let stacks = this.reader.getFloat(children[i].children[descendants].children[j],'stacks');
-                            let slices = this.reader.getFloat(children[i].children[descendants].children[j],'slices');
-                            this.nodes[nodeID].addDescendente(new MyCylinder(this.scene,bottomRadius,topRadius,height,slices,stacks));
-                            break;
-                        }
-                        case "sphere":{
-                            let radius = this.reader.getFloat(children[i].children[descendants].children[j],'radius');
-                            let stacks = this.reader.getFloat(children[i].children[descendants].children[j],'stacks');
-                            let slices = this.reader.getFloat(children[i].children[descendants].children[j],'slices');
-                            this.nodes[nodeID].addDescendente(new MySphere(this.scene,radius,slices,stacks));
-                            break;
-                        }
-                        case "torus":{
-                            let inner = this.reader.getFloat(children[i].children[descendants].children[j],'inner');
-                            let outer = this.reader.getFloat(children[i].children[descendants].children[j],'outer');
-                            let slices = this.reader.getFloat(children[i].children[descendants].children[j],'slices');
-                            let loops = this.reader.getFloat(children[i].children[descendants].children[j],'loops');
-                            this.nodes[nodeID].addDescendente(new MyTorus(this.scene,inner,outer,slices,loops));
-                        }
-                    }
+                    this.auxiliaryParseLeaf(grandgrandChildren,nodeID);
                 }
             }
         }
@@ -599,6 +558,51 @@ class MySceneGraph {
             this.rootNode = this.nodes[key];
         }
         console.log(this.nodes);
+    }
+    auxiliaryParseLeaf(leaf,nodeID){
+        switch(this.reader.getString(leaf,'type')){
+            case "triangle":{
+                let x1 = this.reader.getFloat(leaf,'x1');
+                let x2 = this.reader.getFloat(leaf,'x2');
+                let x3 = this.reader.getFloat(leaf,'x3');
+                let y1 = this.reader.getFloat(leaf,'y1');
+                let y2 = this.reader.getFloat(leaf,'y2');
+                let y3 = this.reader.getFloat(leaf,'y3');
+                this.nodes[nodeID].addDescendente(new MyTriangle(this.scene,x1,y1,x2,y2,x3,y3));
+                break;
+            }
+            case "rectangle":{
+                let x1 = this.reader.getFloat(leaf,'x1');
+                let x2 = this.reader.getFloat(leaf,'x2');
+                let y1 = this.reader.getFloat(leaf,'y1');
+                let y2 = this.reader.getFloat(leaf,'y2');
+                this.nodes[nodeID].addDescendente(new MyRectangle(this.scene,x1,y1,x2,y2));
+                break;
+            }
+            case "cylinder":{
+                let height = this.reader.getFloat(leaf,'height');
+                let topRadius = this.reader.getFloat(leaf,'topRadius');
+                let bottomRadius = this.reader.getFloat(leaf,'bottomRadius');
+                let stacks = this.reader.getFloat(leaf,'stacks');
+                let slices = this.reader.getFloat(leaf,'slices');
+                this.nodes[nodeID].addDescendente(new MyCylinder(this.scene,bottomRadius,topRadius,height,slices,stacks));
+                break;
+            }
+            case "sphere":{
+                let radius = this.reader.getFloat(leaf,'radius');
+                let stacks = this.reader.getFloat(leaf,'stacks');
+                let slices = this.reader.getFloat(leaf,'slices');
+                this.nodes[nodeID].addDescendente(new MySphere(this.scene,radius,slices,stacks));
+                break;
+            }
+            case "torus":{
+                let inner = this.reader.getFloat(leaf,'inner');
+                let outer = this.reader.getFloat(leaf,'outer');
+                let slices = this.reader.getFloat(leaf,'slices');
+                let loops = this.reader.getFloat(leaf,'loops');
+                this.nodes[nodeID].addDescendente(new MyTorus(this.scene,inner,outer,slices,loops));
+            }
+        }
     }
 
     parseBoolean(node, name, messageError) {
