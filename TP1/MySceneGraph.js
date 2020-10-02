@@ -583,6 +583,13 @@ class MySceneGraph {
                             this.nodes[nodeID].addDescendente(new MySphere(this.scene,radius,slices,stacks));
                             break;
                         }
+                        case "torus":{
+                            let inner = this.reader.getFloat(children[i].children[descendants].children[j],'inner');
+                            let outer = this.reader.getFloat(children[i].children[descendants].children[j],'outer');
+                            let slices = this.reader.getFloat(children[i].children[descendants].children[j],'slices');
+                            let loops = this.reader.getFloat(children[i].children[descendants].children[j],'loops');
+                            this.nodes[nodeID].addDescendente(new MyTorus(this.scene,inner,outer,slices,loops));
+                        }
                     }
                 }
             }
