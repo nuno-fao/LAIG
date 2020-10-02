@@ -11,7 +11,8 @@
 
 - (items describing main strong points)
 - Scene
-  - (Brief description of the created scene)
+  - The scene we want to create is a simple dinning table (and a chair) with some food like an apple and a donut in order to use all the primitives
+  - There will also be a floor and a wall so the scene doesn't look to empty
   - (relative link to the scene)
 ----
 ## Issues/Problems
