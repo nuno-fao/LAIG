@@ -156,12 +156,15 @@ class XMLscene extends CGFscene {
             this.loadingProgress++;
         }
 
-        this.popMatrix();/*
+        this.popMatrix();
+        setTimeout(() => { }, 200);
+        
+        
         this.frames+=1;
         if(this.frames%50==0){
         	let now = Date.now();
         	console.log(this.frames/((now-this.start)/1000.0));
-        }*/
+        }
         // ---- END Background, camera and axis setup
     }
 }

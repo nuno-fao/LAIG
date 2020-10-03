@@ -512,6 +512,7 @@ class MySceneGraph {
             var transformationsIndex = nodeNames.indexOf("transformations");
             var materialIndex = nodeNames.indexOf("material");
             var textureIndex = nodeNames.indexOf("texture");
+            var descendants = nodeNames.indexOf("descendants");
 
             this.nodes[nodeID]=new MyNode(
                 this.scene,
@@ -540,7 +541,6 @@ class MySceneGraph {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
-            var descendants = nodeNames.indexOf("descendants");
 
             for( var j=0;j<grandChildren[descendants].children.length;j++){
                 let grandgrandChildren = grandChildren[descendants].children[j];
@@ -552,6 +552,62 @@ class MySceneGraph {
                     this.auxiliaryParseLeaf(grandgrandChildren,nodeID);
                 }
             }
+
+            this.scene.loadIdentity();
+            for(let j = 0; j < grandChildren[transformationsIndex].children.length;j++){
+                let grandgrandChildren = grandChildren[transformationsIndex].children[j]; 
+
+                switch(grandgrandChildren.nodeName){
+                    case "translation":{
+                        let position = this.parseCoordinates3D(grandgrandChildren,"");
+                        //console.log(position)
+                        this.scene.translate(position[0],position[1],position[2]);
+                        
+                        break;
+                    }
+                    case "rotation":{
+                        let axis = this.reader.getString(grandgrandChildren,"axis");  
+                        let angle = this.reader.getFloat(grandgrandChildren,"angle");  
+                        switch(axis){
+                            case "x":{
+                                this.scene.rotate(angle,1,0,0);
+                                break;
+                            }
+                            case "y":{
+                                this.scene.rotate(angle,0,1,0);
+                                break;
+                            }
+                            case "z":{
+                                this.scene.rotate(angle,0,0,1);
+                                break;
+                            }
+                            case "xx":{
+                                this.scene.rotate(angle,1,0,0);
+                                break;
+                            }
+                            case "yy":{
+                                this.scene.rotate(angle,0,1,0);
+                                break;
+                            }
+                            case "zz":{
+                                this.scene.rotate(angle,0,0,1);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    case "scale":{
+                        let sx = this.reader.getFloat(grandgrandChildren,"sx");  
+                        let sy = this.reader.getFloat(grandgrandChildren,"sy"); 
+                        let sz = this.reader.getFloat(grandgrandChildren,"sz"); 
+
+                        this.scene.scale(sx,sy,sz);
+                        
+                        break;
+                    }
+                }             
+            }
+            this.nodes[nodeID].tg_matrix = this.scene.getMatrix();
         }
         for(var key in this.nodes){
             if(this.nodes[key].notRoot==false)
