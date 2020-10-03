@@ -43,7 +43,7 @@ class MyTorus extends CGFobject {
 				vertZ=Math.sin(v)*this.innerRadius;
 
 				this.vertices.push(vertX,vertY,vertZ);
-				this.normals.push(vertX,vertY,vertZ);	//THESE ARE NOT CORRECT
+				this.normals.push(Math.cos(v)*Math.cos(u),Math.cos(v)*Math.sin(u),Math.sin(v));	//THESE ARE NOT CORRECT
 				this.texCoords.push(j / this.loops, i / this.slices);
 				
 			}
@@ -61,13 +61,13 @@ class MyTorus extends CGFobject {
 		
 		for (let i = 0; i < this.slices; i++) {
 			for (let j = 0; j < this.loops; j++) {
-				var vert1 = (j) * (this.slices + 1) + i;
-				var vert2 = (j) * (this.slices + 1) + i + 1;
-				var vert3 = (j + 1) * (this.slices + 1) + i;
-				var vert4 = (j + 1) * (this.slices + 1) + i + 1;
+				var vert1 = i * (this.loops+1) + j
+				var vert2 = (i+1)*(this.loops+1) +j;
+				var vert3 = i * (this.loops+1) + j + 1;
+				var vert4 = (i+1)*(this.loops+1) + j + 1;
 
-				this.indices.push(vert2, vert3, vert1);
-				this.indices.push(vert2, vert4, vert3);
+				this.indices.push(vert2, vert1, vert3);
+				this.indices.push(vert2, vert3, vert4);
 			}
 		}
 

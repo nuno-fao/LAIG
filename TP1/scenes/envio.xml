@@ -67,14 +67,14 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <scale sx="2" sy="2" sz="2"/>
+                <scale sx="1" sy="1" sz="1"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <noderef id="mesa" />
-                <noderef id="cadeira" />
+                <noderef id="cadeiras" />
                 <noderef id="chão" />
                 <noderef id="parede" />
             </descendants>
@@ -109,13 +109,13 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="0" y="10" z="-10"/>
+                <translation x="0" y="2.5" z="-4"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="rectangle" x1="-10" y1="-10" x2="10" y2="0" />
+                <leaf type="rectangle" x1="-10" y1="-2.5" x2="10" y2="0" />
                   <!-- 2D coordinates on the XY plane for bottom-left and top-right vertices. -->
             </descendants>
         </node>
@@ -128,7 +128,7 @@
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
-            <transformations>                
+            <transformations>          
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -138,8 +138,150 @@
                 <noderef id="pernas_mesa" />
                 <noderef id="toalha" />
                 <noderef id="copo" />
-                <noderef id="maçã" />
+                <noderef id="laranja" />
                 <noderef id="bolo" />
+            </descendants>
+        </node>
+
+        <node id="cadeiras">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cadeira1" />
+                <noderef id="cadeira2" />
+                <noderef id="cadeira3" />
+                <noderef id="cadeira4" />
+                <noderef id="cadeira5" />
+                <noderef id="cadeira6" />
+            </descendants>
+        </node>
+        <node id="cadeira1">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.3" y="0" z="0.4"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cadeira" />
+            </descendants>
+        </node>
+        <node id="cadeira2">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="-0.3" y="0" z="0.4"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cadeira" />
+            </descendants>
+        </node>
+        <node id="cadeira3">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.3" y="0" z="-0.4"/>
+                <rotation axis="yy" angle="3.1415"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cadeira" />
+            </descendants>
+        </node>
+        <node id="cadeira4">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="-0.3" y="0" z="-0.4"/>
+                <rotation axis="yy" angle="3.1415"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cadeira" />
+            </descendants>
+        </node>
+        <node id="cadeira5">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.75" y="0" z="0"/>
+                <rotation axis="yy" angle="1.57075"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cadeira" />
+            </descendants>
+        </node>
+        <node id="cadeira6">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="-0.75" y="0" z="0"/>
+                <rotation axis="yy" angle="-1.57075"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cadeira" />
             </descendants>
         </node>
         <node id="cadeira">            <!-- defines one intermediate node; may be repeated as necessary -->
@@ -152,7 +294,6 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="0" y="0" z="0"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -241,7 +382,7 @@
                   <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with ZZ; must have top and bottom caps-->
             </descendants>
         </node>
-        <node id="maçã">            <!-- defines one intermediate node; may be repeated as necessary -->
+        <node id="laranja">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
@@ -251,13 +392,13 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
+                <translation x="-0.5" y="0.8" z="0"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="cylinder" height="ff" topRadius="ff" bottomRadius="ff" stacks="ii" slices="ii"/>
-                  <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with ZZ; must have top and bottom caps-->
+                <leaf type="sphere" radius="0.05" stacks="15" slices="16"/>
             </descendants>
         </node>
         <node id="bolo">            <!-- defines one intermediate node; may be repeated as necessary -->
@@ -270,12 +411,13 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
+                <translation x="0" y="1" z="0"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="cylinder" height="ff" topRadius="ff" bottomRadius="ff" stacks="ii" slices="ii"/>
+                <leaf type="torus"  inner="1" outer="3" slices="30" loops="7"/>
                   <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with ZZ; must have top and bottom caps-->
             </descendants>
         </node>
@@ -289,9 +431,9 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="2" y="0.45" z="2"/>
+                <translation x="0" y="0.45" z="0"/>
                 <rotation axis="xx" angle="-1.57075"/>
-                <scale sx="0.4" sy="0.4" sz="0.025"/>
+                <scale sx="0.4" sy="0.4" sz="0.04"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -310,7 +452,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="2" y="0.225" z="2"/>
+                <translation x="0" y="0.225" z="0"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -332,7 +474,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <scale sx="0.03" sy="0.45" sz="0.03"/>
+                <scale sx="0.08" sy="0.45" sz="0.08"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -529,7 +671,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="2.18" y="0.725" z="2.18"/>
+                <translation x="0.18" y="0.725" z="0.18"/>
                 <scale sx="0.04" sy="0.55" sz="0.04"/>
             </transformations>
 
@@ -549,7 +691,6 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="2" y="0" z="2"/>
                 <translation x="-0.18" y="0.725" z="0.18"/>
                 <scale sx="0.04" sy="0.55" sz="0.04"/>
             </transformations>
@@ -570,6 +711,8 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
+                <translation x="0" y="0.96" z="0.18"/>
+                <scale sx="0.38" sy="0.08" sz="0.04"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -588,12 +731,14 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
+                <translation x="0" y="0.725" z="0.18"/>
+                <scale sx="0.10" sy="0.55" sz="0.04"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <noderef id="pilar_costas_h" />           
+                <noderef id="pilar_costas_v" />           
             </descendants>
         </node>
         <node id="perna_mesa">            <!-- defines one intermediate node; may be repeated as necessary -->

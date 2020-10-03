@@ -609,11 +609,7 @@ class MySceneGraph {
             }
             this.nodes[nodeID].tg_matrix = this.scene.getMatrix();
         }
-        for(var key in this.nodes){
-            if(this.nodes[key].notRoot==false)
-            this.rootNode = this.nodes[key];
-        }
-        console.log(this.nodes);
+        this.rootNode = this.nodes[this.idRoot];
     }
     auxiliaryParseLeaf(leaf,nodeID){
         switch(this.reader.getString(leaf,'type')){
