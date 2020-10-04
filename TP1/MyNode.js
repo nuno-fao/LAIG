@@ -26,7 +26,7 @@ class MyNode {
 			materialEx = this.scene.defaultMaterial;
 		}
 		materialEx.apply();
-		if(this.scene.textureStack.length!=0){
+		if(this.scene.textureStack.length!=0 && this.texture!="clear"){
 			this.scene.textureStack[this.scene.textureStack.length-1].bind();
 		}
 		

@@ -570,7 +570,10 @@ class MySceneGraph {
             aft = this.reader.getString(grandChildren[textureIndex].children[0],"aft");
 
             let textureID = this.reader.getString(grandChildren[textureIndex],"id");
-            if(textureID!="null"){
+            if(textureID=="clear"){
+                this.nodes[nodeID].texture = "clear";
+            }
+            else if(textureID!="null"){
                 this.nodes[nodeID].texture = this.textures[textureID];
             }
             else{

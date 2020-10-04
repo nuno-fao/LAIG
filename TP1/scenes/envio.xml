@@ -21,7 +21,7 @@
 
     <illumination>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />           <!-- global ambient -->
-        <background r="0.1" g="0.7" b="1.0" a="1.0" />        <!-- background color -->
+        <background r="0" g="0" b="0" a="1.0" />        <!-- background color -->
     </illumination>
 
 
@@ -40,8 +40,8 @@
             <!-- enable/disable -->
             <position x="1.04147" y="1.7" z="0" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
             <ambient r="0" g="0" b="0" a="1.0" />                   <!-- ambient component -->
-            <diffuse r="0.1" g="0.1" b="0" a="1.0" />             <!-- diffuse component -->
-            <specular r="0.1" g="0.1" b="0.5" a="1.0" />            <!-- specular component -->
+            <diffuse r="0.2" g="0.2" b="0" a="1.0" />             <!-- diffuse component -->
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />            <!-- specular component -->
         </light>
     </lights>
 
@@ -50,19 +50,22 @@
         <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
         <texture id="demoTexture" path="./scenes/images/vidral.jpg" />
         <texture id="pavewalkTexture" path="./scenes/images/calçada.png" />
+        <texture id="concrete" path="./scenes/images/concrete.png" />
+        <texture id="metal" path="./scenes/images/metal.png" />
+        <texture id="blackMetal" path="./scenes/images/blackMetal.png" />
+        <texture id="chairWood" path="./scenes/images/chairWood.png" />
+        <texture id="stoneWall" path="./scenes/images/stoneWall.png" />
+        <texture id="donutTexture" path="./scenes/images/donut.jpg" />
+        <texture id="cocacolaTexture" path="./scenes/images/cocacola.png" />
+        <texture id="laranjaTexture" path="./scenes/images/laranja.png" />
+        <texture id="relvaTexture" path="./scenes/images/leaves.jpg" />
     </textures>
 
 
     <materials>
         <!-- NOTE: the "MATERIAL" block may be repeated as required. Each defined material
          requires a distinct "id". At least one material should be present. -->
-        <material id="demoMaterial">
-            <shininess value="10.0" />
-            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
-            <emissive r="0.0" g="0.0" b="0.0" a="1.0" />
-        </material>
+
         <material id="lightMaterial">
             <shininess value="10.0" />
             <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
@@ -70,9 +73,50 @@
             <specular r="0.5" g="0.5" b="0.1" a="1.0" />
             <emissive r="0.5" g="0.5" b="0.3" a="1.0" />
         </material>
+        <material id="metalMaterial">
+            <shininess value="300.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <emissive r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="woodMaterial">
+            <shininess value="5.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+            <emissive r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="materialLaranja">
+            <shininess value="1.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+            <emissive r="0" g="0" b="0" a="1.0" />
+        </material>
     </materials>
 
     <nodes>
+        <node id="relva"> may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="relvaTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="0.05" aft="0.05" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0" y="-0.05" z="0"/>
+                <rotation axis="x" angle ="-1.57075"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="rectangle" x1="-20" y1="-20" x2="20" y2="20" />
+            </descendants>
+        </node>
         <node id="root">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
@@ -83,7 +127,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <scale sx="1" sy="1" sz="1"/>
+                <scale sx="3" sy="3" sz="3"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -94,20 +138,21 @@
                 <noderef id="cadeiras" />
                 <noderef id="parede" />
                 <noderef id="candeeiro"/>
+                <noderef id="relva"/>
             </descendants>
         </node>
         <node id="candeeiro">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="metalMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="metal"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-1.5" y="0" z="-1.5"/>
-                <rotation axis="yy" angle="-0.9"/>
+                <rotation axis="y" angle="-0.9"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -126,13 +171,13 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="concrete"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <rotation axis="xx" angle="-1.57075"/>
+                <rotation axis="x" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -152,7 +197,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="0.2" z="0"/>
-                <rotation axis="xx" angle="-1.57075"/>
+                <rotation axis="x" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -163,9 +208,9 @@
         </node>
         <node id="bolinha">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="metalMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="blackMetal"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
@@ -191,8 +236,8 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.0" y="1.25" z="0"/>
-                <rotation axis="zz" angle="-1"/>
-                <rotation axis="xx" angle="-1.57075"/>
+                <rotation axis="z" angle="-1"/>
+                <rotation axis="x" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -212,8 +257,8 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.84147" y="1.78" z="0"/>
-                <rotation axis="zz" angle="-1.9"/>
-                <rotation axis="xx" angle="-1.57075"/>
+                <rotation axis="z" angle="-1.9"/>
+                <rotation axis="x" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -224,17 +269,17 @@
         </node>
         <node id="bolinha2">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="metalMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="blackMetal"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.84147" y="1.78" z="0"/>
-                <rotation axis="zz" angle="-1"/>
-                <rotation axis="xx" angle="-1.57075"/>
+                <rotation axis="z" angle="-1"/>
+                <rotation axis="x" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -247,15 +292,15 @@
             <!-- next two lines are mandatory -->
             <material id="lightMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="clear"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="1.04147" y="1.7" z="0"/>
-                <rotation axis="zz" angle="-1"/>
-                <rotation axis="xx" angle="-1.57075"/>
+                <rotation axis="z" angle="-1"/>
+                <rotation axis="x" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -274,13 +319,13 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <rotation axis="xx" angle ="-1.57075"/>
+                <rotation axis="x" angle ="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="rectangle" x1="-10.0" y1="-10.0" x2="10" y2="10" />
+                <leaf type="rectangle" x1="-5" y1="-2.5" x2="5" y2="2.5" />
                     <!-- 2D coordinates on the XY plane for bottom-left and top-right vertices. -->
             </descendants>
         </node>
@@ -288,25 +333,25 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            <texture id="stoneWall"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="0.5" aft="0.5" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="0" y="2.5" z="-4"/>
+                <translation x="0" y="2.5" z="-2.5"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="rectangle" x1="-10" y1="-2.5" x2="10" y2="0" />
+                <leaf type="rectangle" x1="-5" y1="-2.5" x2="5" y2="0" />
                   <!-- 2D coordinates on the XY plane for bottom-left and top-right vertices. -->
             </descendants>
         </node>
         <node id="mesa">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="demoMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="demoTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
@@ -330,9 +375,9 @@
 
         <node id="cadeiras">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="woodMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="chairWood"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
@@ -400,7 +445,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.3" y="0" z="-0.4"/>
-                <rotation axis="yy" angle="3.1415"/>
+                <rotation axis="y" angle="3.1415"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -420,7 +465,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.3" y="0" z="-0.4"/>
-                <rotation axis="yy" angle="3.1415"/>
+                <rotation axis="y" angle="3.1415"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -440,7 +485,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.75" y="0" z="0"/>
-                <rotation axis="yy" angle="1.57075"/>
+                <rotation axis="y" angle="1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -460,7 +505,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.75" y="0" z="0"/>
-                <rotation axis="yy" angle="-1.57075"/>
+                <rotation axis="y" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -511,10 +556,10 @@
         </node>
         <node id="pernas_mesa">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="metalMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+            <texture id="blackMetal"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -551,28 +596,28 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="cocacolaTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.23" y="0.874" z="0.06"/>
-                <rotation axis="xx" angle="1.57075"/>
+                <rotation axis="x" angle="1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <leaf type="cylinder" height="0.124" topRadius="0.0325" bottomRadius="0.0325" stacks="30" slices="30"/>
-                  <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with ZZ; must have top and bottom caps-->
+                  <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with z; must have top and bottom caps-->
             </descendants>
         </node>
         <node id="laranja">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="materialLaranja" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="laranjaTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
@@ -591,21 +636,21 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="donutTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.25" y="0.766" z="0.18"/>
-                <rotation axis="xx" angle="1.57075"/>
+                <rotation axis="x" angle="1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <leaf type="torus"  inner="0.016" outer="0.039" slices="30" loops="50"/>
-                  <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with ZZ; must have top and bottom caps-->
+                  <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with z; must have top and bottom caps-->
             </descendants>
         </node>
         <node id="tampo_cadeira">            <!-- defines one intermediate node; may be repeated as necessary -->
@@ -619,7 +664,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="0.45" z="0"/>
-                <rotation axis="xx" angle="-1.57075"/>
+                <rotation axis="x" angle="-1.57075"/>
                 <scale sx="0.4" sy="0.4" sz="0.04"/>
             </transformations>
 
@@ -668,7 +713,7 @@
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <noderef id="cube"/>
-                  <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with ZZ; must have top and bottom caps-->
+                  <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with z; must have top and bottom caps-->
             </descendants>
         </node>
         <node id="perna_cadeira_1">            <!-- defines one intermediate node; may be repeated as necessary -->
@@ -779,7 +824,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.71" y="0" z="0.41"/>
-                <rotation angle="-1.57075" axis="xx"/>
+                <rotation angle="-1.57075" axis="x"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -799,7 +844,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.71" y="0" z="0.41"/>
-                <rotation angle="-1.57075" axis="xx"/>
+                <rotation angle="-1.57075" axis="x"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -819,7 +864,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.71" y="0" z="-0.41"/>
-                <rotation angle="-1.57075" axis="xx"/>
+                <rotation angle="-1.57075" axis="x"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -839,7 +884,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.71" y="0" z="-0.41"/>
-                <rotation angle="-1.57075" axis="xx"/>
+                <rotation angle="-1.57075" axis="x"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1018,7 +1063,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="0.5" z="0"/>
-                <rotation axis="xx" angle="-1.57075"/>
+                <rotation axis="x" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1038,7 +1083,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="-0.5" z="0"/>
-                <rotation axis="xx" angle="1.57075"/>
+                <rotation axis="x" angle="1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1059,7 +1104,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.50" y="0" z="0"/>
-                <rotation axis="yy" angle="-1.57075"/>
+                <rotation axis="y" angle="-1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1080,7 +1125,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.5" y="0" z="0"/>
-                <rotation axis="yy" angle="1.57075"/>
+                <rotation axis="y" angle="1.57075"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1120,7 +1165,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="0" z="-0.5"/>
-                <rotation axis="yy" angle="3.1415"/>
+                <rotation axis="y" angle="3.1415"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
