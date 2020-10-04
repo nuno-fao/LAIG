@@ -26,7 +26,8 @@ class MyNode {
 			materialEx = this.scene.defaultMaterial;
 		}
 		materialEx.apply();
-		if(this.scene.textureStack.length!=0 && this.texture!="clear"){
+		if(this.scene.textureStack.length>0 && this.texture!="clear"){
+			//console.log(this.scene.textureStack[this.scene.textureStack.length-1]);
 			this.scene.textureStack[this.scene.textureStack.length-1].bind();
 		}
 		
@@ -43,7 +44,7 @@ class MyNode {
 			this.scene.materialStack.pop();
 		}
 
-		if(this.texture!=null){
+		if(this.texture!=null && this.texture!="clear"){
 			this.scene.textureStack.pop();
 		}
 
