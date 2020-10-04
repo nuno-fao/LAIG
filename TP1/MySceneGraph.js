@@ -607,6 +607,7 @@ class MySceneGraph {
                     case "rotation":{
                         let axis = this.reader.getString(grandgrandChildren,"axis");  
                         let angle = this.reader.getFloat(grandgrandChildren,"angle");  
+                        angle=angle/180*Math.PI;
                         switch(axis){
                             case "x":{
                                 this.scene.rotate(angle,1,0,0);

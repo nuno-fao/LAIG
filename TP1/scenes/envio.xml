@@ -97,7 +97,7 @@
     </materials>
 
     <nodes>
-        <node id="relva"> may be repeated as necessary -->
+        <node id="relva"> <!-- may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
@@ -108,7 +108,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="-0.05" z="0"/>
-                <rotation axis="x" angle ="-1.57075"/>
+                <rotation axis="x" angle ="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -152,7 +152,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-1.5" y="0" z="-1.5"/>
-                <rotation axis="y" angle="-0.9"/>
+                <rotation axis="y" angle="-51.568"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -177,7 +177,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <rotation axis="x" angle="-1.57075"/>
+                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -197,7 +197,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="0.2" z="0"/>
-                <rotation axis="x" angle="-1.57075"/>
+                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -236,8 +236,8 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.0" y="1.25" z="0"/>
-                <rotation axis="z" angle="-1"/>
-                <rotation axis="x" angle="-1.57075"/>
+                <rotation axis="z" angle="-57.297"/>
+                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -257,8 +257,8 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.84147" y="1.78" z="0"/>
-                <rotation axis="z" angle="-1.9"/>
-                <rotation axis="x" angle="-1.57075"/>
+                <rotation axis="z" angle="-108.865"/>
+                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -278,8 +278,8 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.84147" y="1.78" z="0"/>
-                <rotation axis="z" angle="-1"/>
-                <rotation axis="x" angle="-1.57075"/>
+                <rotation axis="z" angle="-57.297"/>
+                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -299,8 +299,8 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="1.04147" y="1.7" z="0"/>
-                <rotation axis="z" angle="-1"/>
-                <rotation axis="x" angle="-1.57075"/>
+                <rotation axis="z" angle="-57.297"/>
+                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -319,7 +319,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <rotation axis="x" angle ="-1.57075"/>
+                <rotation axis="x" angle ="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -445,7 +445,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.3" y="0" z="-0.4"/>
-                <rotation axis="y" angle="3.1415"/>
+                <rotation axis="y" angle="180"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -465,7 +465,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.3" y="0" z="-0.4"/>
-                <rotation axis="y" angle="3.1415"/>
+                <rotation axis="y" angle="180"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -485,7 +485,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.75" y="0" z="0"/>
-                <rotation axis="y" angle="1.57075"/>
+                <rotation axis="y" angle="90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -505,7 +505,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.75" y="0" z="0"/>
-                <rotation axis="y" angle="-1.57075"/>
+                <rotation axis="y" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -603,7 +603,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.23" y="0.874" z="0.06"/>
-                <rotation axis="x" angle="1.57075"/>
+                <rotation axis="x" angle="90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -643,7 +643,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.25" y="0.766" z="0.18"/>
-                <rotation axis="x" angle="1.57075"/>
+                <rotation axis="x" angle="90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -664,7 +664,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="0.45" z="0"/>
-                <rotation axis="x" angle="-1.57075"/>
+                <rotation axis="x" angle="-90"/>
                 <scale sx="0.4" sy="0.4" sz="0.04"/>
             </transformations>
 
@@ -824,7 +824,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.71" y="0" z="0.41"/>
-                <rotation angle="-1.57075" axis="x"/>
+                <rotation angle="-90" axis="x"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -844,7 +844,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.71" y="0" z="0.41"/>
-                <rotation angle="-1.57075" axis="x"/>
+                <rotation angle="-90" axis="x"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -864,7 +864,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.71" y="0" z="-0.41"/>
-                <rotation angle="-1.57075" axis="x"/>
+                <rotation angle="-90" axis="x"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -884,7 +884,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.71" y="0" z="-0.41"/>
-                <rotation angle="-1.57075" axis="x"/>
+                <rotation angle="-90" axis="x"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1063,7 +1063,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="0.5" z="0"/>
-                <rotation axis="x" angle="-1.57075"/>
+                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1083,7 +1083,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="-0.5" z="0"/>
-                <rotation axis="x" angle="1.57075"/>
+                <rotation axis="x" angle="90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1104,7 +1104,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.50" y="0" z="0"/>
-                <rotation axis="y" angle="-1.57075"/>
+                <rotation axis="y" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1125,7 +1125,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.5" y="0" z="0"/>
-                <rotation axis="y" angle="1.57075"/>
+                <rotation axis="y" angle="90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1165,7 +1165,7 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="0" z="-0.5"/>
-                <rotation axis="y" angle="3.1415"/>
+                <rotation axis="y" angle="180"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
