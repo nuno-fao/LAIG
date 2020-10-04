@@ -568,6 +568,7 @@ class MySceneGraph {
             let afs, aft;
             afs = this.reader.getString(grandChildren[textureIndex].children[0],"afs");
             aft = this.reader.getString(grandChildren[textureIndex].children[0],"aft");
+
             let textureID = this.reader.getString(grandChildren[textureIndex],"id");
             if(textureID!="null"){
                 this.nodes[nodeID].texture = this.textures[textureID];
@@ -584,7 +585,7 @@ class MySceneGraph {
                     this.nodes[this.reader.getString(grandgrandChildren,'id')].notRoot = true;
                 }
                 else{
-                    this.auxiliaryParseLeaf(grandgrandChildren,nodeID);
+                    this.auxiliaryParseLeaf(grandgrandChildren,nodeID,afs,aft);
                 }
             }
 
@@ -646,7 +647,7 @@ class MySceneGraph {
         }
         this.rootNode = this.nodes[this.idRoot];
     }
-    auxiliaryParseLeaf(leaf,nodeID){
+    auxiliaryParseLeaf(leaf,nodeID,aft,afs){
         switch(this.reader.getString(leaf,'type')){
             case "triangle":{
                 let x1 = this.reader.getFloat(leaf,'x1');
@@ -655,7 +656,8 @@ class MySceneGraph {
                 let y1 = this.reader.getFloat(leaf,'y1');
                 let y2 = this.reader.getFloat(leaf,'y2');
                 let y3 = this.reader.getFloat(leaf,'y3');
-                this.nodes[nodeID].addDescendente(new MyTriangle(this.scene,x1,y1,x2,y2,x3,y3));
+                let t  = new MyTriangle(this.scene,x1,y1,x2,y2,x3,y3,aft,afs);
+                this.nodes[nodeID].addDescendente(t);
                 break;
             }
             case "rectangle":{
@@ -663,7 +665,8 @@ class MySceneGraph {
                 let x2 = this.reader.getFloat(leaf,'x2');
                 let y1 = this.reader.getFloat(leaf,'y1');
                 let y2 = this.reader.getFloat(leaf,'y2');
-                this.nodes[nodeID].addDescendente(new MyRectangle(this.scene,x1,y1,x2,y2));
+                let r = new MyRectangle(this.scene,x1,y1,x2,y2,aft,afs);
+                this.nodes[nodeID].addDescendente(r);
                 break;
             }
             case "cylinder":{
