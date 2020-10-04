@@ -285,7 +285,7 @@ class MySceneGraph {
                 this.views[key] = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
             }
         }
-
+        console.log("Frango 2: ",this.views);
         return null;
     }
 
