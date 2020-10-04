@@ -10,7 +10,7 @@
         <!-- at least one of the following type of cameras must be declared -->
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
             <from x="0" y="12" z="10" />
-            <to x="0" y="4" z="0" />
+            <to x="0" y="5" z="0" />
         </perspective>
         <ortho id="demoOrtho" near="0.2" far="100" left="-5" right="5" top="5" bottom="-5">
             <from x="35" y="50" z="10" />
@@ -31,7 +31,7 @@
             <enable value="1" />
             <!-- enable/disable -->
             <position x="10" y="12" z="9.5" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
-            <ambient r="0" g="0" b="0" a="1.0" />                   <!-- ambient component -->
+            <ambient r="0.3" g="0.3" b="0.3" a="1.0" />                   <!-- ambient component -->
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />             <!-- diffuse component -->
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />            <!-- specular component -->
         </light>
@@ -51,6 +51,7 @@
         <texture id="demoTexture" path="./scenes/images/vidral.jpg" />
         <texture id="pavewalkTexture" path="./scenes/images/calçada.png" />
         <texture id="concrete" path="./scenes/images/concrete.png" />
+        <texture id="brick" path="./scenes/images/brick.jpg" />
         <texture id="metal" path="./scenes/images/metal.png" />
         <texture id="blackMetal" path="./scenes/images/blackMetal.png" />
         <texture id="chairWood" path="./scenes/images/chairWood.png" />
@@ -59,6 +60,7 @@
         <texture id="cocacolaTexture" path="./scenes/images/cocacola.png" />
         <texture id="laranjaTexture" path="./scenes/images/laranja.png" />
         <texture id="relvaTexture" path="./scenes/images/leaves.jpg" />
+        <texture id="guardanapoTexture" path="./scenes/images/napkin.png" />
     </textures>
 
 
@@ -94,6 +96,13 @@
             <specular r="0" g="0" b="0" a="1.0" />
             <emissive r="0" g="0" b="0" a="1.0" />
         </material>
+        <material id="materialGuardanapo">
+            <shininess value="5.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+            <emissive r="1" g="1" b="1" a="1.0" />
+        </material>
     </materials>
 
     <nodes>
@@ -122,7 +131,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -133,6 +142,7 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
+                <noderef id="bbq"/>
                 <noderef id="chão" />
                 <noderef id="mesa" />
                 <noderef id="cadeiras" />
@@ -141,12 +151,235 @@
                 <noderef id="relva"/>
             </descendants>
         </node>
+        <node id="bbq">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="concrete"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="3" y="1.0" z="-2.249"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="pilar1"/>
+                <noderef id="pilar2"/>
+                <noderef id="prateleiras"/>
+                <noderef id="paredeBBQ"/>
+                <noderef id="chamine"/>
+            </descendants>
+        </node>
+        <node id="pilar1">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="-0.5" y="0.0" z="0"/>
+                <scale sx="0.1" sy="2" sz="0.5"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cube"/>
+            </descendants>
+        </node>
+        <node id="pilar2">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.5" y="0.0" z="0"/>
+                <scale sx="0.1" sy="2" sz="0.5"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>  
+                <noderef id="cube"/>
+            </descendants>
+        </node>
+        <node id="prateleiras">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="brick"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="prateleira1"/>
+                <noderef id="prateleira2"/>
+                <noderef id="prateleira3"/>
+            </descendants>
+        </node>
+        <node id="chamine">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="baseChamine"/>
+                <noderef id="tuboChamine"/>
+            </descendants>
+        </node>
+        <node id="prateleira1">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.0" y="-0.5" z="0.05"/>
+                <scale sx="0.9" sy="0.1" sz="0.6"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cube"/>
+            </descendants>
+        </node>
+        <node id="prateleira2">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.0" y="0.2" z="0.05"/>
+                <scale sx="1.3" sy="0.1" sz="0.6"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cube"/>
+            </descendants>
+        </node>
+        <node id="prateleira3">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.0" y="1.05" z="0.05"/>
+                <scale sx="1.1" sy="0.1" sz="0.6"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cube"/>
+            </descendants>
+        </node>
+        <node id="baseChamine">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.0" y="1.1" z="0.05"/>
+                <rotation axis="y" angle="45"/>
+                <rotation axis="x" angle="-90"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="cylinder" height="0.2" topRadius="0.2" bottomRadius="0.4" stacks="30" slices="4"/>
+            </descendants>
+        </node>
+        <node id="tuboChamine">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.0" y="1.4" z="0.05"/>
+                <scale sx="0.3" sy="0.5" sz="0.3"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <noderef id="cube"/>
+            </descendants>
+        </node>
+        <node id="paredeBBQ">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="brick"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0" y="0.6" z="-0.249"/>
+                <scale sx="0.5" sy="0.4" sz="1"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="rectangle" x1="-1" y1="-1" x2="1" y2="1" />
+            </descendants>
+        </node>
         <node id="candeeiro">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="metalMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="metal"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -172,7 +405,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="concrete"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -191,7 +424,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -211,7 +444,7 @@
             <material id="metalMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="blackMetal"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -230,7 +463,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -251,7 +484,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -272,7 +505,7 @@
             <material id="metalMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="blackMetal"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -293,7 +526,7 @@
             <material id="lightMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="clear"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -340,12 +573,13 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0" y="2.5" z="-2.5"/>
+                
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="rectangle" x1="-5" y1="-2.5" x2="5" y2="0" />
+                <leaf type="rectangle" x1="-5" y1="-2.5" x2="5" y2="0.3" />
                   <!-- 2D coordinates on the XY plane for bottom-left and top-right vertices. -->
             </descendants>
         </node>
@@ -354,7 +588,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="demoTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -370,6 +604,7 @@
                 <noderef id="lata" />
                 <noderef id="laranja" />
                 <noderef id="donut" />
+                <noderef id="guardanapo"/>
             </descendants>
         </node>
 
@@ -378,7 +613,7 @@
             <material id="woodMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="chairWood"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -396,12 +631,34 @@
                 <noderef id="cadeira6" />
             </descendants>
         </node>
+         <node id="guardanapo">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="materialGuardanapo" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="guardanapoTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="-0.45" y="0.751" z="0"/>
+                <rotation axis="y" angle="30"/>
+                <rotation axis="x" angle="90"/>
+                <scale sx="0.16" sy="0.16" sz="1"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="triangle" x1="-1" y1="0" x2="0" y2="1" x3="1" y3="0" />
+            </descendants>
+        </node>
         <node id="cadeira1">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -420,7 +677,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -439,7 +696,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -459,7 +716,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -479,7 +736,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -499,7 +756,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -519,7 +776,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -539,7 +796,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -580,7 +837,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -597,7 +854,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="cocacolaTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -618,7 +875,7 @@
             <material id="materialLaranja" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="laranjaTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -637,7 +894,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="donutTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -658,7 +915,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -679,7 +936,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -701,7 +958,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -721,7 +978,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -740,7 +997,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -759,7 +1016,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -778,7 +1035,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -797,7 +1054,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -818,7 +1075,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -838,7 +1095,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -858,7 +1115,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -878,7 +1135,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -898,7 +1155,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -918,7 +1175,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -938,7 +1195,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -958,7 +1215,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -978,7 +1235,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -996,7 +1253,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -1014,7 +1271,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -1034,7 +1291,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -1057,7 +1314,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -1077,7 +1334,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -1098,7 +1355,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -1119,7 +1376,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -1140,7 +1397,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
@@ -1159,7 +1416,7 @@
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="2.0" aft="2.0" /><!-- for primitives = dx/afs, dy/aft -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
