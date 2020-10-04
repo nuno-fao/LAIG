@@ -29,6 +29,8 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
+        this.textureStack=[];
+        this.materialStack=[];
 
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(100);
@@ -41,6 +43,14 @@ class XMLscene extends CGFscene {
         this.previous = Date.now();
         this.start = Date.now();
         this.frames = 0;
+
+
+        this.defaultMaterial = new CGFappearance(this);
+        this.defaultMaterial.setAmbient(0.2, 0.2, 0.2, 1.0);
+        this.defaultMaterial.setDiffuse(0.5, 0.5, 0.5, 1.0);
+        this.defaultMaterial.setSpecular(0.5, 0.5, 0.5, 1.0);
+        this.defaultMaterial.setShininess(10.0);
+        this.defaultMaterial.setEmission(0.0,0.0,0.0,1);
 
         
     }

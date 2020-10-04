@@ -455,22 +455,36 @@ class MySceneGraph {
             let grandChildren = children[i].children;
             this.materials[materialID] = new CGFappearance(this.scene);
             for (var u = 0; u < grandChildren.length; u++) {
-                if (grandChildren[u].nodeName == "ambient")
-                    this.materials[materialID].setAmbient(this.parseColor(grandChildren[u], "Color ERROR"));
+                var color;
+               
+                if (grandChildren[u].nodeName == "ambient"){
+                    color=this.parseColor(grandChildren[u], "Color ERROR");
+                    this.materials[materialID].setAmbient(color[0],color[1],color[2],color[3]);
+                }
+                    
 
-                if (grandChildren[u].nodeName == "diffuse")
-                    this.materials[materialID].setDiffuse(this.parseColor(grandChildren[u], "Color ERROR"));
+                else if (grandChildren[u].nodeName == "diffuse"){
+                    color = this.parseColor(grandChildren[u], "Color ERROR");
+                    this.materials[materialID].setDiffuse(color[0],color[1],color[2],color[3]);
+                }
 
-                if (grandChildren[u].nodeName == "specular")
-                    this.materials[materialID].setSpecular(this.parseColor(grandChildren[u], "Color ERROR"));
+                else if (grandChildren[u].nodeName == "specular"){
+                    color = this.parseColor(grandChildren[u], "Color ERROR");
+                    this.materials[materialID].setSpecular(color[0],color[1],color[2],color[3]);
+                }
+                   
 
-                if (grandChildren[u].nodeName == "emissive")
-                    this.materials[materialID].setEmission(this.parseColor(grandChildren[u], "Color ERROR"));
+                else if (grandChildren[u].nodeName == "emissive"){
+                    color = this.parseColor(grandChildren[u], "Color ERROR");
+                    this.materials[materialID].setEmission(color[0],color[1],color[2],color[3]);
+                }
+               
 
-                if (grandChildren[u].nodeName == "shininess")
+                else if (grandChildren[u].nodeName == "shininess")
                     this.materials[materialID].setShininess(this.reader.getFloat(grandChildren[u], "value"));
             }
         }
+        for(let key in this.materials) console.log(this.materials[key]);
         return null;
     }
 
@@ -541,6 +555,27 @@ class MySceneGraph {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
+            let matID = this.reader.getString(grandChildren[materialIndex],"id");
+            if(matID!="null"){
+                this.nodes[nodeID].material = this.materials[matID];
+            }
+            else{
+                this.nodes[nodeID].material = null;
+            }
+
+
+
+            let afs, aft;
+            afs = this.reader.getString(grandChildren[textureIndex].children[0],"afs");
+            aft = this.reader.getString(grandChildren[textureIndex].children[0],"aft");
+            let textureID = this.reader.getString(grandChildren[textureIndex],"id");
+            if(textureID!="null"){
+                this.nodes[nodeID].texture = this.textures[textureID];
+            }
+            else{
+                this.nodes[nodeID].texture = null;
+            }
+            
 
             for( var j=0;j<grandChildren[descendants].children.length;j++){
                 let grandgrandChildren = grandChildren[descendants].children[j];
