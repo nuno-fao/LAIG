@@ -9,10 +9,9 @@
 ----
 ## Project information
 
-- (items describing main strong points)
 - Scene
-  - The scene we want to create is a simple dinning table (and a chair) with some food like an apple and a donut in order to use all the primitives
-  - There will also be a floor and a wall so the scene doesn't look too empty
+  - The scene we created is a simple outdoor dinning table with an orange, a donut, a napkin, a can of coke and 6 chairs
+  - There are also 2 floors, a wall, a BBQ stand and a lamp (with its own light source) to light up the table
   - (relative link to the scene)
 ----
 ## Issues/Problems
