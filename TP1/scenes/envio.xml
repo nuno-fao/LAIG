@@ -128,9 +128,9 @@
         </node>
         <node id="root">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="clear" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="clear"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
@@ -600,7 +600,6 @@
             <descendants>
                 <noderef id="tampo_mesa" />
                 <noderef id="pernas_mesa" />
-                <noderef id="toalha" />
                 <noderef id="lata" />
                 <noderef id="laranja" />
                 <noderef id="donut" />
@@ -830,23 +829,6 @@
                 <noderef id="perna_mesa_2" />
                 <noderef id="perna_mesa_3" />
                 <noderef id="perna_mesa_4" />
-            </descendants>
-        </node>
-        <node id="toalha">            <!-- defines one intermediate node; may be repeated as necessary -->
-            <!-- next two lines are mandatory -->
-            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
-
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
-            </texture>
-
-            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
-            <transformations>
-            </transformations>
-
-            <!-- declaring descendants, at least one node or one leaf must be present
-             descendants may be mixed, nodes and leafs -->
-            <descendants>
             </descendants>
         </node>
         <node id="lata">            <!-- defines one intermediate node; may be repeated as necessary -->
