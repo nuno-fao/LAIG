@@ -31,7 +31,7 @@ class MySceneGraph {
         this.idRoot = null; // The id of the root element.
 
         this.axisCoords = [];
-        this.rootNode = null ;
+        this.rootNode = null;
         this.axisCoords['x'] = [1, 0, 0];
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
@@ -285,7 +285,7 @@ class MySceneGraph {
                 this.views[key] = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
             }
         }
-        console.log("Frango 2: ",this.views);
+        console.log("Frango 2: ", this.views);
         return null;
     }
 
@@ -350,8 +350,7 @@ class MySceneGraph {
             if (children[i].nodeName != "light") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
-            }
-            else {
+            } else {
                 attributeNames.push(...["enable", "position", "ambient", "diffuse", "specular"]);
                 attributeTypes.push(...["boolean", "position", "color", "color", "color"]);
             }
@@ -388,8 +387,7 @@ class MySceneGraph {
                         return aux;
 
                     global.push(aux);
-                }
-                else
+                } else
                     return "light " + attributeNames[i] + " undefined for ID = " + lightId;
             }
             this.lights[lightId] = global;
@@ -456,48 +454,38 @@ class MySceneGraph {
             this.materials[materialID] = new CGFappearance(this.scene);
             for (var u = 0; u < grandChildren.length; u++) {
                 var color;
-               
-                if (grandChildren[u].nodeName == "ambient"){
-                    color=this.parseColor(grandChildren[u], "Color ERROR");
-                    this.materials[materialID].setAmbient(color[0],color[1],color[2],color[3]);
-                }
-                    
 
-                else if (grandChildren[u].nodeName == "diffuse"){
+                if (grandChildren[u].nodeName == "ambient") {
                     color = this.parseColor(grandChildren[u], "Color ERROR");
-                    this.materials[materialID].setDiffuse(color[0],color[1],color[2],color[3]);
-                }
-
-                else if (grandChildren[u].nodeName == "specular"){
+                    this.materials[materialID].setAmbient(color[0], color[1], color[2], color[3]);
+                } else if (grandChildren[u].nodeName == "diffuse") {
                     color = this.parseColor(grandChildren[u], "Color ERROR");
-                    this.materials[materialID].setSpecular(color[0],color[1],color[2],color[3]);
-                }
-                   
-
-                else if (grandChildren[u].nodeName == "emissive"){
+                    this.materials[materialID].setDiffuse(color[0], color[1], color[2], color[3]);
+                } else if (grandChildren[u].nodeName == "specular") {
                     color = this.parseColor(grandChildren[u], "Color ERROR");
-                    this.materials[materialID].setEmission(color[0],color[1],color[2],color[3]);
-                }
-               
-
-                else if (grandChildren[u].nodeName == "shininess")
+                    this.materials[materialID].setSpecular(color[0], color[1], color[2], color[3]);
+                } else if (grandChildren[u].nodeName == "emissive") {
+                    color = this.parseColor(grandChildren[u], "Color ERROR");
+                    this.materials[materialID].setEmission(color[0], color[1], color[2], color[3]);
+                } else if (grandChildren[u].nodeName == "shininess")
                     this.materials[materialID].setShininess(this.reader.getFloat(grandChildren[u], "value"));
             }
         }
-        for(let key in this.materials) console.log(this.materials[key]);
+        for (let key in this.materials) console.log(this.materials[key]);
         return null;
     }
 
     /**
-   * Parses the <nodes> block.
-   * @param {nodes block element} nodesNode
-   */
+     * Parses the <nodes> block.
+     * @param {nodes block element} nodesNode
+     */
     parseNodes(nodesNode) {
         var children = nodesNode.children;
 
         var grandChildren = [];
         var grandgrandChildren = [];
         var nodeNames = [];
+        var descendants = [];
 
         // Any number of nodes.
         for (var i = 0; i < children.length; i++) {
@@ -526,14 +514,32 @@ class MySceneGraph {
             var transformationsIndex = nodeNames.indexOf("transformations");
             var materialIndex = nodeNames.indexOf("material");
             var textureIndex = nodeNames.indexOf("texture");
-            var descendants = nodeNames.indexOf("descendants");
+            descendants[nodeID] = nodeNames.indexOf("descendants");
 
-            this.nodes[nodeID]=new MyNode(
+            var tg;
+            if (transformationsIndex < 0) {
+                tg = null;
+            } else {
+                tg = children[i].children[transformationsIndex];
+            }
+            var t;
+            if (textureIndex < 0) {
+                t = null;
+            } else {
+                t = children[i].children[textureIndex];
+            }
+            var m;
+            if (materialIndex < 0) {
+                m = null;
+            } else {
+                m = children[i].children[materialIndex];
+            }
+            this.nodes[nodeID] = new MyNode(
                 this.scene,
-                children[i].children[transformationsIndex],
-                children[i].children[textureIndex],
-                children[i].children[materialIndex]
-                );
+                tg,
+                t,
+                m
+            );
 
         }
         for (var i = 0; i < children.length; i++) {
@@ -545,7 +551,7 @@ class MySceneGraph {
 
             // Get id of the current node.
             var nodeID = this.reader.getString(children[i], 'id');
-            if (nodeID == null){
+            if (nodeID == null) {
                 return "node not define";
             }
             grandChildren = children[i].children;
@@ -555,163 +561,181 @@ class MySceneGraph {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
-            let matID = this.reader.getString(grandChildren[materialIndex],"id");
-            if(matID!="null"){
+            let matID = this.reader.getString(this.nodes[nodeID].material, "id");
+            if (matID != "null") {
                 this.nodes[nodeID].material = this.materials[matID];
-            }
-            else{
+            } else {
                 this.nodes[nodeID].material = null;
             }
 
 
 
             let afs, aft;
-            afs = this.reader.getString(grandChildren[textureIndex].children[0],"afs");
-            aft = this.reader.getString(grandChildren[textureIndex].children[0],"aft");
+            if (this.nodes[nodeID].texture != null) {
+                afs = this.reader.getString(this.nodes[nodeID].texture.children[0], "afs");
+                aft = this.reader.getString(this.nodes[nodeID].texture.children[0], "aft");
+            } else {
+                afs = 1;
+                aft = 1;
+            }
 
-            let textureID = this.reader.getString(grandChildren[textureIndex],"id");
-            if(textureID=="clear"){
+            let textureID = this.reader.getString(this.nodes[nodeID].texture, "id");
+            if (textureID == "clear") {
                 this.nodes[nodeID].texture = "clear";
-            }
-            else if(textureID!="null"){
+            } else if (textureID != "null") {
                 this.nodes[nodeID].texture = this.textures[textureID];
-            }
-            else{
+            } else {
                 this.nodes[nodeID].texture = null;
             }
-            
 
-            for( var j=0;j<grandChildren[descendants].children.length;j++){
-                let grandgrandChildren = grandChildren[descendants].children[j];
-                if(grandgrandChildren.nodeName=="noderef"){
-                    this.nodes[nodeID].addDescendente(this.nodes[this.reader.getString(grandgrandChildren,'id')]);
-                    this.nodes[this.reader.getString(grandgrandChildren,'id')].notRoot = true;
-                }
-                else{
-                    this.auxiliaryParseLeaf(grandgrandChildren,nodeID,afs,aft);
+
+            for (var j = 0; j < grandChildren[descendants[nodeID]].children.length; j++) {
+                let grandgrandChildren = grandChildren[descendants[nodeID]].children[j];
+                if (grandgrandChildren.nodeName == "noderef") {
+                    this.nodes[nodeID].addDescendente(this.nodes[this.reader.getString(grandgrandChildren, 'id')]);
+                    this.nodes[this.reader.getString(grandgrandChildren, 'id')].notRoot = true;
+                } else {
+                    this.auxiliaryParseLeaf(grandgrandChildren, nodeID, afs, aft);
                 }
             }
 
             this.scene.loadIdentity();
-            for(let j = 0; j < grandChildren[transformationsIndex].children.length;j++){
-                let grandgrandChildren = grandChildren[transformationsIndex].children[j]; 
+            console.log(this.nodes[nodeID].tg_matrix);
+            if (this.nodes[nodeID].tg_matrix != null) {
+                for (let j = 0; j < this.nodes[nodeID].tg_matrix.children.length; j++) {
+                    let grandgrandChildren = this.nodes[nodeID].tg_matrix.children[j];
 
-                switch(grandgrandChildren.nodeName){
-                    case "translation":{
-                        let position = this.parseCoordinates3D(grandgrandChildren,"");
-                        //console.log(position)
-                        this.scene.translate(position[0],position[1],position[2]);
-                        
-                        break;
-                    }
-                    case "rotation":{
-                        let axis = this.reader.getString(grandgrandChildren,"axis");  
-                        let angle = this.reader.getFloat(grandgrandChildren,"angle");  
-                        angle=angle/180*Math.PI;
-                        switch(axis){
-                            case "x":{
-                                this.scene.rotate(angle,1,0,0);
-                                break;
-                            }
-                            case "y":{
-                                this.scene.rotate(angle,0,1,0);
-                                break;
-                            }
-                            case "z":{
-                                this.scene.rotate(angle,0,0,1);
-                                break;
-                            }
-                            case "xx":{
-                                this.scene.rotate(angle,1,0,0);
-                                break;
-                            }
-                            case "yy":{
-                                this.scene.rotate(angle,0,1,0);
-                                break;
-                            }
-                            case "zz":{
-                                this.scene.rotate(angle,0,0,1);
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                    case "scale":{
-                        let sx = this.reader.getFloat(grandgrandChildren,"sx");  
-                        let sy = this.reader.getFloat(grandgrandChildren,"sy"); 
-                        let sz = this.reader.getFloat(grandgrandChildren,"sz"); 
+                    switch (grandgrandChildren.nodeName) {
+                        case "translation":
+                            {
+                                let position = this.parseCoordinates3D(grandgrandChildren, "");
+                                //console.log(position)
+                                this.scene.translate(position[0], position[1], position[2]);
 
-                        this.scene.scale(sx,sy,sz);
-                        
-                        break;
+                                break;
+                            }
+                        case "rotation":
+                            {
+                                let axis = this.reader.getString(grandgrandChildren, "axis");
+                                let angle = this.reader.getFloat(grandgrandChildren, "angle");
+                                angle = angle / 180 * Math.PI;
+                                switch (axis) {
+                                    case "x":
+                                        {
+                                            this.scene.rotate(angle, 1, 0, 0);
+                                            break;
+                                        }
+                                    case "y":
+                                        {
+                                            this.scene.rotate(angle, 0, 1, 0);
+                                            break;
+                                        }
+                                    case "z":
+                                        {
+                                            this.scene.rotate(angle, 0, 0, 1);
+                                            break;
+                                        }
+                                    case "xx":
+                                        {
+                                            this.scene.rotate(angle, 1, 0, 0);
+                                            break;
+                                        }
+                                    case "yy":
+                                        {
+                                            this.scene.rotate(angle, 0, 1, 0);
+                                            break;
+                                        }
+                                    case "zz":
+                                        {
+                                            this.scene.rotate(angle, 0, 0, 1);
+                                            break;
+                                        }
+                                }
+                                break;
+                            }
+                        case "scale":
+                            {
+                                let sx = this.reader.getFloat(grandgrandChildren, "sx");
+                                let sy = this.reader.getFloat(grandgrandChildren, "sy");
+                                let sz = this.reader.getFloat(grandgrandChildren, "sz");
+
+                                this.scene.scale(sx, sy, sz);
+
+                                break;
+                            }
                     }
-                }             
+                }
             }
             this.nodes[nodeID].tg_matrix = this.scene.getMatrix();
         }
         this.rootNode = this.nodes[this.idRoot];
     }
-    auxiliaryParseLeaf(leaf,nodeID,aft,afs){
-        switch(this.reader.getString(leaf,'type')){
-            case "triangle":{
-                let x1 = this.reader.getFloat(leaf,'x1');
-                let x2 = this.reader.getFloat(leaf,'x2');
-                let x3 = this.reader.getFloat(leaf,'x3');
-                let y1 = this.reader.getFloat(leaf,'y1');
-                let y2 = this.reader.getFloat(leaf,'y2');
-                let y3 = this.reader.getFloat(leaf,'y3');
-                let t  = new MyTriangle(this.scene,x1,y1,x2,y2,x3,y3,aft,afs);
-                this.nodes[nodeID].addDescendente(t);
-                break;
-            }
-            case "rectangle":{
-                let x1 = this.reader.getFloat(leaf,'x1');
-                let x2 = this.reader.getFloat(leaf,'x2');
-                let y1 = this.reader.getFloat(leaf,'y1');
-                let y2 = this.reader.getFloat(leaf,'y2');
-                let r = new MyRectangle(this.scene,x1,y1,x2,y2,aft,afs);
-                this.nodes[nodeID].addDescendente(r);
-                break;
-            }
-            case "cylinder":{
-                let height = this.reader.getFloat(leaf,'height');
-                let topRadius = this.reader.getFloat(leaf,'topRadius');
-                let bottomRadius = this.reader.getFloat(leaf,'bottomRadius');
-                let stacks = this.reader.getFloat(leaf,'stacks');
-                let slices = this.reader.getFloat(leaf,'slices');
-                this.nodes[nodeID].addDescendente(new MyCylinder(this.scene,bottomRadius,topRadius,height,slices,stacks));
-                break;
-            }
-            case "sphere":{
-                let radius = this.reader.getFloat(leaf,'radius');
-                let stacks = this.reader.getFloat(leaf,'stacks');
-                let slices = this.reader.getFloat(leaf,'slices');
-                this.nodes[nodeID].addDescendente(new MySphere(this.scene,radius,slices,stacks));
-                break;
-            }
-            case "torus":{
-                let inner = this.reader.getFloat(leaf,'inner');
-                let outer = this.reader.getFloat(leaf,'outer');
-                let slices = this.reader.getFloat(leaf,'slices');
-                let loops = this.reader.getFloat(leaf,'loops');
-                this.nodes[nodeID].addDescendente(new MyTorus(this.scene,inner,outer,slices,loops));
-            }
+    auxiliaryParseLeaf(leaf, nodeID, aft, afs) {
+        switch (this.reader.getString(leaf, 'type')) {
+            case "triangle":
+                {
+                    let x1 = this.reader.getFloat(leaf, 'x1');
+                    let x2 = this.reader.getFloat(leaf, 'x2');
+                    let x3 = this.reader.getFloat(leaf, 'x3');
+                    let y1 = this.reader.getFloat(leaf, 'y1');
+                    let y2 = this.reader.getFloat(leaf, 'y2');
+                    let y3 = this.reader.getFloat(leaf, 'y3');
+                    let t = new MyTriangle(this.scene, x1, y1, x2, y2, x3, y3, aft, afs);
+                    this.nodes[nodeID].addDescendente(t);
+                    break;
+                }
+            case "rectangle":
+                {
+                    let x1 = this.reader.getFloat(leaf, 'x1');
+                    let x2 = this.reader.getFloat(leaf, 'x2');
+                    let y1 = this.reader.getFloat(leaf, 'y1');
+                    let y2 = this.reader.getFloat(leaf, 'y2');
+                    let r = new MyRectangle(this.scene, x1, y1, x2, y2, aft, afs);
+                    this.nodes[nodeID].addDescendente(r);
+                    break;
+                }
+            case "cylinder":
+                {
+                    let height = this.reader.getFloat(leaf, 'height');
+                    let topRadius = this.reader.getFloat(leaf, 'topRadius');
+                    let bottomRadius = this.reader.getFloat(leaf, 'bottomRadius');
+                    let stacks = this.reader.getFloat(leaf, 'stacks');
+                    let slices = this.reader.getFloat(leaf, 'slices');
+                    this.nodes[nodeID].addDescendente(new MyCylinder(this.scene, bottomRadius, topRadius, height, slices, stacks));
+                    break;
+                }
+            case "sphere":
+                {
+                    let radius = this.reader.getFloat(leaf, 'radius');
+                    let stacks = this.reader.getFloat(leaf, 'stacks');
+                    let slices = this.reader.getFloat(leaf, 'slices');
+                    this.nodes[nodeID].addDescendente(new MySphere(this.scene, radius, slices, stacks));
+                    break;
+                }
+            case "torus":
+                {
+                    let inner = this.reader.getFloat(leaf, 'inner');
+                    let outer = this.reader.getFloat(leaf, 'outer');
+                    let slices = this.reader.getFloat(leaf, 'slices');
+                    let loops = this.reader.getFloat(leaf, 'loops');
+                    this.nodes[nodeID].addDescendente(new MyTorus(this.scene, inner, outer, slices, loops));
+                }
         }
     }
 
     parseBoolean(node, name, messageError) {
-        var boolVal = true;
-        boolVal = this.reader.getBoolean(node, name);
-        if (!(boolVal != null && !isNaN(boolVal) && (boolVal == true || boolVal == false)))
-            this.onXMLMinorError("unable to parse value component " + messageError + "; assuming 'value = 1'");
+            var boolVal = true;
+            boolVal = this.reader.getBoolean(node, name);
+            if (!(boolVal != null && !isNaN(boolVal) && (boolVal == true || boolVal == false)))
+                this.onXMLMinorError("unable to parse value component " + messageError + "; assuming 'value = 1'");
 
-        return boolVal || 1;
-    }
-    /**
-     * Parse the coordinates from a node with ID = id
-     * @param {block element} node
-     * @param {message to be displayed in case of error} messageError
-     */
+            return boolVal || 1;
+        }
+        /**
+         * Parse the coordinates from a node with ID = id
+         * @param {block element} node
+         * @param {message to be displayed in case of error} messageError
+         */
     parseCoordinates3D(node, messageError) {
         var position = [];
 
