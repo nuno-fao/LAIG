@@ -52,6 +52,10 @@ class XMLscene extends CGFscene {
         this.defaultMaterial.setShininess(10.0);
         this.defaultMaterial.setEmission(0.0,0.0,0.0,1);
 
+
+        //GUI
+        this.selectedCamera = 0;
+
         
     }
 

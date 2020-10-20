@@ -22,6 +22,7 @@ class MyInterface extends CGFinterface {
 
         // add a group of controls (and open/expand by defult)
 
+
         this.initKeys();
 
         return true;
