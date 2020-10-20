@@ -363,10 +363,7 @@
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
-            <transformations>
-                <translation x="0" y="0.6" z="-0.249"/>
-                <scale sx="0.5" sy="0.4" sz="1"/>
-            </transformations>
+ 
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
