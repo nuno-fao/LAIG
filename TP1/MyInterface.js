@@ -1,6 +1,6 @@
 /**
-* MyInterface class, creating a GUI interface.
-*/
+ * MyInterface class, creating a GUI interface.
+ */
 class MyInterface extends CGFinterface {
     /**
      * @constructor
@@ -31,18 +31,37 @@ class MyInterface extends CGFinterface {
     /**
      * initKeys
      */
+
+    initCameras() {
+        this.scene.cameraKeys = []
+        console.log("FRANGO", this.scene.graph.views)
+        let i = 0
+        for (var key in this.scene.graph.views) {
+            this.scene.cameraKeys.push(key)
+        }
+        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraKeys).name('Selected camera').onChange(this.scene.setCamera.bind(this.scene));
+    }
+
+    initLights() {
+        let i = 0;
+        for (var key in this.scene.graph.lights) {
+            this.gui.add(this.scene.lights[i], 'enabled').name(this.scene.lights[i].idLight)
+            i++;
+        }
+    }
+
     initKeys() {
-        this.scene.gui=this;
-        this.processKeyboard=function(){};
-        this.activeKeys={};
+        this.scene.gui = this;
+        this.processKeyboard = function() {};
+        this.activeKeys = {};
     }
 
     processKeyDown(event) {
-        this.activeKeys[event.code]=true;
+        this.activeKeys[event.code] = true;
     };
 
     processKeyUp(event) {
-        this.activeKeys[event.code]=false;
+        this.activeKeys[event.code] = false;
     };
 
     isKeyPressed(keyCode) {

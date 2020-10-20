@@ -122,7 +122,7 @@ class MySceneGraph {
             if (index != INITIALS_INDEX)
                 this.onXMLMinorError("tag <initials> out of order " + index);
 
-            //Parse initials block
+            //Parse initials block40
             if ((error = this.parseInitials(nodes[index])) != null)
                 return error;
         }
@@ -284,6 +284,7 @@ class MySceneGraph {
                 let bottom = this.reader.getFloat(children[i], 'bottom')
                 this.views[key] = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
             }
+            this.views[key].cameraId = key;
         }
         console.log("Frango 2: ", this.views);
         return null;
@@ -390,7 +391,9 @@ class MySceneGraph {
                 } else
                     return "light " + attributeNames[i] + " undefined for ID = " + lightId;
             }
+            global.push(lightId);
             this.lights[lightId] = global;
+            console.log("FRANGO222: ", global)
             numLights++;
         }
 
@@ -724,12 +727,19 @@ class MySceneGraph {
     }
 
     parseBoolean(node, name, messageError) {
-            var boolVal = true;
-            boolVal = this.reader.getBoolean(node, name);
-            if (!(boolVal != null && !isNaN(boolVal) && (boolVal == true || boolVal == false)))
-                this.onXMLMinorError("unable to parse value component " + messageError + "; assuming 'value = 1'");
+            var boolVal = this.reader.getBoolean(node, name);
+            if (!(boolVal != null && !isNaN(boolVal) && (boolVal == true || boolVal == false))) {
+                this.onXMLMinorError(
+                    "unable to parse value component " +
+                    messageError +
+                    "; assuming 'value = 1'"
+                );
+                return true;
+            }
 
-            return boolVal || 1;
+
+            return boolVal;
+
         }
         /**
          * Parse the coordinates from a node with ID = id

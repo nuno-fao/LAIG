@@ -20,8 +20,8 @@ class XMLscene extends CGFscene {
         super.init(application);
 
         this.sceneInited = false;
-        
-    	this.camera = (new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0)));
+
+        this.camera = (new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0)));
 
         this.enableTextures(true);
 
@@ -29,17 +29,17 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
-        this.textureStack=[];
-        this.materialStack=[];
+        this.textureStack = [];
+        this.materialStack = [];
 
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(100);
 
-        this.loadingProgressObject=new MyRectangle(this, -1, -.1, 1, .1);
-        this.loadingProgress=0;
+        this.loadingProgressObject = new MyRectangle(this, -1, -.1, 1, .1);
+        this.loadingProgress = 0;
 
-        this.defaultAppearance=new CGFappearance(this);
-        
+        this.defaultAppearance = new CGFappearance(this);
+
         this.previous = Date.now();
         this.start = Date.now();
         this.frames = 0;
@@ -50,36 +50,42 @@ class XMLscene extends CGFscene {
         this.defaultMaterial.setDiffuse(0.5, 0.5, 0.5, 1.0);
         this.defaultMaterial.setSpecular(0.5, 0.5, 0.5, 1.0);
         this.defaultMaterial.setShininess(10.0);
-        this.defaultMaterial.setEmission(0.0,0.0,0.0,1);
+        this.defaultMaterial.setEmission(0.0, 0.0, 0.0, 1);
 
 
         //GUI
         this.selectedCamera = 0;
 
-        
+
     }
 
     /**
      * Initializes the scene cameras.
-     */    
+     */
     initCameras() {
-        for (var key in this.graph.views){
-            this.camera = this.graph.views[key];
-            this.interface.setActiveCamera(this.graph.views[key]);
+        for (var key in this.graph.views) {
+            this.setCamera(key)
             return;
         }
     }
-    /**
-     * Initializes the scene lights with the values read from the XML file.
-     */
+    setCamera(cameraKey) {
+            this.camera = this.graph.views[cameraKey];
+            this.selectedCamera = cameraKey;
+            this.interface.setActiveCamera(this.graph.views[cameraKey]);
+        }
+        /**
+         * Initializes the scene lights with the values read from the XML file.
+         */
     initLights() {
         var i = 0;
+        console.log("Frango", this.lights);
         // Lights index.
 
         // Reads the lights from the scene graph.
         for (var key in this.graph.lights) {
+            console.log("piroca")
             if (i >= 8)
-                break;              // Only eight lights allowed by WebCGF on default shaders.
+                break; // Only eight lights allowed by WebCGF on default shaders.
 
             if (this.graph.lights.hasOwnProperty(key)) {
                 var graphLight = this.graph.lights[key];
@@ -88,8 +94,10 @@ class XMLscene extends CGFscene {
                 this.lights[i].setAmbient(...graphLight[2]);
                 this.lights[i].setDiffuse(...graphLight[3]);
                 this.lights[i].setSpecular(...graphLight[4]);
+                this.lights[i].idLight = graphLight[5];
 
                 this.lights[i].setVisible(true);
+                console.log("frango caril", graphLight);
                 if (graphLight[0])
                     this.lights[i].enable();
                 else
@@ -106,20 +114,22 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-    	this.initCameras();
-        
-    	if(this.graph.referenceLength>0){
-        	this.axis = new MyAxis(new CGFaxis(this, this.graph.referenceLength),true);
-    	}
-    	else{
-        	this.axis = new MyAxis(new CGFaxis(this, 1),false);    
-    	}
+        this.initCameras();
+
+        if (this.graph.referenceLength > 0) {
+            this.axis = new MyAxis(new CGFaxis(this, this.graph.referenceLength), true);
+        } else {
+            this.axis = new MyAxis(new CGFaxis(this, 1), false);
+        }
 
         this.gl.clearColor(...this.graph.background);
 
         this.setGlobalAmbientLight(...this.graph.ambient);
 
         this.initLights();
+
+        this.interface.initCameras();
+        this.interface.initLights();
 
         this.sceneInited = true;
     }
@@ -145,7 +155,6 @@ class XMLscene extends CGFscene {
 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
-            this.lights[i].enable();
             this.lights[i].update();
         }
 
@@ -158,26 +167,24 @@ class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
-        }
-        else
-        {
+        } else {
             // Show some "loading" visuals
             this.defaultAppearance.apply();
 
-            this.rotate(-this.loadingProgress/10.0,0,0,1);
-            
+            this.rotate(-this.loadingProgress / 10.0, 0, 0, 1);
+
             this.loadingProgressObject.display();
             this.loadingProgress++;
         }
 
         this.popMatrix();
-        setTimeout(() => { }, 200);
-        
-        
-        this.frames+=1;
-        if(this.frames%50==0){
-        	let now = Date.now();
-        	console.log(this.frames/((now-this.start)/1000.0));
+        setTimeout(() => {}, 200);
+
+
+        this.frames += 1;
+        if (this.frames % 50 == 0) {
+            let now = Date.now();
+            console.log(this.frames / ((now - this.start) / 1000.0));
         }
         // ---- END Background, camera and axis setup
     }
