@@ -34,9 +34,8 @@ class MyInterface extends CGFinterface {
 
     initCameras() {
         this.scene.cameraKeys = []
-        console.log("FRANGO", this.scene.graph.views)
         let i = 0
-        for (var key in this.scene.graph.views) {
+        for (let key in this.scene.graph.views) {
             this.scene.cameraKeys.push(key)
         }
         this.gui.add(this.scene, 'selectedCamera', this.scene.cameraKeys).name('Selected camera').onChange(this.scene.setCamera.bind(this.scene));
@@ -44,8 +43,9 @@ class MyInterface extends CGFinterface {
 
     initLights() {
         let i = 0;
-        for (var key in this.scene.graph.lights) {
-            this.gui.add(this.scene.lights[i], 'enabled').name(this.scene.lights[i].idLight)
+        let folder = this.gui.addFolder("Lights");
+        for (let key in this.scene.graph.lights) {
+            folder.add(this.scene.lights[i], 'enabled').name(this.scene.lights[i].idLight)
             i++;
         }
     }

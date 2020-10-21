@@ -28,7 +28,7 @@
     <lights>
         <!-- NOTE: this block "light" must be repeated as necessary with different "id". At least one light should be present, and a maximum of eight lights is accepted. -->
         <light id="demoLight">            <!-- light identifier -->
-            <enable value="0" />
+            <enable value="1" />
             <!-- enable/disable -->
             <position x="10" y="12" z="9.5" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
             <ambient r="1" g="1" b="1" a="1.0" />                   <!-- ambient component -->
@@ -36,7 +36,7 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />            <!-- specular component -->
         </light>
         <light id="candeeiroLight">            <!-- light identifier -->
-            <enable value="1" />
+            <enable value="0" />
             <!-- enable/disable -->
             <position x="1.04147" y="1.7" z="0" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
             <ambient r="0" g="0" b="0" a="1.0" />                   <!-- ambient component -->
@@ -51,8 +51,8 @@
         <texture id="demoTexture" path="./scenes/images/vidral.jpg" />
         <texture id="pavewalkTexture" path="./scenes/images/calçada.png" />
         <texture id="concrete" path="./scenes/images/concrete.png" />
-        <texture id="brick" path="./scenes/images/brick.jpg" />
-        <texture id="metal" path="./scenes/images/metal.png" />
+        <texture id="brick" path="./scenes/images/brick.png" />
+        <texture id="metal" path="./scenes/images/metal.jpg" />
         <texture id="blackMetal" path="./scenes/images/blackMetal.png" />
         <texture id="chairWood" path="./scenes/images/chairWood.png" />
         <texture id="stoneWall" path="./scenes/images/stoneWall.png" />
@@ -130,7 +130,7 @@
             <!-- next two lines are mandatory -->
             <material id="clear" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="clear"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="brick"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
@@ -354,7 +354,13 @@
                 <noderef id="cube"/>
             </descendants>
         </node>
-        <node id="paredeBBQ">            <!-- defines one intermediate node; may be repeated as necessary -->
+        <node id="paredeBBQ">   
+        
+            <transformations>
+                <translation x="0" y="0.6" z="-0.249"/>
+                <scale sx="0.5" sy="0.4" sz="1"/>
+            </transformations>
+         <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
@@ -363,7 +369,7 @@
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
- 
+    
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
@@ -440,7 +446,7 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="cocacolaTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="blackMetal"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 

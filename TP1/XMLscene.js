@@ -63,7 +63,7 @@ class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-        for (var key in this.graph.views) {
+        for (let key in this.graph.views) {
             this.setCamera(key)
             return;
         }
@@ -77,18 +77,16 @@ class XMLscene extends CGFscene {
          * Initializes the scene lights with the values read from the XML file.
          */
     initLights() {
-        var i = 0;
-        console.log("Frango", this.lights);
+        let i = 0;
         // Lights index.
 
         // Reads the lights from the scene graph.
-        for (var key in this.graph.lights) {
-            console.log("piroca")
+        for (let key in this.graph.lights) {
             if (i >= 8)
                 break; // Only eight lights allowed by WebCGF on default shaders.
 
             if (this.graph.lights.hasOwnProperty(key)) {
-                var graphLight = this.graph.lights[key];
+                let graphLight = this.graph.lights[key];
 
                 this.lights[i].setPosition(...graphLight[1]);
                 this.lights[i].setAmbient(...graphLight[2]);
@@ -96,8 +94,7 @@ class XMLscene extends CGFscene {
                 this.lights[i].setSpecular(...graphLight[4]);
                 this.lights[i].idLight = graphLight[5];
 
-                this.lights[i].setVisible(true);
-                console.log("frango caril", graphLight);
+                this.lights[i].setVisible(false);
                 if (graphLight[0])
                     this.lights[i].enable();
                 else
@@ -153,8 +150,8 @@ class XMLscene extends CGFscene {
 
         this.pushMatrix();
 
-        for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
+        for (let i = 0; i < this.lights.length; i++) {
+            //this.lights[i].setVisible(false);
             this.lights[i].update();
         }
 
@@ -162,7 +159,7 @@ class XMLscene extends CGFscene {
             // Draw axis
             this.axis.display();
             this.defaultAppearance.apply();
-            var key;
+            let key;
             this.graph.rootNode.display();
 
             // Displays the scene (MySceneGraph function).
@@ -181,11 +178,11 @@ class XMLscene extends CGFscene {
         setTimeout(() => {}, 200);
 
 
-        this.frames += 1;
+        /*this.frames += 1;
         if (this.frames % 50 == 0) {
             let now = Date.now();
             console.log(this.frames / ((now - this.start) / 1000.0));
-        }
+        }*/
         // ---- END Background, camera and axis setup
     }
 }
