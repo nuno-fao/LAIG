@@ -522,18 +522,21 @@ class MySceneGraph {
 
             let tg;
             if (transformationsIndex < 0) {
+                this.onXMLMinorError("Transformation block for '" + nodeID + "' not found!")
                 tg = null;
             } else {
                 tg = children[i].children[transformationsIndex];
             }
             let t;
             if (textureIndex < 0) {
+                this.onXMLMinorError("Texture block for '" + nodeID + "' not found!")
                 t = null;
             } else {
                 t = children[i].children[textureIndex];
             }
             let m;
             if (materialIndex < 0) {
+                this.onXMLMinorError("Material block for '" + nodeID + "' not found!")
                 m = null;
             } else {
                 m = children[i].children[materialIndex];
@@ -565,11 +568,13 @@ class MySceneGraph {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
-            let matID = this.reader.getString(this.nodes[nodeID].material, "id");
-            if (matID != "null") {
-                this.nodes[nodeID].material = this.materials[matID];
-            } else {
-                this.nodes[nodeID].material = null;
+            if (this.nodes[nodeID].material != null) {
+                let matID = this.reader.getString(this.nodes[nodeID].material, "id");
+                if (matID != "null") {
+                    this.nodes[nodeID].material = this.materials[matID];
+                } else {
+                    this.nodes[nodeID].material = null;
+                }
             }
 
 
@@ -578,19 +583,27 @@ class MySceneGraph {
             if (this.nodes[nodeID].texture != null) {
                 afs = this.reader.getString(this.nodes[nodeID].texture.children[0], "afs");
                 aft = this.reader.getString(this.nodes[nodeID].texture.children[0], "aft");
-            } else {
-                afs = 1;
-                aft = 1;
+
+                let textureID = this.reader.getString(this.nodes[nodeID].texture, "id");
+                if (textureID == "clear") {
+                    this.nodes[nodeID].texture = "clear";
+                } else if (textureID != "null") {
+                    this.nodes[nodeID].texture = this.textures[textureID];
+                } else {
+                    this.nodes[nodeID].texture = null;
+                }
+            }
+            if (this.nodes[nodeID].texture != "clear") {
+                if (afs == null) {
+                    afs = 1;
+                    this.onXMLMinorError("Afs info is missing for the node '" + nodeID + "', setting to 1")
+                }
+                if (aft == null) {
+                    aft = 1;
+                    this.onXMLMinorError("Aft info is missing for the node '" + nodeID + "', setting to 1")
+                }
             }
 
-            let textureID = this.reader.getString(this.nodes[nodeID].texture, "id");
-            if (textureID == "clear") {
-                this.nodes[nodeID].texture = "clear";
-            } else if (textureID != "null") {
-                this.nodes[nodeID].texture = this.textures[textureID];
-            } else {
-                this.nodes[nodeID].texture = null;
-            }
 
 
             for (let j = 0; j < grandChildren[descendants[nodeID]].children.length; j++) {
