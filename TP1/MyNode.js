@@ -9,34 +9,44 @@ class MyNode {
     }
     display() {
         this.scene.pushMatrix();
-        if (this.notRoot == false) {
-            this.scene.textureStack = [];
+
+        let matSize = this.scene.materialStack.length;
+        let texSize = this.scene.textureStack.length;
+        if (matSize == 0) {
+            this.scene.materialStack.push(this.scene.defaultMaterial);
+            matSize = this.scene.materialStack.length;
         }
 
-        if (this.material != null) {
+
+        //handle material if clear push null, if null push the last element on the stack, else push the current material
+        if (this.material == "clear") {
+            this.scene.materialStack.push(this.scene.defaultMaterial);
+        } else if (this.material == null) {
+            this.scene.materialStack.push(this.scene.materialStack[matSize - 1]);
+        } else {
             this.scene.materialStack.push(this.material);
         }
+
+        //handle texture if clear push null, if null push the last element on the stack, else push the current texture
         if (this.texture == "clear") {
             this.scene.textureStack.push(null);
-        } else if (this.texture != null) {
-            this.scene.textureStack.push(this.texture);
-        }
-
-        let materialEx;
-
-        if (this.scene.materialStack.length != 0) {
-            materialEx = this.scene.materialStack[this.scene.materialStack.length - 1];
+        } else if (this.texture == null) {
+            this.scene.textureStack.push(this.scene.textureStack[texSize - 1]);
         } else {
-            materialEx = this.scene.defaultMaterial;
+            this.scene.textureStack.push(this.texture)
         }
 
-        materialEx.apply();
-        if (this.scene.textureStack.length > 0 && this.texture != "clear" && this.scene.textureStack[this.scene.textureStack.length - 1] != null) {
-            try {
-                this.scene.textureStack[this.scene.textureStack.length - 1].bind();
-            } catch {}
-        }
+        matSize = this.scene.materialStack.length;
+        texSize = this.scene.textureStack.length;
 
+
+        // 
+        this.scene.materialStack[matSize - 1].apply();
+
+
+        if (this.scene.textureStack[texSize - 1] != null) {
+            this.scene.textureStack[texSize - 1].bind();
+        }
 
         if (this.tg_matrix != null)
             this.scene.multMatrix(this.tg_matrix);
@@ -44,13 +54,8 @@ class MyNode {
             this.descendentes[i].display();
         }
 
-        if (this.material != null) {
-            this.scene.materialStack.pop();
-        }
-
-        if (this.texture != null) {
-            this.scene.textureStack.pop();
-        }
+        this.scene.materialStack.pop();
+        this.scene.textureStack.pop();
 
 
         this.scene.popMatrix();

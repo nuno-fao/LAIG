@@ -50,7 +50,7 @@ class XMLscene extends CGFscene {
         this.defaultMaterial.setDiffuse(0.5, 0.5, 0.5, 1.0);
         this.defaultMaterial.setSpecular(0.5, 0.5, 0.5, 1.0);
         this.defaultMaterial.setShininess(10.0);
-        this.defaultMaterial.setEmission(0.0, 0.0, 0.0, 1);
+        this.defaultMaterial.setEmission(0, 0, 0, 1);
 
 
         //GUI
@@ -94,7 +94,7 @@ class XMLscene extends CGFscene {
                 this.lights[i].setSpecular(...graphLight[4]);
                 this.lights[i].idLight = graphLight[5];
 
-                this.lights[i].setVisible(false);
+                this.lights[i].setVisible(true);
                 if (graphLight[0])
                     this.lights[i].enable();
                 else

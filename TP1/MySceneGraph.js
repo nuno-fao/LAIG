@@ -248,6 +248,9 @@ class MySceneGraph {
     parseViews(viewsNode) {
         this.views = [];
         let children = viewsNode.children;
+        if (children.length <= 0) {
+            this.onXMLError("The Xml does not define any camera, using Default Camera");
+        }
         for (let i = 0; i < children.length; i++) {
             let key = this.reader.getString(children[i], "id");
             if (this.views[key] != null) {
@@ -255,6 +258,14 @@ class MySceneGraph {
             }
             let near = this.reader.getFloat(children[i], 'near')
             let far = this.reader.getFloat(children[i], 'far')
+            if (near == null) {
+                near = 0.1;
+                this.onXMLMinorError("Camera '" + key + "near value not defined, set to -0.1")
+            }
+            if (far == null) {
+                far = 400
+                this.onXMLMinorError("Camera '" + key + "far value not defined, set to 400")
+            }
             let position;
             let target;
             let up;
@@ -274,7 +285,12 @@ class MySceneGraph {
                 }
             }
             if (children[i].nodeName == "perspective") {
-                let angle = this.reader.getFloat(children[i], 'angle') / 180.0 * 3.1415;
+                let angle = this.reader.getFloat(children[i], 'angle');
+                if (angle == null) {
+                    angle = 45;
+                    this.onXMLMinorError("Camera '" + key + "angle value not defined, set to 45")
+                }
+                angle = angle / 180.0 * 3.1415
                 this.views[key] = new CGFcamera(angle, near, far, position, target);
             }
             if (children[i].nodeName == "ortho") {
@@ -282,6 +298,24 @@ class MySceneGraph {
                 let right = this.reader.getFloat(children[i], 'right')
                 let top = this.reader.getFloat(children[i], 'top')
                 let bottom = this.reader.getFloat(children[i], 'bottom')
+
+                if (left == null) {
+                    left = -5;
+                    this.onXMLMinorError("Camera '" + key + "left value not defined, set to -5")
+                }
+                if (right == null) {
+                    right = 5;
+                    this.onXMLMinorError("Camera '" + key + "right value not defined, set to 5")
+                }
+                if (bottom == null) {
+                    bottom = -5;
+                    this.onXMLMinorError("Camera '" + key + "bottom value not defined, set to -5")
+                }
+                if (top == null) {
+                    top = 5;
+                    this.onXMLMinorError("Camera '" + key + "top value not defined, set to 5")
+                }
+
                 this.views[key] = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
             }
             this.views[key].cameraId = key;
@@ -308,13 +342,25 @@ class MySceneGraph {
         let ambientIndex = nodeNames.indexOf("ambient");
         let backgroundIndex = nodeNames.indexOf("background");
 
-        let color = this.parseColor(children[ambientIndex], "ambient");
+        let color;
+        if (ambientIndex < 0) {
+            this.onXMLMinorError("Ambient color not defined");
+            color = [0.2, 0.2, 0.2, 1]
+        } else {
+
+            color = this.parseColor(children[ambientIndex], "ambient");
+            console.log(color)
+        }
         if (!Array.isArray(color))
             return color;
         else
             this.ambient = color;
 
-        color = this.parseColor(children[backgroundIndex], "background");
+        if (backgroundIndex < 0) {
+            this.onXMLMinorError("Background color not defined");
+            color = [1, 1, 1, 1]
+        } else
+            color = this.parseColor(children[backgroundIndex], "background");
         if (!Array.isArray(color))
             return color;
         else
@@ -338,8 +384,10 @@ class MySceneGraph {
         let grandChildren = [];
         let nodeNames = [];
 
-        // Any number of lights.
-        for (let i = 0; i < children.length; i++) {
+        if (children.length > 8) {
+            this.onXMLMinorError("Maximum number of lights is 8, tried to use " + children.length + ".")
+        }
+        for (let i = 0; i < children.length && i < 8; i++) {
 
             // Storing light information
             let global = [];
@@ -375,20 +423,25 @@ class MySceneGraph {
             for (let j = 0; j < attributeNames.length; j++) {
                 let attributeIndex = nodeNames.indexOf(attributeNames[j]);
                 let aux = 0;
-                if (attributeIndex != -1) {
+                if (attributeIndex < 0 && attributeNames[j] == "enable") {
+                    global.push(false);
+                    this.onXMLMinorError("Enable value for light '" + lightId + "' was not set, used default value 0")
+                } else if (attributeIndex != -1) {
                     if (attributeTypes[j] == "boolean")
                         aux = this.parseBoolean(grandChildren[attributeIndex], "value", "enabled attribute for light of ID" + lightId);
-                    else if (attributeTypes[j] == "position")
+                    else if (attributeTypes[j] == "position") {
                         aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
-                    else
+
+                    } else
                         aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
 
-                    if (typeof aux === 'string')
+                    if (typeof aux === 'string') {
                         return aux;
+                    }
 
                     global.push(aux);
                 } else
-                    return "light " + attributeNames[i] + " undefined for ID = " + lightId;
+                    return "light " + attributeNames[j] + " undefined for ID = " + lightId;
             }
             global.push(lightId);
             this.lights[lightId] = global;
@@ -396,7 +449,7 @@ class MySceneGraph {
         }
 
         if (numLights == 0)
-            return "at least one light must be defined";
+            this.onXMLError("At least one light should be defined");
         else if (numLights > 8)
             this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
 
@@ -418,7 +471,11 @@ class MySceneGraph {
                 return "ID must be unique for each texture (conflict: ID = " + key + ")";
             }
             try {
-                this.textures[key] = new CGFtexture(this.scene, path);
+                if (checkFileExist(path)) {
+                    this.textures[key] = new CGFtexture(this.scene, path);
+                } else {
+                    this.textures[key] = "clear"
+                }
             } catch {
 
             }
@@ -472,8 +529,14 @@ class MySceneGraph {
                 } else if (grandChildren[u].nodeName == "emissive") {
                     color = this.parseColor(grandChildren[u], "Color ERROR");
                     this.materials[materialID].setEmission(color[0], color[1], color[2], color[3]);
-                } else if (grandChildren[u].nodeName == "shininess")
-                    this.materials[materialID].setShininess(this.reader.getFloat(grandChildren[u], "value"));
+                } else if (grandChildren[u].nodeName == "shininess") {
+                    let sh = this.reader.getFloat(grandChildren[u], "value");
+                    if (sh == null) {
+                        this.onXMLMinorError("Shininess value of material '" + materialID + "' is not defined")
+                    }
+                    this.materials[materialID].setShininess();
+
+                }
             }
         }
         return null;
@@ -606,7 +669,14 @@ class MySceneGraph {
 
 
 
-            for (let j = 0; j < grandChildren[descendants[nodeID]].children.length; j++) {
+            let ddLenght;
+            if (descendants[nodeID] == -1) {
+                ddLenght = 0;
+                this.onXMLError(nodeID + " does not have a descendants tag, some nodes may not be used");
+            } else {
+                ddLenght = grandChildren[descendants[nodeID]].children.length;
+            }
+            for (let j = 0; j < ddLenght; j++) {
                 let grandgrandChildren = grandChildren[descendants[nodeID]].children[j];
                 if (grandgrandChildren.nodeName == "noderef") {
                     let node = this.nodes[this.reader.getString(grandgrandChildren, 'id')];
@@ -773,16 +843,30 @@ class MySceneGraph {
 
         // x
         let x = this.reader.getFloat(node, 'x');
+        if (x == null) {
+            x = 0;
+            this.onXMLError(messageError + " 'x' value set to 0");
+        }
         if (!(x != null && !isNaN(x)))
             return "unable to parse x-coordinate of the " + messageError;
 
         // y
-        let y = this.reader.getFloat(node, 'y');
+        let y;
+        y = this.reader.getFloat(node, 'y');
+        if (y == null) {
+            y = 0;
+            this.onXMLError(messageError + " 'y' value set to 0");
+        }
+
         if (!(y != null && !isNaN(y)))
             return "unable to parse y-coordinate of the " + messageError;
 
         // z
         let z = this.reader.getFloat(node, 'z');
+        if (z == null) {
+            z = 0;
+            this.onXMLError(messageError + " 'z' value set to 0");
+        }
         if (!(z != null && !isNaN(z)))
             return "unable to parse z-coordinate of the " + messageError;
 
@@ -808,6 +892,10 @@ class MySceneGraph {
 
         // w
         let w = this.reader.getFloat(node, 'w');
+        if (w == null) {
+            w = 0;
+            this.onXMLError(messageError + " 'w' value set to 0");
+        }
         if (!(w != null && !isNaN(w)))
             return "unable to parse w-coordinate of the " + messageError;
 
@@ -826,21 +914,37 @@ class MySceneGraph {
 
         // R
         let r = this.reader.getFloat(node, 'r');
+        if (r == null) {
+            r = 0;
+            this.onXMLError(messageError + " 'r' value set to 0");
+        }
         if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
             return "unable to parse R component of the " + messageError;
 
         // G
         let g = this.reader.getFloat(node, 'g');
+        if (g == null) {
+            g = 0;
+            this.onXMLError(messageError + " 'g' value set to 0");
+        }
         if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
             return "unable to parse G component of the " + messageError;
 
         // B
         let b = this.reader.getFloat(node, 'b');
+        if (b == null) {
+            b = 0;
+            this.onXMLError(messageError + " 'b' value set to 0");
+        }
         if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
             return "unable to parse B component of the " + messageError;
 
         // A
         let a = this.reader.getFloat(node, 'a');
+        if (a == null) {
+            a = 0;
+            this.onXMLError(messageError + " 'a' value set to 0");
+        }
         if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
             return "unable to parse A component of the " + messageError;
 
@@ -857,5 +961,17 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph, calling the root node's display function
 
         //this.nodes[this.idRoot].display()
+    }
+}
+
+function checkFileExist(url) {
+    let http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    if (http.status === 200) {
+        return true;
+    } else {
+        this.onXMLMinorError("File '" + url + "' doesn't exists");
+        return false
     }
 }
