@@ -8,7 +8,7 @@
     </initials>
     <views default="defaultCamera">
         <!-- at least one of the following type of cameras must be declared -->
-        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
+        <perspective id="defaultCamera" near="0.01" far="500" angle="45">
             <from x="0" y="12" z="10" />
             <to x="0" y="5" z="0" />
         </perspective>
@@ -61,6 +61,7 @@
         <texture id="laranjaTexture" path="./scenes/images/laranja.png" />
         <texture id="relvaTexture" path="./scenes/images/leaves.jpg" />
         <texture id="guardanapoTexture" path="./scenes/images/napkin.png" />
+        <texture id="can_top_texture" path="./scenes/images/can_top.png" />
     </textures>
 
 
@@ -514,8 +515,6 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.84147" y="1.78" z="0"/>
-                <rotation axis="z" angle="-57.297"/>
-                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -535,8 +534,6 @@
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="1.04147" y="1.7" z="0"/>
-                <rotation axis="z" angle="-57.297"/>
-                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -852,6 +849,27 @@
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <leaf type="cylinder" height="0.124" topRadius="0.0325" bottomRadius="0.0325" stacks="30" slices="30"/>
+                   <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with z; must have top and bottom caps-->
+                <noderef id="can_top"/>
+            </descendants>
+        </node>
+        <node id="can_top">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="metal" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="can_top_texture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0.0" y="0" z="-0.001"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                 <leaf type="cylinder" height="0.001" topRadius="0.0325" bottomRadius="0.0315" stacks="30" slices="30"/>
                   <!-- height, top radius, bottom radius, sections along height (stacks), parts per section (slices); main axis is aligned with z; must have top and bottom caps-->
             </descendants>
         </node>

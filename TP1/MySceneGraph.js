@@ -253,8 +253,13 @@ class MySceneGraph {
         }
         for (let i = 0; i < children.length; i++) {
             let key = this.reader.getString(children[i], "id");
+            if (key == null) {
+                this.onXMLError("There is one camera without a defined id, ignoring that camera (camera number " + (i + 1) + ")");
+                continue;
+            }
             if (this.views[key] != null) {
-                return "ID must be unique for each camera (conflict: ID = " + key + ")";
+                this.onXMLError("ID must be unique for each camera (conflict: ID = " + key + "), using only the first camera with this id");
+                continue;
             }
             let near = this.reader.getFloat(children[i], 'near')
             let far = this.reader.getFloat(children[i], 'far')
@@ -405,12 +410,16 @@ class MySceneGraph {
 
             // Get id of the current light.
             let lightId = this.reader.getString(children[i], 'id');
-            if (lightId == null)
-                return "no ID defined for light";
+            if (lightId == null) {
+                this.onXMLError("There is one light without a defined id, ignoring that light (light number " + (i + 1) + ")");
+                continue;
+            }
 
             // Checks for repeated IDs.
-            if (this.lights[lightId] != null)
-                return "ID must be unique for each light (conflict: ID = " + lightId + ")";
+            if (this.lights[lightId] != null) {
+                this.onXMLError("ID must be unique for each light (conflict: ID = " + lightId + "), using only the first light with this id");
+                continue;
+            }
 
             grandChildren = children[i].children;
             // Specifications for the current light.
@@ -428,15 +437,14 @@ class MySceneGraph {
                     this.onXMLMinorError("Enable value for light '" + lightId + "' was not set, used default value 0")
                 } else if (attributeIndex != -1) {
                     if (attributeTypes[j] == "boolean")
-                        aux = this.parseBoolean(grandChildren[attributeIndex], "value", "enabled attribute for light of ID" + lightId);
+                        aux = this.parseBoolean(grandChildren[attributeIndex], "value", "for light " + lightId);
                     else if (attributeTypes[j] == "position") {
-                        aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
-
+                        aux = this.parseCoordinates4D(grandChildren[attributeIndex], "Value not Defined; " + lightId);
                     } else
-                        aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
+                        aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + "Value not Defined; " + lightId);
 
                     if (typeof aux === 'string') {
-                        return aux;
+                        this.onXMLMinorError(aux);
                     }
 
                     global.push(aux);
@@ -467,8 +475,18 @@ class MySceneGraph {
         for (let i = 0; i < children.length; i++) {
             let key = this.reader.getString(children[i], "id");
             let path = this.reader.getString(children[i], "path")
+
+            if (key == null) {
+                this.onXMLError("There is one texture without a defined id, ignoring that texture (texture number " + (i + 1) + ")");
+                continue;
+            } else if (path == null) {
+                this.onXMLError("Path not defined for node '" + key + "'");
+                continue;
+            }
+            // Checks for repeated IDs.
             if (this.textures[key] != null) {
-                return "ID must be unique for each texture (conflict: ID = " + key + ")";
+                this.onXMLError("ID must be unique for each texture (conflict: ID = " + key + "), using only the first texture with this id");
+                continue;
             }
             try {
                 if (checkFileExist(path)) {
@@ -592,14 +610,14 @@ class MySceneGraph {
             }
             let t;
             if (textureIndex < 0) {
-                this.onXMLMinorError("Texture block for '" + nodeID + "' not found!")
+                this.onXMLMinorError("Texture block for '" + nodeID + "' not found, using 'null' value");
                 t = null;
             } else {
                 t = children[i].children[textureIndex];
             }
             let m;
             if (materialIndex < 0) {
-                this.onXMLMinorError("Material block for '" + nodeID + "' not found!")
+                this.onXMLMinorError("Material block for '" + nodeID + "' not found, using 'null' value")
                 m = null;
             } else {
                 m = children[i].children[materialIndex];
@@ -651,7 +669,11 @@ class MySceneGraph {
                 if (textureID == "clear") {
                     this.nodes[nodeID].texture = "clear";
                 } else if (textureID != "null") {
-                    this.nodes[nodeID].texture = this.textures[textureID];
+                    let texture = this.textures[textureID];
+                    this.nodes[nodeID].texture = texture;
+                    if (texture == null) {
+                        this.onXMLMinorError("TextureId (" + textureID + ") on node '" + nodeID + "' does not reference a valid texture")
+                    }
                 } else {
                     this.nodes[nodeID].texture = null;
                 }
@@ -666,8 +688,6 @@ class MySceneGraph {
                     this.onXMLMinorError("Aft info is missing for the node '" + nodeID + "', setting to 1")
                 }
             }
-
-
 
             let ddLenght;
             if (descendants[nodeID] == -1) {
@@ -708,6 +728,15 @@ class MySceneGraph {
                             {
                                 let axis = this.reader.getString(grandgrandChildren, "axis");
                                 let angle = this.reader.getFloat(grandgrandChildren, "angle");
+
+                                if (axis == null) {
+                                    this.onXMLError("Axis Value not set on rotation's block at node '" + nodeID + "'")
+                                    break;
+                                }
+                                if (angle == null) {
+                                    this.onXMLError("Angle Value not set on rotation's block at node '" + nodeID + "'")
+                                    break;
+                                }
                                 angle = angle / 180 * Math.PI;
                                 switch (axis) {
                                     case "x":
@@ -740,6 +769,9 @@ class MySceneGraph {
                                             this.scene.rotate(angle, 0, 0, 1);
                                             break;
                                         }
+                                    default:
+                                        this.onXMLError("Axis Value for rotation on node '" + nodeID + "' not valid")
+
                                 }
                                 break;
                             }
@@ -748,11 +780,26 @@ class MySceneGraph {
                                 let sx = this.reader.getFloat(grandgrandChildren, "sx");
                                 let sy = this.reader.getFloat(grandgrandChildren, "sy");
                                 let sz = this.reader.getFloat(grandgrandChildren, "sz");
+                                if (sx == null) {
+                                    this.onXMLMinorError("sx Value not set for scale on node '" + nodeID + "',using sx=1")
+                                    sx = 1;
+                                }
+                                if (sy == null) {
+                                    this.onXMLMinorError("sy Value not set for scale on node '" + nodeID + "',using sy=1")
+                                    sy = 1;
+                                }
+                                if (sz == null) {
+                                    this.onXMLMinorError("sz Value not set for scale on node '" + nodeID + "',using sz=1")
+                                    sz = 1;
+                                }
 
                                 this.scene.scale(sx, sy, sz);
 
                                 break;
                             }
+                        default:
+                            this.onXMLError("Transformation tag '" + grandgrandChildren.nodeName + "' not valid on node '" + nodeID + "'")
+
                     }
                 }
             }
