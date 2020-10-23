@@ -488,14 +488,11 @@ class MySceneGraph {
                 this.onXMLError("ID must be unique for each texture (conflict: ID = " + key + "), using only the first texture with this id");
                 continue;
             }
-            try {
-                if (checkFileExist(path)) {
-                    this.textures[key] = new CGFtexture(this.scene, path);
-                } else {
-                    this.textures[key] = "clear"
-                }
-            } catch {
-
+            let exists = this.checkFileExist(path);
+            if (exists == true) {
+                this.textures[key] = new CGFtexture(this.scene, path);
+            } else {
+                this.textures[key] = "clear"
             }
         }
         return null;
@@ -523,12 +520,16 @@ class MySceneGraph {
 
             // Get id of the current material.
             let materialID = this.reader.getString(children[i], 'id');
-            if (materialID == null)
-                return "no ID defined for material";
+            if (materialID == null) {
+                this.onXMLError("no ID defined for material number " + i + ", ignoring material");
+                continue;
+            }
 
             // Checks for repeated IDs.
-            if (this.materials[materialID] != null)
-                return "ID must be unique for each light (conflict: ID = " + materialID + ")";
+            if (this.materials[materialID] != null) {
+                this.onXMLError("ID must be unique for each material (conflict: ID = " + materialID + "), only using first material with that id");
+                continue;
+            }
 
             let grandChildren = children[i].children;
             this.materials[materialID] = new CGFappearance(this.scene);
@@ -557,6 +558,7 @@ class MySceneGraph {
                 }
             }
         }
+        this.scene.materialStack.push(this.scene.defaultMaterial);
         return null;
     }
 
@@ -582,12 +584,16 @@ class MySceneGraph {
 
             // Get id of the current node.
             let nodeID = this.reader.getString(children[i], 'id');
-            if (nodeID == null)
-                return "no ID defined for nodeID";
+            if (nodeID == null) {
+                this.onXMLError("no ID defined for nodeID number " + i + ", ignoring ");
+                continue;
+            }
 
             // Checks for repeated IDs.
-            if (this.nodes[nodeID] != null)
-                return "ID must be unique for each node (conflict: ID = " + nodeID + ")";
+            if (this.nodes[nodeID] != null) {
+                this.onXMLError("ID must be unique for each node (conflict: ID = " + nodeID + "), using only first node with that id");
+                continue;
+            }
 
             grandChildren = children[i].children;
 
@@ -699,10 +705,17 @@ class MySceneGraph {
             for (let j = 0; j < ddLenght; j++) {
                 let grandgrandChildren = grandChildren[descendants[nodeID]].children[j];
                 if (grandgrandChildren.nodeName == "noderef") {
-                    let node = this.nodes[this.reader.getString(grandgrandChildren, 'id')];
-                    if (node == null) {
-                        node = new MyNode(this.scene, null, null, null);
-                        this.onXMLError("Node '" + this.reader.getString(grandgrandChildren, 'id') + "' referenced but not created!")
+                    let id = this.reader.getString(grandgrandChildren, 'id');
+                    if (id == null) {
+                        continue;
+                    }
+                    let node = this.nodes[id];
+                    if (node == null) {;
+                        this.onXMLError("Node '" + this.reader.getString(grandgrandChildren, 'id') + "' referenced but not created!");
+                        continue;
+                    }
+                    if (id == this.idRoot) {
+                        this.onXMLError(this.idRoot + " is defined as root node, however it has parent nodes such as '" + nodeID + "', every node that is not a descendant of this node may not be rendered")
                     }
                     this.nodes[nodeID].addDescendente(node);
                     node.used = true;
@@ -810,9 +823,34 @@ class MySceneGraph {
                 this.onXMLError("Node '" + node + "' created but not referenced!")
             }
         }
-        this.rootNode = this.nodes[this.idRoot];
+        let rootNodeInstance = this.nodes[this.idRoot];
+        if (rootNodeInstance == null) {
+            let IdRootNodeInfered;
+            let dictLenght = false;
+            for (let key in this.nodes) {
+                dictLenght = true;
+                if (this.nodes[key].used == false) {
+                    rootNodeInstance = this.nodes[key];
+                    IdRootNodeInfered = key;
+                    break;
+                }
+            }
+            if (rootNodeInstance == null) {
+                for (let key in this.nodes) {
+                    rootNodeInstance = this.nodes[key];
+                    IdRootNodeInfered = key;
+                    break;
+                }
+            }
+            if (dictLenght)
+                this.onXMLError("Root node '" + this.idRoot + "' does not exist, using '" + IdRootNodeInfered + "' as root")
+            else
+                this.onXMLError("There were no nodes created")
+
+        }
+        this.rootNode = rootNodeInstance;
     }
-    auxiliaryParseLeaf(leaf, nodeID, aft, afs) {
+    auxiliaryParseLeaf(leaf, nodeID, afs, aft) {
         switch (this.reader.getString(leaf, 'type')) {
             case "triangle":
                 {
@@ -822,7 +860,7 @@ class MySceneGraph {
                     let y1 = this.reader.getFloat(leaf, 'y1');
                     let y2 = this.reader.getFloat(leaf, 'y2');
                     let y3 = this.reader.getFloat(leaf, 'y3');
-                    let t = new MyTriangle(this.scene, x1, y1, x2, y2, x3, y3, aft, afs);
+                    let t = new MyTriangle(this.scene, x1, y1, x2, y2, x3, y3, afs, aft);
                     this.nodes[nodeID].addDescendente(t);
                     break;
                 }
@@ -832,7 +870,7 @@ class MySceneGraph {
                     let x2 = this.reader.getFloat(leaf, 'x2');
                     let y1 = this.reader.getFloat(leaf, 'y1');
                     let y2 = this.reader.getFloat(leaf, 'y2');
-                    let r = new MyRectangle(this.scene, x1, y1, x2, y2, aft, afs);
+                    let r = new MyRectangle(this.scene, x1, y1, x2, y2, afs, aft);
                     this.nodes[nodeID].addDescendente(r);
                     break;
                 }
@@ -1004,21 +1042,17 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-
-        //To do: Create display loop for transversing the scene graph, calling the root node's display function
-
-        //this.nodes[this.idRoot].display()
+        this.rootNode.display();
     }
-}
-
-function checkFileExist(url) {
-    let http = new XMLHttpRequest();
-    http.open('HEAD', url, false);
-    http.send();
-    if (http.status === 200) {
-        return true;
-    } else {
-        this.onXMLMinorError("File '" + url + "' doesn't exists");
-        return false
+    checkFileExist(add) {
+        let http = new XMLHttpRequest();
+        http.open('HEAD', add, false);
+        http.send();
+        if (http.status == 200) {
+            return true;
+        } else {
+            this.onXMLMinorError("File '" + add + "' doesn't exists");
+            return false
+        }
     }
 }

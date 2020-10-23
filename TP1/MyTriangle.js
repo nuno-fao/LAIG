@@ -10,7 +10,7 @@
  * @param y3 - y coordinate corner 3
  */
 class MyTriangle extends CGFobject {
-    constructor(scene, x1, y1, x2, y2, x3, y3, aft, afs) {
+    constructor(scene, x1, y1, x2, y2, x3, y3, afs, aft) {
         super(scene);
         this.x1 = x1;
         this.x2 = x2;
@@ -21,8 +21,6 @@ class MyTriangle extends CGFobject {
         this.z1 = 0;
         this.z2 = 0;
         this.z3 = 0;
-        this.aft = 1;
-        this.afs = 1;
         this.aft = aft;
         this.afs = afs;
 
@@ -49,9 +47,9 @@ class MyTriangle extends CGFobject {
         ];
 
         //distance between vertices
-        let a = Math.sqrt(Math.pow(this.x1 - this.x3, 2) + Math.pow(this.y1 - this.y3, 2) + Math.pow(this.z1 - this.z3, 2));
-        let b = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2) + Math.pow(this.z3 - this.z2, 2));
-        let c = Math.sqrt(Math.pow(this.x2 - this.x1, 2) + Math.pow(this.y2 - this.y1, 2) + Math.pow(this.z2 - this.z1, 2));
+        let a = Math.sqrt(Math.pow(this.x1 - this.x2, 2) + Math.pow(this.y1 - this.y2, 2));
+        let b = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2));
+        let c = Math.sqrt(Math.pow(this.x3 - this.x1, 2) + Math.pow(this.y3 - this.y1, 2));
 
         //cos(alpha) and sin(alpha)
         let cosalpha = (Math.pow(a, 2) - Math.pow(b, 2) + Math.pow(c, 2)) / (2 * a * c);
@@ -68,10 +66,11 @@ class MyTriangle extends CGFobject {
         */
 
         this.texCoords = [
-            0, 0,
-            a / this.afs, 0,
-            c * cosalpha / this.afs, c * sinalpha / this.aft
+            0, 1,
+            a / this.afs, 1,
+            c * cosalpha / this.afs, 1 - c * sinalpha / this.aft
         ];
+        console.log(a, b, c, this.afs, this.aft);
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
@@ -84,9 +83,5 @@ class MyTriangle extends CGFobject {
     updateTexCoords(coords) {
         this.texCoords = [...coords];
         this.updateTexCoordsGLBuffers();
-    }
-    setAftAfs(aft, afs) {
-        this.aft = aft;
-        this.afs = afs;
     }
 }

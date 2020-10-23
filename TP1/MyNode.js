@@ -12,40 +12,45 @@ class MyNode {
 
         let matSize = this.scene.materialStack.length;
         let texSize = this.scene.textureStack.length;
-        if (matSize == 0) {
-            this.scene.materialStack.push(this.scene.defaultMaterial);
-            matSize = this.scene.materialStack.length;
-        }
+        let localMat;
+        let localText;
 
 
         //handle material if clear push null, if null push the last element on the stack, else push the current material
+
         if (this.material == "clear") {
-            this.scene.materialStack.push(this.scene.defaultMaterial);
+            localMat = this.scene.defaultMaterial;
+            this.scene.materialStack.push(localMat);
         } else if (this.material == null) {
-            this.scene.materialStack.push(this.scene.materialStack[matSize - 1]);
+            localMat = this.scene.materialStack[matSize - 1];
+            this.scene.materialStack.push(localMat);
         } else {
-            this.scene.materialStack.push(this.material);
+            localMat = this.material;
+            this.scene.materialStack.push(localMat);
         }
 
         //handle texture if clear push null, if null push the last element on the stack, else push the current texture
+
         if (this.texture == "clear") {
+            localText = null;
             this.scene.textureStack.push(null);
         } else if (this.texture == null) {
-            this.scene.textureStack.push(this.scene.textureStack[texSize - 1]);
+            localText = this.scene.textureStack[texSize - 1];
+            this.scene.textureStack.push(localText);
         } else {
-            this.scene.textureStack.push(this.texture)
+            localText = this.texture;
+            this.scene.textureStack.push(localText)
         }
 
-        matSize = this.scene.materialStack.length;
-        texSize = this.scene.textureStack.length;
+        matSize += 1;
+        texSize += 1;
 
 
         // 
-        this.scene.materialStack[matSize - 1].apply();
+        localMat.apply();
 
-
-        if (this.scene.textureStack[texSize - 1] != null) {
-            this.scene.textureStack[texSize - 1].bind();
+        if (localText != null) {
+            localText.bind();
         }
 
         if (this.tg_matrix != null)
@@ -56,7 +61,6 @@ class MyNode {
 
         this.scene.materialStack.pop();
         this.scene.textureStack.pop();
-
 
         this.scene.popMatrix();
     }
