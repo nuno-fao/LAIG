@@ -12,7 +12,8 @@
 - Scene
   - The scene we created is a simple outdoor dinning table with an orange, a donut, a napkin, a can of coke and 6 chairs
   - There are also 2 floors, a wall, a BBQ stand and a lamp (with its own light source) to light up the table
-  - (relative link to the scene)
+  - [Scene Running](https://web.fe.up.pt/~up201806206/laig/TP1/)
+  - [Scene XML](./scenes/envio.xml)
 ----
 ## Issues/Problems
 
