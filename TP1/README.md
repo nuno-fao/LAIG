@@ -9,13 +9,13 @@
 ----
 ## Project information
 
-- Scene
+### Scene
   - The scene we created is a simple outdoor dinning table with an orange, a donut, a napkin, a can of coke and 6 chairs
   - There are also 2 floors, a wall, a BBQ stand and a lamp (with its own light source) to light up the table
   - [Scene Running](https://web.fe.up.pt/~up201806206/laig/TP1/)
   - [Scene XML](./scenes/envio.xml)
 
-- Main Strong Points
+### Main Strong Points
   - All primitives have been implemented
   - Heritage working properly for both materials and textures
   - Texture amplification working aswell
@@ -23,7 +23,7 @@
   - Transformations all work as they should
   - GUI implemented with a dropdown for cameras, a folder with checkboxes for each light and another checkbox to visualize every light source
 
-- Additional features
+### Additional features
   - Vectors have default values for each element and a warning is produced in case of any error or missing value. Examples: RGBA, Transformations, Lights and each of its components, Cameras, Afs and Aft, Ambient and Background
   - Materials, Textures, Transformations, Amplification and Descendants can be omitted and produce a warning
   - Maximum number of lights accepted is 8 and minimum is 0 (everything will be very dark obviously)
