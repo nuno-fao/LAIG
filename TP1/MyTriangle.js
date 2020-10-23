@@ -70,7 +70,6 @@ class MyTriangle extends CGFobject {
             a / this.afs, 1,
             c * cosalpha / this.afs, 1 - c * sinalpha / this.aft
         ];
-        console.log(a, b, c, this.afs, this.aft);
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }

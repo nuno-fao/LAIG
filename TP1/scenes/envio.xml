@@ -65,7 +65,7 @@
         <texture id="teste" path="./scenes/images/testTexture2.png" />
         <texture id="chrome" path="./scenes/images/chrome.png" />
         <texture id="pernaWood" path="./scenes/images/pernaWood.jpg" />
-        <texture id="backWood" path="./scenes/images/backWood2.jpg" />
+        <texture id="backWood" path="./scenes/images/backWood.jpg" />
     </textures>
 
 
@@ -953,7 +953,7 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="woodMaterial"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="chairWood"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
@@ -1071,7 +1071,7 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="woodMaterial"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="chairWood"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
