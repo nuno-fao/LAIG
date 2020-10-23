@@ -216,12 +216,12 @@ class MySceneGraph {
 
         // Get root of the scene.
         if (rootIndex == -1)
-            return "No root id defined for scene.";
+            this.onXMLError("No root tag defined for scene.");
 
         let rootNode = children[rootIndex];
         let id = this.reader.getString(rootNode, 'id');
         if (id == null)
-            return "No root id defined for scene.";
+            this.onXMLError("No root id defined for scene.");
 
         this.idRoot = id;
 
@@ -570,7 +570,6 @@ class MySceneGraph {
         let children = nodesNode.children;
 
         let grandChildren = [];
-        let grandgrandChildren = [];
         let nodeNames = [];
         let descendants = [];
 
@@ -634,21 +633,12 @@ class MySceneGraph {
                 t,
                 m
             );
+            descendants[nodeID] = children[i].children[descendants[nodeID]]
 
         }
-        for (let i = 0; i < children.length; i++) {
+        for (let nodeID in this.nodes) {
 
-            if (children[i].nodeName != "node") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
-                continue;
-            }
-
-            // Get id of the current node.
-            let nodeID = this.reader.getString(children[i], 'id');
-            if (nodeID == null) {
-                return "node not define";
-            }
-            grandChildren = children[i].children;
+            grandChildren = descendants[nodeID];
 
             nodeNames = [];
             for (let j = 0; j < grandChildren.length; j++) {
@@ -657,8 +647,14 @@ class MySceneGraph {
 
             if (this.nodes[nodeID].material != null) {
                 let matID = this.reader.getString(this.nodes[nodeID].material, "id");
+                if (matID == null) {
+                    this.onXMLMinorError("Material id for node " + nodeID + " is not set, using value null")
+                }
                 if (matID != "null") {
                     this.nodes[nodeID].material = this.materials[matID];
+                    if (this.nodes[nodeID].material == null) {
+                        this.onXMLMinorError("MaterialId (" + matID + ") on node '" + nodeID + "' does not reference a valid material")
+                    }
                 } else {
                     this.nodes[nodeID].material = null;
                 }
@@ -674,6 +670,9 @@ class MySceneGraph {
                 let textureID = this.reader.getString(this.nodes[nodeID].texture, "id");
                 if (textureID == "clear") {
                     this.nodes[nodeID].texture = "clear";
+                } else if (textureID == null) {
+                    this.onXMLMinorError("Texture id for node " + nodeID + " is not set, using value null");
+                    this.nodes[nodeID].texture = null;
                 } else if (textureID != "null") {
                     let texture = this.textures[textureID];
                     this.nodes[nodeID].texture = texture;
@@ -700,18 +699,19 @@ class MySceneGraph {
                 ddLenght = 0;
                 this.onXMLError(nodeID + " does not have a descendants tag, some nodes may not be used");
             } else {
-                ddLenght = grandChildren[descendants[nodeID]].children.length;
+                ddLenght = descendants[nodeID].children.length;
             }
             for (let j = 0; j < ddLenght; j++) {
-                let grandgrandChildren = grandChildren[descendants[nodeID]].children[j];
+                let grandgrandChildren = descendants[nodeID].children[j];
                 if (grandgrandChildren.nodeName == "noderef") {
                     let id = this.reader.getString(grandgrandChildren, 'id');
                     if (id == null) {
+                        this.onXMLError("Node '" + nodeID + "' has a noderef without an id value");
                         continue;
                     }
                     let node = this.nodes[id];
                     if (node == null) {;
-                        this.onXMLError("Node '" + this.reader.getString(grandgrandChildren, 'id') + "' referenced but not created!");
+                        this.onXMLError("Node '" + id + "' referenced but not created!");
                         continue;
                     }
                     if (id == this.idRoot) {
