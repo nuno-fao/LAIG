@@ -27,7 +27,7 @@
 
     <lights>
         <!-- NOTE: this block "light" must be repeated as necessary with different "id". At least one light should be present, and a maximum of eight lights is accepted. -->
-        <light id="demoLight">          <!-- light identifier -->
+        <light id="luz_ambiente">          <!-- light identifier -->
             <enable value="1" /> 
             <!-- enable/disable -->
             <position x="10" y="12" z="9.5" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
@@ -35,7 +35,7 @@
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />             <!-- diffuse component -->
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />            <!-- specular component -->
         </light>
-        <light id="candeeiroLight">           <!-- light identifier -->
+        <light id="luz_candeeiro">           <!-- light identifier -->
             <enable value="0" /> 
             <!-- enable/disable -->
             <position x="-2.5" y="5.1" z="-2" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
