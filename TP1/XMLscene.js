@@ -43,6 +43,7 @@ class XMLscene extends CGFscene {
         this.previous = Date.now();
         this.start = Date.now();
         this.frames = 0;
+        this.seeLights = false;
 
 
         this.defaultMaterial = new CGFappearance(this);
@@ -101,6 +102,7 @@ class XMLscene extends CGFscene {
                     this.lights[i].disable();
 
                 this.lights[i].update();
+                this.lights[i].setVisible(false);
 
                 i++;
             }
@@ -151,7 +153,11 @@ class XMLscene extends CGFscene {
         this.pushMatrix();
 
         for (let i = 0; i < this.lights.length; i++) {
-            //this.lights[i].setVisible(false);
+            if (this.seeLights)
+                this.lights[i].setVisible(true);
+            else {
+                this.lights[i].setVisible(false);
+            }
             this.lights[i].update();
         }
 

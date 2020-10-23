@@ -945,7 +945,7 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>   
-                <noderef d="cube" />  
+                <noderef id="cube" />  
             </descendants>
         </node>
         <node id="pernas_cadeira">            <!-- defines one intermediate node; may be repeated as necessary -->

@@ -39,6 +39,7 @@ class MyInterface extends CGFinterface {
             this.scene.cameraKeys.push(key)
         }
         this.gui.add(this.scene, 'selectedCamera', this.scene.cameraKeys).name('Selected camera').onChange(this.scene.setCamera.bind(this.scene));
+        this.gui.add(this.scene, 'seeLights').name("See Lights")
     }
 
     initLights() {
