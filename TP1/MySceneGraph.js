@@ -888,7 +888,13 @@ class MySceneGraph {
         this.rootNode = rootNodeInstance;
     }
 
-
+    /**
+     * Create the leafs instances
+     * @param {block element} leaf
+     * @param {id of the leaf} nodeID
+     * @param {amplification value for s} afs
+     * @param {amplification value for t} aft
+     */
     auxiliaryParseLeaf(leaf, nodeID, afs, aft) {
         switch (this.reader.getString(leaf, 'type', false)) {
             case "triangle":
@@ -1041,6 +1047,12 @@ class MySceneGraph {
         }
     }
 
+    /**
+     * Parse a boolean with id = name
+     * @param {block element} node
+     * @param {name of the elemnt to be retrieved} name
+     * @param {message to be displayed in case of error} messageError
+     */
     parseBoolean(node, name, messageError) {
         let boolVal = this.reader.getBoolean(node, name, false);
         if (!(boolVal != null && !isNaN(boolVal) && (boolVal == true || boolVal == false))) {
@@ -1183,17 +1195,28 @@ class MySceneGraph {
     displayScene() {
         this.rootNode.display();
     }
-    checkFileExist(add) {
+
+    /**
+     * Check if a file exists on the server
+     * @param {url of the file to check} url
+     */
+    checkFileExist(url) {
         let http = new XMLHttpRequest();
-        http.open('HEAD', add, false);
+        http.open('HEAD', url, false);
         http.send();
         if (http.status == 200) {
             return true;
         } else {
-            this.onXMLMinorError("File '" + add + "' doesn't exists");
+            this.onXMLMinorError("File '" + url + "' doesn't exists");
             return false
         }
     }
+
+    /**
+     * Get a float value from the xml
+     * @param {block element} tag
+     * @param {string name of the xml elemnt to retrieve} ustringrl
+     */
     graphGetFloat(tag, string) {
         let out = this.reader.getFloat(tag, string, false);
         if (isNaN(out)) {
