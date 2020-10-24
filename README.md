@@ -15,7 +15,7 @@
 - Scene
   - The scene we created is a simple outdoor dinning table with an orange, a donut, a napkin, a can of coke and 6 chairs
   - There are also 2 floors, a wall, a BBQ stand and a lamp (with its own light source) to light up the table
-  - (relative link to the scene)
+  - [TP1](./TP1)
 
 -----
 
