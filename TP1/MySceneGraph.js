@@ -690,36 +690,40 @@ class MySceneGraph {
 
 
             //parse texture
-            let afs, aft;
+            let afs = null;
+            let aft = null;
             if (this.nodes[nodeID].texture != null) {
-                afs = this.reader.getString(this.nodes[nodeID].texture.children[0], "afs", false);
-                aft = this.reader.getString(this.nodes[nodeID].texture.children[0], "aft", false);
-
                 let textureID = this.reader.getString(this.nodes[nodeID].texture, "id", false);
-                if (textureID == "clear") {
-                    this.nodes[nodeID].texture = "clear";
-                } else if (textureID == null) {
-                    this.onXMLMinorError("Texture id for node " + nodeID + " is not set, using value null");
-                    this.nodes[nodeID].texture = null;
-                } else if (textureID != "null") {
-                    let texture = this.textures[textureID];
-                    this.nodes[nodeID].texture = texture;
-                    if (texture == null) {
-                        this.onXMLMinorError("TextureId (" + textureID + ") on node '" + nodeID + "' does not reference a valid texture")
+                if (textureID != "clear") {
+                    if (this.nodes[nodeID].texture.children[0] != null) {
+                        afs = this.reader.getString(this.nodes[nodeID].texture.children[0], "afs", false);
+                        aft = this.reader.getString(this.nodes[nodeID].texture.children[0], "aft", false);
+                    } else {
+                        this.onXMLMinorError("Aplification tag was not defined for node '" + nodeID + "'")
+                    }
+                    if (afs == null) {
+                        afs = 1;
+                        this.onXMLMinorError("Afs info is missing for the node '" + nodeID + "', setting to 1")
+                    }
+                    if (aft == null) {
+                        aft = 1;
+                        this.onXMLMinorError("Aft info is missing for the node '" + nodeID + "', setting to 1")
+                    }
+
+                    if (textureID == null) {
+                        this.onXMLMinorError("Texture id for node " + nodeID + " is not set, using value null");
+                        this.nodes[nodeID].texture = null;
+                    } else if (textureID != "null") {
+                        let texture = this.textures[textureID];
+                        this.nodes[nodeID].texture = texture;
+                        if (texture == null) {
+                            this.onXMLMinorError("TextureId (" + textureID + ") on node '" + nodeID + "' does not reference a valid texture")
+                        }
+                    } else {
+                        this.nodes[nodeID].texture = null;
                     }
                 } else {
-                    this.nodes[nodeID].texture = null;
-                }
-            }
-
-            if (this.nodes[nodeID].texture != "clear") {
-                if (afs == null) {
-                    afs = 1;
-                    this.onXMLMinorError("Afs info is missing for the node '" + nodeID + "', setting to 1")
-                }
-                if (aft == null) {
-                    aft = 1;
-                    this.onXMLMinorError("Aft info is missing for the node '" + nodeID + "', setting to 1")
+                    this.nodes[nodeID].texture = "clear";
                 }
             }
 
@@ -748,7 +752,12 @@ class MySceneGraph {
                     if (id == this.idRoot) {
                         this.onXMLError(this.idRoot + " is defined as root node, however it has parent nodes such as '" + nodeID + "', every node that is not a descendant of this node may not be rendered")
                     }
+                    /*if (node.wasReferenced == true) {
+                        this.onXMLError("The graph is cyclic!!!! node '" + id + " has " + nodeID + " as a descendant(direct or not)");
+                        continue;
+                    }*/
                     this.nodes[nodeID].addDescendente(node);
+                    //node.wasReferenced = true;
                     node.used = true;
                 } else {
                     this.auxiliaryParseLeaf(descendantList, nodeID, afs, aft);

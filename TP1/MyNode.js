@@ -6,6 +6,7 @@ class MyNode {
         this.material = material;
         this.descendentes = [];
         this.used = false;
+        //this.wasReferenced = false;
     }
     display() {
         this.scene.pushMatrix();
