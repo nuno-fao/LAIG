@@ -64,19 +64,24 @@ class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-        for (let key in this.graph.views) {
-            this.setCamera(key)
-            return;
-        }
+        if (this.defaultCamera == null)
+            for (let key in this.graph.views) {
+                this.setCamera(key)
+                return;
+            }
+        else
+            this.setCamera(this.defaultCamera)
     }
+
     setCamera(cameraKey) {
-            this.camera = this.graph.views[cameraKey];
-            this.selectedCamera = cameraKey;
-            this.interface.setActiveCamera(this.graph.views[cameraKey]);
-        }
-        /**
-         * Initializes the scene lights with the values read from the XML file.
-         */
+        this.camera = this.graph.views[cameraKey];
+        this.selectedCamera = cameraKey;
+        this.interface.setActiveCamera(this.graph.views[cameraKey]);
+    }
+
+    /**
+     * Initializes the scene lights with the values read from the XML file.
+     */
     initLights() {
         let i = 0;
         // Lights index.

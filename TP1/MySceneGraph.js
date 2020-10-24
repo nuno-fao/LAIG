@@ -253,6 +253,10 @@ class MySceneGraph {
             this.onXMLError("The Xml does not define any camera, using Default Camera");
         }
 
+        let defaultCamera = this.reader.getString(viewsNode, "default", false);
+        if (defaultCamera == null) {
+            this.onXMLError("No default camera set, using first camera on the XML file as default");
+        }
 
         for (let i = 0; i < cameras.length; i++) {
             let cameraID = this.reader.getString(cameras[i], "id", false);
@@ -333,6 +337,12 @@ class MySceneGraph {
             //guarda o id da camera na estrutura de dados do CFG
             this.views[cameraID].cameraId = cameraID;
         }
+        if (this.views[defaultCamera] == null) {
+            this.scene.defaultCamera = null;
+            this.onXMLMinorError("Camera '" + defaultCamera + "' was not defined, using the fist camera on the XML as default");
+        } else
+            this.scene.defaultCamera = defaultCamera;
+
         return null;
     }
 
@@ -554,6 +564,7 @@ class MySceneGraph {
                 continue;
             }
 
+            //parse material atributes
             let materialAtribute = materialsList[i].children;
             this.materials[materialID] = new CGFappearance(this.scene);
             for (let u = 0; u < materialAtribute.length; u++) {
@@ -662,13 +673,6 @@ class MySceneGraph {
         // popula estruturas de dados com dados do xml
         for (let nodeID in this.nodes) {
 
-            nodeAtributes = descendants[nodeID];
-
-            nodeNames = [];
-            for (let j = 0; j < nodeAtributes.length; j++) {
-                nodeNames.push(nodeAtributes[j].nodeName);
-            }
-
             if (this.nodes[nodeID].material != null) {
                 let matID = this.reader.getString(this.nodes[nodeID].material, "id", false);
                 if (matID == null) {
@@ -685,7 +689,7 @@ class MySceneGraph {
             }
 
 
-
+            //parse texture
             let afs, aft;
             if (this.nodes[nodeID].texture != null) {
                 afs = this.reader.getString(this.nodes[nodeID].texture.children[0], "afs", false);
@@ -720,13 +724,14 @@ class MySceneGraph {
             }
 
             let descendantLength;
-            if (descendants[nodeID] == -1) {
+            if (descendants[nodeID] == -1 || descendants[nodeID] == null) {
                 descendantLength = 0;
                 this.onXMLError(nodeID + " does not have a descendants tag, some nodes may not be used");
             } else {
                 descendantLength = descendants[nodeID].children.length;
             }
 
+            //add descendants to each node, handles erros such as noderef thar don't exist
             for (let j = 0; j < descendantLength; j++) {
                 let descendantList = descendants[nodeID].children[j];
                 if (descendantList.nodeName == "noderef") {
@@ -756,6 +761,7 @@ class MySceneGraph {
                 for (let j = 0; j < this.nodes[nodeID].tg_matrix.children.length; j++) {
                     let descendantList = this.nodes[nodeID].tg_matrix.children[j];
 
+                    //parse transformation
                     switch (descendantList.nodeName) {
                         case "translation":
                             {
@@ -846,13 +852,14 @@ class MySceneGraph {
             this.nodes[nodeID].tg_matrix = this.scene.getMatrix();
         }
 
-        //
+        // print which nodes were created but not used
         for (let nodeID in this.nodes) {
             if (this.nodes[nodeID].used == false && nodeID != this.idRoot) {
                 this.onXMLError("Node '" + nodeID + "' created but not referenced!")
             }
         }
 
+        //if root was not defined, it tries to find a node without any parent and make it root
         let rootNodeInstance = this.nodes[this.idRoot];
         if (rootNodeInstance == null) {
             let IdRootNodeInfered;
@@ -887,21 +894,72 @@ class MySceneGraph {
             case "triangle":
                 {
                     let x1 = this.reader.getFloat(leaf, 'x1', false);
+                    if (x1 == null) {
+                        this.onXMLMinorError("x1 value not set for triangle on node " + nodeID + ", using value 0")
+                        x1 = 0
+                    }
+
                     let x2 = this.reader.getFloat(leaf, 'x2', false);
+                    if (x2 == null) {
+                        this.onXMLMinorError("x2 value not set for triangle on node " + nodeID + ", using value 0")
+                        x2 = 0
+                    }
+
                     let x3 = this.reader.getFloat(leaf, 'x3', false);
+                    if (x3 == null) {
+                        this.onXMLMinorError("x3 value not set for triangle on node " + nodeID + ", using value 0")
+                        x3 = 0
+                    }
+
                     let y1 = this.reader.getFloat(leaf, 'y1', false);
+                    if (y1 == null) {
+                        this.onXMLMinorError("y1 value not set for triangle on node " + nodeID + ", using value 0")
+                        y1 = 0
+                    }
+
                     let y2 = this.reader.getFloat(leaf, 'y2', false);
+                    if (y2 == null) {
+                        this.onXMLMinorError("y2 value not set for triangle on node " + nodeID + ", using value 0")
+                        y2 = 0
+                    }
+
                     let y3 = this.reader.getFloat(leaf, 'y3', false);
+                    if (y3 == null) {
+                        this.onXMLMinorError("y3 value not set for triangle on node " + nodeID + ", using value 0")
+                        y3 = 0
+                    }
+
                     let t = new MyTriangle(this.scene, x1, y1, x2, y2, x3, y3, afs, aft);
                     this.nodes[nodeID].addDescendente(t);
                     break;
+
                 }
             case "rectangle":
                 {
                     let x1 = this.reader.getFloat(leaf, 'x1', false);
+                    if (x1 == null) {
+                        this.onXMLMinorError("x1 value not set for rectangle on node " + nodeID + ", using value 0")
+                        x1 = 0
+                    }
+
                     let x2 = this.reader.getFloat(leaf, 'x2', false);
+                    if (x2 == null) {
+                        this.onXMLMinorError("x2 value not set for rectangle on node " + nodeID + ", using value 0")
+                        x2 = 0
+                    }
+
                     let y1 = this.reader.getFloat(leaf, 'y1', false);
+                    if (y1 == null) {
+                        this.onXMLMinorError("y1 value not set for rectangle on node " + nodeID + ", using value 0")
+                        y1 = 0
+                    }
+
                     let y2 = this.reader.getFloat(leaf, 'y2', false);
+                    if (y2 == null) {
+                        this.onXMLMinorError("y2 value not set for rectangle on node " + nodeID + ", using value 0")
+                        y2 = 0
+                    }
+
                     let r = new MyRectangle(this.scene, x1, y1, x2, y2, afs, aft);
                     this.nodes[nodeID].addDescendente(r);
                     break;
@@ -909,27 +967,75 @@ class MySceneGraph {
             case "cylinder":
                 {
                     let height = this.reader.getFloat(leaf, 'height', false);
+                    if (height == null) {
+                        this.onXMLMinorError("height value not set for cylinder on node " + nodeID + ", using value 1")
+                        height = 1
+                    }
                     let topRadius = this.reader.getFloat(leaf, 'topRadius', false);
+                    if (topRadius == null) {
+                        this.onXMLMinorError("topRadius value not set for cylinder on node " + nodeID + ", using value 1")
+                        topRadius = 1
+                    }
                     let bottomRadius = this.reader.getFloat(leaf, 'bottomRadius', false);
+                    if (bottomRadius == null) {
+                        this.onXMLMinorError("bottomRadius value not set for cylinder on node " + nodeID + ", using value 1")
+                        bottomRadius = 1
+                    }
                     let stacks = this.reader.getFloat(leaf, 'stacks', false);
+                    if (stacks == null) {
+                        this.onXMLMinorError("stacks value not set for cylinder on node " + nodeID + ", using value 30")
+                        stacks = 30
+                    }
                     let slices = this.reader.getFloat(leaf, 'slices', false);
+                    if (slices == null) {
+                        this.onXMLMinorError("slices value not set for cylinder on node " + nodeID + ", using value 30")
+                        slices = 30
+                    }
                     this.nodes[nodeID].addDescendente(new MyCylinder(this.scene, bottomRadius, topRadius, height, slices, stacks));
                     break;
                 }
             case "sphere":
                 {
                     let radius = this.reader.getFloat(leaf, 'radius', false);
+                    if (radius == null) {
+                        this.onXMLMinorError("radius value not set for sphere on node " + nodeID + ", using value 1")
+                        radius = 1
+                    }
                     let stacks = this.reader.getFloat(leaf, 'stacks', false);
+                    if (stacks == null) {
+                        this.onXMLMinorError("stacks value not set for sphere on node " + nodeID + ", using value 30")
+                        stacks = 30
+                    }
                     let slices = this.reader.getFloat(leaf, 'slices', false);
+                    if (slices == null) {
+                        this.onXMLMinorError("slices value not set for sphere on node " + nodeID + ", using value 30")
+                        slices = 30
+                    }
                     this.nodes[nodeID].addDescendente(new MySphere(this.scene, radius, slices, stacks));
                     break;
                 }
             case "torus":
                 {
                     let inner = this.reader.getFloat(leaf, 'inner', false);
+                    if (inner == null) {
+                        this.onXMLMinorError("inner value not set for torus on node " + nodeID + ", using value 0.1")
+                        inner = 0.1
+                    }
                     let outer = this.reader.getFloat(leaf, 'outer', false);
+                    if (outer == null) {
+                        this.onXMLMinorError("outer value not set for torus on node " + nodeID + ", using value 1")
+                        outer = 1
+                    }
                     let slices = this.reader.getFloat(leaf, 'slices', false);
+                    if (slices == null) {
+                        this.onXMLMinorError("outer value not set for torus on node " + nodeID + ", using value 30")
+                        slices = 30
+                    }
                     let loops = this.reader.getFloat(leaf, 'loops', false);
+                    if (loops == null) {
+                        this.onXMLMinorError("loops value not set for torus on node " + nodeID + ", using value 30")
+                        loops = 30
+                    }
                     this.nodes[nodeID].addDescendente(new MyTorus(this.scene, inner, outer, slices, loops));
                 }
         }

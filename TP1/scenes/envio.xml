@@ -148,7 +148,7 @@
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <noderef id="bbq"/>
-                <noderef id="chão" />
+                <noderef id="chao" />
                 <noderef id="mesa" />
                 <noderef id="cadeiras" />
                 <noderef id="parede" />
@@ -557,7 +557,7 @@
                <leaf type="sphere" radius="0.15" slices="30" stacks="30"/>
             </descendants>
         </node>
-        <node id="chão">            <!-- defines one intermediate node; may be repeated as necessary -->
+        <node id="chao">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
