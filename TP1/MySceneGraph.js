@@ -1163,8 +1163,10 @@ class MySceneGraph {
             r = 0;
             this.onXMLError(messageError + " 'r' value set to 0");
         }
-        if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
-            return "unable to parse R component of the " + messageError;
+        if (!(r != null && !isNaN(r) && r >= 0 && r <= 1)) {
+            this.onXMLError("unable to parse R component of the " + messageError + ", setting to 1");
+            r = 1
+        }
 
         // G
         let g = this.graphGetFloat(node, 'g', false);
@@ -1172,8 +1174,10 @@ class MySceneGraph {
             g = 0;
             this.onXMLError(messageError + " 'g' value set to 0");
         }
-        if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
-            return "unable to parse G component of the " + messageError;
+        if (!(g != null && !isNaN(g) && g >= 0 && g <= 1)) {
+            this.onXMLError("unable to parse G component of the " + messageError + ", setting to 1");
+            g = 1
+        }
 
         // B
         let b = this.graphGetFloat(node, 'b', false);
@@ -1181,8 +1185,10 @@ class MySceneGraph {
             b = 0;
             this.onXMLError(messageError + " 'b' value set to 0");
         }
-        if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
-            return "unable to parse B component of the " + messageError;
+        if (!(b != null && !isNaN(b) && b >= 0 && b <= 1)) {
+            this.onXMLError("unable to parse B component of the " + messageError + ", setting to 1");
+            b = 1
+        }
 
         // A
         let a = this.graphGetFloat(node, 'a', false);
@@ -1190,8 +1196,10 @@ class MySceneGraph {
             a = 0;
             this.onXMLError(messageError + " 'a' value set to 0");
         }
-        if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
-            return "unable to parse A component of the " + messageError;
+        if (!(a != null && !isNaN(a) && a >= 0 && a <= 1)) {
+            this.onXMLError("unable to parse A component of the " + messageError + ", setting to 1");
+            a = 1
+        }
 
         color.push(...[r, g, b, a]);
 
