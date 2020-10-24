@@ -389,7 +389,7 @@
         <node id="paredeBBQ">   
         
             <transformations>
-                <translation x="0" y="0.6" z="-0.249"/>
+                <translation x="0" y="0.6" z="-0.245"/>
             </transformations>
          <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
@@ -610,7 +610,90 @@
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <leaf type="rectangle" x1="-5" y1="-2.5" x2="5" y2="0.3" />
-                  <!-- 2D coordinates on the XY plane for bottom-left and top-right vertices. -->
+                <noderef id="parede_top"/>
+                <noderef id="parede_back"/>
+                <noderef id="parede_left"/>
+                <noderef id="parede_right"/>
+            </descendants>
+        </node>
+        <node id="parede_top">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="stoneWall"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="5" aft="2.8" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0" y="0.30" z="-0.15"/>
+                <rotation axis="x" angle="-90"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="rectangle" x1="-5" y1="-0.15" x2="5" y2="0.15" />
+            </descendants>
+        </node>
+        <node id="parede_back">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="stoneWall"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="5" aft="2.8" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0" y="-2.2" z="-0.3"/>
+                <rotation axis="x" angle="180"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="rectangle" x1="-5" y1="-2.5" x2="5" y2="0.3" />
+            </descendants>
+        </node>
+        <node id="parede_left">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="stoneWall"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="5" aft="2.8" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <rotation axis="y" angle="-90"/>
+                <translation x="-0.15" y="0" z="5"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="rectangle" x1="-0.15" y1="-2.5" x2="0.15" y2="0.3" />
+            </descendants>
+        </node>
+        <node id="parede_right">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="stoneWall"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="5" aft="2.8" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <rotation axis="y" angle="90"/>
+                <translation x="0.15" y="0" z="5"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="rectangle" x1="-0.15" y1="-2.5" x2="0.15" y2="0.3" />
             </descendants>
         </node>
         <node id="mesa">            <!-- defines one intermediate node; may be repeated as necessary -->

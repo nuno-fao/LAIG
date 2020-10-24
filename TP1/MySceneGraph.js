@@ -229,7 +229,7 @@ class MySceneGraph {
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
 
         let refNode = children[referenceIndex];
-        let axis_length = this.reader.getFloat(refNode, 'length', false);
+        let axis_length = this.graphGetFloat(refNode, 'length', false);
         if (axis_length == null)
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
 
@@ -268,8 +268,8 @@ class MySceneGraph {
                 this.onXMLError("ID must be unique for each camera (conflict: ID = " + cameraID + "), using only the first camera with this id");
                 continue;
             }
-            let near = this.reader.getFloat(cameras[i], 'near', false)
-            let far = this.reader.getFloat(cameras[i], 'far', false)
+            let near = this.graphGetFloat(cameras[i], 'near', false)
+            let far = this.graphGetFloat(cameras[i], 'far', false)
             if (near == null) {
                 near = 0.1;
                 this.onXMLMinorError("Camera '" + cameraID + "near value not defined, set to -0.1")
@@ -300,7 +300,7 @@ class MySceneGraph {
             }
             //checks if it is a perspective or ortho camera(they have different Class builders)
             if (cameras[i].nodeName == "perspective") {
-                let angle = this.reader.getFloat(cameras[i], 'angle', false);
+                let angle = this.graphGetFloat(cameras[i], 'angle', false);
                 if (angle == null) {
                     angle = 45;
                     this.onXMLMinorError("Camera '" + cameraID + "angle value not defined, set to 45")
@@ -310,10 +310,10 @@ class MySceneGraph {
                 this.views[cameraID] = new CGFcamera(angle, near, far, position, target);
 
             } else if (cameras[i].nodeName == "ortho") {
-                let left = this.reader.getFloat(cameras[i], 'left', false)
-                let right = this.reader.getFloat(cameras[i], 'right', false)
-                let top = this.reader.getFloat(cameras[i], 'top', false)
-                let bottom = this.reader.getFloat(cameras[i], 'bottom', false)
+                let left = this.graphGetFloat(cameras[i], 'left', false)
+                let right = this.graphGetFloat(cameras[i], 'right', false)
+                let top = this.graphGetFloat(cameras[i], 'top', false)
+                let bottom = this.graphGetFloat(cameras[i], 'bottom', false)
 
                 if (left == null) {
                     left = -5;
@@ -583,7 +583,7 @@ class MySceneGraph {
                     color = this.parseColor(materialAtribute[u], "Color ERROR");
                     this.materials[materialID].setEmission(color[0], color[1], color[2], color[3]);
                 } else if (materialAtribute[u].nodeName == "shininess") {
-                    let sh = this.reader.getFloat(materialAtribute[u], "value", false);
+                    let sh = this.graphGetFloat(materialAtribute[u], "value", false);
                     if (sh == null) {
                         this.onXMLMinorError("Shininess value of material '" + materialID + "' is not defined")
                     }
@@ -773,7 +773,7 @@ class MySceneGraph {
                         case "rotation":
                             {
                                 let axis = this.reader.getString(descendantList, "axis", false);
-                                let angle = this.reader.getFloat(descendantList, "angle", false);
+                                let angle = this.graphGetFloat(descendantList, "angle", false);
 
                                 if (axis == null) {
                                     this.onXMLError("Axis Value not set on rotation's block at node '" + nodeID + "'")
@@ -823,9 +823,9 @@ class MySceneGraph {
                             }
                         case "scale":
                             {
-                                let sx = this.reader.getFloat(descendantList, "sx", false);
-                                let sy = this.reader.getFloat(descendantList, "sy", false);
-                                let sz = this.reader.getFloat(descendantList, "sz", false);
+                                let sx = this.graphGetFloat(descendantList, "sx", false);
+                                let sy = this.graphGetFloat(descendantList, "sy", false);
+                                let sz = this.graphGetFloat(descendantList, "sz", false);
                                 if (sx == null) {
                                     this.onXMLMinorError("sx Value not set for scale on node '" + nodeID + "',using sx=1")
                                     sx = 1;
@@ -893,37 +893,37 @@ class MySceneGraph {
         switch (this.reader.getString(leaf, 'type', false)) {
             case "triangle":
                 {
-                    let x1 = this.reader.getFloat(leaf, 'x1', false);
+                    let x1 = this.graphGetFloat(leaf, 'x1', false);
                     if (x1 == null) {
                         this.onXMLMinorError("x1 value not set for triangle on node " + nodeID + ", using value 0")
                         x1 = 0
                     }
 
-                    let x2 = this.reader.getFloat(leaf, 'x2', false);
+                    let x2 = this.graphGetFloat(leaf, 'x2', false);
                     if (x2 == null) {
                         this.onXMLMinorError("x2 value not set for triangle on node " + nodeID + ", using value 0")
                         x2 = 0
                     }
 
-                    let x3 = this.reader.getFloat(leaf, 'x3', false);
+                    let x3 = this.graphGetFloat(leaf, 'x3', false);
                     if (x3 == null) {
                         this.onXMLMinorError("x3 value not set for triangle on node " + nodeID + ", using value 0")
                         x3 = 0
                     }
 
-                    let y1 = this.reader.getFloat(leaf, 'y1', false);
+                    let y1 = this.graphGetFloat(leaf, 'y1', false);
                     if (y1 == null) {
                         this.onXMLMinorError("y1 value not set for triangle on node " + nodeID + ", using value 0")
                         y1 = 0
                     }
 
-                    let y2 = this.reader.getFloat(leaf, 'y2', false);
+                    let y2 = this.graphGetFloat(leaf, 'y2', false);
                     if (y2 == null) {
                         this.onXMLMinorError("y2 value not set for triangle on node " + nodeID + ", using value 0")
                         y2 = 0
                     }
 
-                    let y3 = this.reader.getFloat(leaf, 'y3', false);
+                    let y3 = this.graphGetFloat(leaf, 'y3', false);
                     if (y3 == null) {
                         this.onXMLMinorError("y3 value not set for triangle on node " + nodeID + ", using value 0")
                         y3 = 0
@@ -936,25 +936,25 @@ class MySceneGraph {
                 }
             case "rectangle":
                 {
-                    let x1 = this.reader.getFloat(leaf, 'x1', false);
+                    let x1 = this.graphGetFloat(leaf, 'x1', false);
                     if (x1 == null) {
                         this.onXMLMinorError("x1 value not set for rectangle on node " + nodeID + ", using value 0")
                         x1 = 0
                     }
 
-                    let x2 = this.reader.getFloat(leaf, 'x2', false);
+                    let x2 = this.graphGetFloat(leaf, 'x2', false);
                     if (x2 == null) {
                         this.onXMLMinorError("x2 value not set for rectangle on node " + nodeID + ", using value 0")
                         x2 = 0
                     }
 
-                    let y1 = this.reader.getFloat(leaf, 'y1', false);
+                    let y1 = this.graphGetFloat(leaf, 'y1', false);
                     if (y1 == null) {
                         this.onXMLMinorError("y1 value not set for rectangle on node " + nodeID + ", using value 0")
                         y1 = 0
                     }
 
-                    let y2 = this.reader.getFloat(leaf, 'y2', false);
+                    let y2 = this.graphGetFloat(leaf, 'y2', false);
                     if (y2 == null) {
                         this.onXMLMinorError("y2 value not set for rectangle on node " + nodeID + ", using value 0")
                         y2 = 0
@@ -966,27 +966,27 @@ class MySceneGraph {
                 }
             case "cylinder":
                 {
-                    let height = this.reader.getFloat(leaf, 'height', false);
+                    let height = this.graphGetFloat(leaf, 'height', false);
                     if (height == null) {
                         this.onXMLMinorError("height value not set for cylinder on node " + nodeID + ", using value 1")
                         height = 1
                     }
-                    let topRadius = this.reader.getFloat(leaf, 'topRadius', false);
+                    let topRadius = this.graphGetFloat(leaf, 'topRadius', false);
                     if (topRadius == null) {
                         this.onXMLMinorError("topRadius value not set for cylinder on node " + nodeID + ", using value 1")
                         topRadius = 1
                     }
-                    let bottomRadius = this.reader.getFloat(leaf, 'bottomRadius', false);
+                    let bottomRadius = this.graphGetFloat(leaf, 'bottomRadius', false);
                     if (bottomRadius == null) {
                         this.onXMLMinorError("bottomRadius value not set for cylinder on node " + nodeID + ", using value 1")
                         bottomRadius = 1
                     }
-                    let stacks = this.reader.getFloat(leaf, 'stacks', false);
+                    let stacks = this.graphGetFloat(leaf, 'stacks', false);
                     if (stacks == null) {
                         this.onXMLMinorError("stacks value not set for cylinder on node " + nodeID + ", using value 30")
                         stacks = 30
                     }
-                    let slices = this.reader.getFloat(leaf, 'slices', false);
+                    let slices = this.graphGetFloat(leaf, 'slices', false);
                     if (slices == null) {
                         this.onXMLMinorError("slices value not set for cylinder on node " + nodeID + ", using value 30")
                         slices = 30
@@ -996,17 +996,17 @@ class MySceneGraph {
                 }
             case "sphere":
                 {
-                    let radius = this.reader.getFloat(leaf, 'radius', false);
+                    let radius = this.graphGetFloat(leaf, 'radius', false);
                     if (radius == null) {
                         this.onXMLMinorError("radius value not set for sphere on node " + nodeID + ", using value 1")
                         radius = 1
                     }
-                    let stacks = this.reader.getFloat(leaf, 'stacks', false);
+                    let stacks = this.graphGetFloat(leaf, 'stacks', false);
                     if (stacks == null) {
                         this.onXMLMinorError("stacks value not set for sphere on node " + nodeID + ", using value 30")
                         stacks = 30
                     }
-                    let slices = this.reader.getFloat(leaf, 'slices', false);
+                    let slices = this.graphGetFloat(leaf, 'slices', false);
                     if (slices == null) {
                         this.onXMLMinorError("slices value not set for sphere on node " + nodeID + ", using value 30")
                         slices = 30
@@ -1016,22 +1016,22 @@ class MySceneGraph {
                 }
             case "torus":
                 {
-                    let inner = this.reader.getFloat(leaf, 'inner', false);
+                    let inner = this.graphGetFloat(leaf, 'inner', false);
                     if (inner == null) {
                         this.onXMLMinorError("inner value not set for torus on node " + nodeID + ", using value 0.1")
                         inner = 0.1
                     }
-                    let outer = this.reader.getFloat(leaf, 'outer', false);
+                    let outer = this.graphGetFloat(leaf, 'outer', false);
                     if (outer == null) {
                         this.onXMLMinorError("outer value not set for torus on node " + nodeID + ", using value 1")
                         outer = 1
                     }
-                    let slices = this.reader.getFloat(leaf, 'slices', false);
+                    let slices = this.graphGetFloat(leaf, 'slices', false);
                     if (slices == null) {
                         this.onXMLMinorError("outer value not set for torus on node " + nodeID + ", using value 30")
                         slices = 30
                     }
-                    let loops = this.reader.getFloat(leaf, 'loops', false);
+                    let loops = this.graphGetFloat(leaf, 'loops', false);
                     if (loops == null) {
                         this.onXMLMinorError("loops value not set for torus on node " + nodeID + ", using value 30")
                         loops = 30
@@ -1066,7 +1066,7 @@ class MySceneGraph {
         let position = [];
 
         // x
-        let x = this.reader.getFloat(node, 'x', false);
+        let x = this.graphGetFloat(node, 'x');
         if (x == null) {
             x = 0;
             this.onXMLError(messageError + " 'x' value set to 0");
@@ -1076,7 +1076,7 @@ class MySceneGraph {
 
         // y
         let y;
-        y = this.reader.getFloat(node, 'y', false);
+        y = this.graphGetFloat(node, 'y', false);
         if (y == null) {
             y = 0;
             this.onXMLError(messageError + " 'y' value set to 0");
@@ -1086,7 +1086,7 @@ class MySceneGraph {
             return "unable to parse y-coordinate of the " + messageError;
 
         // z
-        let z = this.reader.getFloat(node, 'z', false);
+        let z = this.graphGetFloat(node, 'z', false);
         if (z == null) {
             z = 0;
             this.onXMLError(messageError + " 'z' value set to 0");
@@ -1115,7 +1115,7 @@ class MySceneGraph {
 
 
         // w
-        let w = this.reader.getFloat(node, 'w', false);
+        let w = this.graphGetFloat(node, 'w', false);
         if (w == null) {
             w = 0;
             this.onXMLError(messageError + " 'w' value set to 0");
@@ -1137,7 +1137,7 @@ class MySceneGraph {
         let color = [];
 
         // R
-        let r = this.reader.getFloat(node, 'r', false);
+        let r = this.graphGetFloat(node, 'r', false);
         if (r == null) {
             r = 0;
             this.onXMLError(messageError + " 'r' value set to 0");
@@ -1146,7 +1146,7 @@ class MySceneGraph {
             return "unable to parse R component of the " + messageError;
 
         // G
-        let g = this.reader.getFloat(node, 'g', false);
+        let g = this.graphGetFloat(node, 'g', false);
         if (g == null) {
             g = 0;
             this.onXMLError(messageError + " 'g' value set to 0");
@@ -1155,7 +1155,7 @@ class MySceneGraph {
             return "unable to parse G component of the " + messageError;
 
         // B
-        let b = this.reader.getFloat(node, 'b', false);
+        let b = this.graphGetFloat(node, 'b', false);
         if (b == null) {
             b = 0;
             this.onXMLError(messageError + " 'b' value set to 0");
@@ -1164,7 +1164,7 @@ class MySceneGraph {
             return "unable to parse B component of the " + messageError;
 
         // A
-        let a = this.reader.getFloat(node, 'a', false);
+        let a = this.graphGetFloat(node, 'a', false);
         if (a == null) {
             a = 0;
             this.onXMLError(messageError + " 'a' value set to 0");
@@ -1193,5 +1193,12 @@ class MySceneGraph {
             this.onXMLMinorError("File '" + add + "' doesn't exists");
             return false
         }
+    }
+    graphGetFloat(tag, string) {
+        let out = this.reader.getFloat(tag, string, false);
+        if (isNaN(out)) {
+            this.onXMLMinorError("Value '" + string + "' on node " + tag.parentNode.nodeName + "." + tag.nodeName + " is not valid (tag: " + tag.outerHTML + "),ignoring this block")
+        }
+        return out
     }
 }
