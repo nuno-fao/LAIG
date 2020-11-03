@@ -195,7 +195,136 @@ class MySceneGraph {
             if ((error = this.parseNodes(nodes[index])) != null)
                 return error;
         }
+
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        else {
+            if (index != NODES_INDEX)
+                this.onXMLMinorError("tag <nodes> out of order");
+
+            //Parse nodes block
+            if ((error = this.parseAnimations(nodes[index])) != null)
+                return error;
+        }
         this.log("all parsed");
+    }
+
+    parseAnimations(animationNode) {
+        let animations = animationNode.children;
+        this.parsedAnimations = [];
+        for (let i = 0; i < animations.length; i++) {
+            let parsedkeyframes = [];
+            let animationID = this.reader.getString(animations[i], "id", false);
+            let keyframes = animations[i].children;
+            if (this.parsedAnimations[animationID] != null) {
+                this.onXMLError("ID must be unique for each texture (conflict: ID = " + animationID + "), using only the first texture with this id");
+                continue;
+            }
+            for (let j = 0; j < keyframes.length; j++) {
+                let keyframeInstant = this.reader.getString(keyframes[j], "instant", false);
+                let tranfomations = keyframes[i].children;
+                this.scene.loadIdentity();
+                for (let k = 0; k < tranfomations.length; k++) {
+                    switch (tranfomations[k].nodeName) {
+                        case "translation":
+                            {
+                                let position = this.parseCoordinates3D(tranfomations[k], "");
+                                this.scene.translate(position[0], position[1], position[2]);
+
+                                break;
+                            }
+                        case "rotation":
+                            {
+                                let axis = this.reader.getString(tranfomations[k], "axis", false);
+                                let angle = this.graphGetFloat(tranfomations[k], "angle", false);
+
+                                if (axis == null) {
+                                    this.onXMLError("Axis Value not set on rotation's block at node '" + nodeID + "'")
+                                    break;
+                                }
+                                if (angle == null) {
+                                    this.onXMLError("Angle Value not set on rotation's block at node '" + nodeID + "'")
+                                    break;
+                                }
+                                angle = angle / 180 * Math.PI;
+                                switch (axis) {
+                                    case "x":
+                                        {
+                                            this.scene.rotate(angle, 1, 0, 0);
+                                            break;
+                                        }
+                                    case "y":
+                                        {
+                                            this.scene.rotate(angle, 0, 1, 0);
+                                            break;
+                                        }
+                                    case "z":
+                                        {
+                                            this.scene.rotate(angle, 0, 0, 1);
+                                            break;
+                                        }
+                                    case "xx":
+                                        {
+                                            this.scene.rotate(angle, 1, 0, 0);
+                                            break;
+                                        }
+                                    case "yy":
+                                        {
+                                            this.scene.rotate(angle, 0, 1, 0);
+                                            break;
+                                        }
+                                    case "zz":
+                                        {
+                                            this.scene.rotate(angle, 0, 0, 1);
+                                            break;
+                                        }
+                                    default:
+                                        this.onXMLError("Axis Value for rotation on node '" + nodeID + "' not valid")
+
+                                }
+                                break;
+                            }
+                        case "scale":
+                            {
+                                let sx = this.graphGetFloat(tranfomations[k], "sx", false);
+                                let sy = this.graphGetFloat(tranfomations[k], "sy", false);
+                                let sz = this.graphGetFloat(tranfomations[k], "sz", false);
+                                if (sx == null) {
+                                    this.onXMLMinorError("sx Value not set for scale on node '" + nodeID + "',using sx=1")
+                                    sx = 1;
+                                }
+                                if (sy == null) {
+                                    this.onXMLMinorError("sy Value not set for scale on node '" + nodeID + "',using sy=1")
+                                    sy = 1;
+                                }
+                                if (sz == null) {
+                                    this.onXMLMinorError("sz Value not set for scale on node '" + nodeID + "',using sz=1")
+                                    sz = 1;
+                                }
+
+                                this.scene.scale(sx, sy, sz);
+
+                                break;
+                            }
+                        default:
+                            this.onXMLError("Transformation tag '" + tranfomations[k].nodeName + "' not valid on node '" + nodeID + "'")
+                    }
+                }
+                parsedkeyframes.push(new KeyFrame(keyframeInstant, this.scene.getMatrix()));
+            }
+            this.parsedAnimations[animationID] = new KeyFrameAnimation(parsedkeyframes, this.scene);
+            console.log(this.parsedAnimations[animationID]);
+
+            // check if texture and path are valid
+            if (animationID == null) {
+                this.onXMLError("There is one texture without a defined id, ignoring that texture (texture number " + (i + 1) + ")");
+                continue;
+            }
+
+            // Checks for repeated IDs.
+
+            return null;
+        }
     }
 
     /**
