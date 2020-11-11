@@ -26,19 +26,19 @@
 
    <animations>
         <animation id="teste" >
-            <keyframe instant="10">
-                <translation x="1" y="2" z="3" />
-                <rotation axis="x" angle="90" />
-                <rotation axis="y" angle="90" />
-                <rotation axis="z" angle="90" />
-                <scale sx="2" sy="2" sz="2" />
+            <keyframe instant="4">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="3" sy="3" sz="3" />
             </keyframe>
-            <keyframe instant="20">
-                <translation x="1" y="2" z="3" />
-                <rotation axis="x" angle="90" />
-                <rotation axis="y" angle="90" />
-                <rotation axis="z" angle="90" />
-                <scale sx="2" sy="2" sz="2" />
+            <keyframe instant="8">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
             </keyframe>
         </animation>
     </animations>
@@ -717,6 +717,8 @@
         <node id="mesa">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <animationref id="teste" />
 
             <texture id="demoTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->

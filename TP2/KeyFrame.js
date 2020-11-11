@@ -1,6 +1,10 @@
 class KeyFrame {
-    constructor(time, transformations) {
+    constructor(time, x, y, z, s, t) {
         this.time = parseInt(time);
-        this.transformations = transformations;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.s = s;
+        this.t = t;
     }
 }

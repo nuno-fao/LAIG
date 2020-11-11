@@ -223,15 +223,13 @@ class MySceneGraph {
             }
             for (let j = 0; j < keyframes.length; j++) {
                 let keyframeInstant = this.reader.getString(keyframes[j], "instant", false);
-                let tranfomations = keyframes[i].children;
-                this.scene.loadIdentity();
+                let tranfomations = keyframes[j].children;
+                let t, s, x, y, z;
                 for (let k = 0; k < tranfomations.length; k++) {
                     switch (tranfomations[k].nodeName) {
                         case "translation":
                             {
-                                let position = this.parseCoordinates3D(tranfomations[k], "");
-                                this.scene.translate(position[0], position[1], position[2]);
-
+                                t = this.parseCoordinates3D(tranfomations[k], "");
                                 break;
                             }
                         case "rotation":
@@ -251,32 +249,17 @@ class MySceneGraph {
                                 switch (axis) {
                                     case "x":
                                         {
-                                            this.scene.rotate(angle, 1, 0, 0);
+                                            x = angle;
                                             break;
                                         }
                                     case "y":
                                         {
-                                            this.scene.rotate(angle, 0, 1, 0);
+                                            y = angle;
                                             break;
                                         }
                                     case "z":
                                         {
-                                            this.scene.rotate(angle, 0, 0, 1);
-                                            break;
-                                        }
-                                    case "xx":
-                                        {
-                                            this.scene.rotate(angle, 1, 0, 0);
-                                            break;
-                                        }
-                                    case "yy":
-                                        {
-                                            this.scene.rotate(angle, 0, 1, 0);
-                                            break;
-                                        }
-                                    case "zz":
-                                        {
-                                            this.scene.rotate(angle, 0, 0, 1);
+                                            z = angle;
                                             break;
                                         }
                                     default:
@@ -302,16 +285,14 @@ class MySceneGraph {
                                     this.onXMLMinorError("sz Value not set for scale on node '" + nodeID + "',using sz=1")
                                     sz = 1;
                                 }
-
-                                this.scene.scale(sx, sy, sz);
-
+                                s = [sx, sy, sz];
                                 break;
                             }
                         default:
                             this.onXMLError("Transformation tag '" + tranfomations[k].nodeName + "' not valid on node '" + nodeID + "'")
                     }
                 }
-                parsedkeyframes.push(new KeyFrame(keyframeInstant, this.scene.getMatrix()));
+                parsedkeyframes.push(new KeyFrame(keyframeInstant * 1000, x, y, z, s, t));
             }
             this.parsedAnimations[animationID] = new KeyFrameAnimation(parsedkeyframes, this.scene);
 
@@ -767,6 +748,7 @@ class MySceneGraph {
             let transformationsIndex = nodeNames.indexOf("transformations");
             let materialIndex = nodeNames.indexOf("material");
             let textureIndex = nodeNames.indexOf("texture");
+            let animationIndex = nodeNames.indexOf("animationref");
             descendants[nodeID] = nodeNames.indexOf("descendants");
 
             let transformation_matrix;
@@ -790,15 +772,22 @@ class MySceneGraph {
             } else {
                 material = nodesList[i].children[materialIndex];
             }
+            let animation;
+            if (animationIndex < 0) {
+                this.onXMLMinorError("Material block for '" + nodeID + "' not found, using 'null' value")
+                animation = null;
+            } else {
+                animation = nodesList[i].children[animationIndex];
+            }
             this.nodes[nodeID] = new MyNode(
                 this.scene,
                 transformation_matrix,
                 texture,
                 material
             );
-            if (nodeID == "mesa") {
-                this.nodes[nodeID].addAnimation(this.parsedAnimations["teste"]);
-                console.log(this.parsedAnimations)
+            if (animation != null) {
+                let animID = this.reader.getString(animation, "id", false);
+                this.nodes[nodeID].addAnimation(this.parsedAnimations[animID]);
             }
             descendants[nodeID] = nodesList[i].children[descendants[nodeID]]
         }
