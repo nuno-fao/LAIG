@@ -20,7 +20,6 @@ class KeyFrameAnimation extends Animation {
         this.dead = false;
 
         this.frameMultiplier = (this.keyFrames[this.activeFrame].time - this.lastTime);
-        console.log(this.actives, this.lasts);
     }
     update(time) {
         if (this.dead == false) {
@@ -41,12 +40,11 @@ class KeyFrameAnimation extends Animation {
                     this.activet = this.keyFrames[this.activeFrame].t;
                     this.subtractList(this.activet, this.lastt);
 
-
-                    this.aux = this.actives;
-                    this.addList(this.aux, this.lasts);
-                    this.lasts = this.aux;
+                    this.addList(this.actives, this.lasts);
+                    this.lasts = this.actives;
                     this.actives = this.keyFrames[this.activeFrame].s;
                     this.subtractList(this.actives, this.lasts);
+                    this.frameMultiplier = (this.keyFrames[this.activeFrame].time - this.lastTime);
 
                 } else if ((this.activeFrame == this.keyFrames.length - 1) && this.timeAccumulator > this.keyFrames[this.activeFrame].time) {
                     this.timeAccumulator = this.keyFrames[this.activeFrame].time;
@@ -78,6 +76,7 @@ class KeyFrameAnimation extends Animation {
     applyScale(x, y, z, lx, ly, lz, multiplier) {
         this.scene.scale(lx + x * multiplier, ly + y * multiplier, lz + z * multiplier);
     }
+
     subtractList(B, A) {
         for (let i = 0; i < B.length; i++) {
             B[i] -= A[i];
