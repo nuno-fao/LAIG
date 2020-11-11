@@ -45,6 +45,7 @@ class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open('scenes/' + filename, this);
+        this.parsedAnimations = [];
     }
 
     /*
@@ -183,6 +184,16 @@ class MySceneGraph {
             if ((error = this.parseMaterials(nodes[index])) != null)
                 return error;
         }
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        else {
+            if (index != NODES_INDEX)
+                this.onXMLMinorError("tag <nodes> out of order");
+
+            //Parse nodes block
+            if ((error = this.parseAnimations(nodes[index])) != null)
+                return error;
+        }
 
         // <nodes>
         if ((index = nodeNames.indexOf("nodes")) == -1)
@@ -196,22 +207,12 @@ class MySceneGraph {
                 return error;
         }
 
-        if ((index = nodeNames.indexOf("animations")) == -1)
-            return "tag <animations> missing";
-        else {
-            if (index != NODES_INDEX)
-                this.onXMLMinorError("tag <nodes> out of order");
 
-            //Parse nodes block
-            if ((error = this.parseAnimations(nodes[index])) != null)
-                return error;
-        }
         this.log("all parsed");
     }
 
     parseAnimations(animationNode) {
         let animations = animationNode.children;
-        this.parsedAnimations = [];
         for (let i = 0; i < animations.length; i++) {
             let parsedkeyframes = [];
             let animationID = this.reader.getString(animations[i], "id", false);
@@ -313,7 +314,6 @@ class MySceneGraph {
                 parsedkeyframes.push(new KeyFrame(keyframeInstant, this.scene.getMatrix()));
             }
             this.parsedAnimations[animationID] = new KeyFrameAnimation(parsedkeyframes, this.scene);
-            console.log(this.parsedAnimations[animationID]);
 
             // check if texture and path are valid
             if (animationID == null) {
@@ -796,6 +796,10 @@ class MySceneGraph {
                 texture,
                 material
             );
+            if (nodeID == "mesa") {
+                this.nodes[nodeID].addAnimation(this.parsedAnimations["teste"]);
+                console.log(this.parsedAnimations)
+            }
             descendants[nodeID] = nodesList[i].children[descendants[nodeID]]
         }
 

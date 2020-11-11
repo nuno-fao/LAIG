@@ -8,7 +8,7 @@ class XMLscene extends CGFscene {
      */
     constructor(myinterface) {
         super();
-
+        this.lastTime = Date.now();
         this.interface = myinterface;
     }
 
@@ -142,8 +142,13 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
-        // ---- BEGIN Background, camera and axis setup
+        let actTime = Date.now();
+        for (let a in this.graph.parsedAnimations) {
+            this.graph.parsedAnimations[a].update(actTime - this.lastTime);
+        }
+        this.lastTime = actTime;
 
+        // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);

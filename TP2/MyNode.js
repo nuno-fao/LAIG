@@ -6,9 +6,14 @@ class MyNode {
         this.material = material;
         this.descendentes = [];
         this.used = false;
+        this.animation = null;
         //this.wasReferenced = false;
     }
-    display() {
+
+    addAnimation(animation) {
+        this.animation = animation;
+    }
+    display(time) {
         this.scene.pushMatrix();
 
         let matSize = this.scene.materialStack.length;
@@ -56,6 +61,8 @@ class MyNode {
 
         if (this.tg_matrix != null)
             this.scene.multMatrix(this.tg_matrix);
+        if (this.animation != null)
+            this.animation.apply();
         for (let i = 0; i < this.descendentes.length; i++) {
             this.descendentes[i].display();
         }
