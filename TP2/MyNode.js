@@ -63,9 +63,12 @@ class MyNode {
             this.scene.multMatrix(this.tg_matrix);
         if (this.animation != null)
             this.animation.apply();
-        for (let i = 0; i < this.descendentes.length; i++) {
-            this.descendentes[i].display();
+        if(this.animation==null || this.animation.activeFrame!=0){
+            for (let i = 0; i < this.descendentes.length; i++) {
+                this.descendentes[i].display();
+            }
         }
+        
 
         this.scene.materialStack.pop();
         this.scene.textureStack.pop();

@@ -7,7 +7,8 @@ let ILLUMINATION_INDEX = 2;
 let LIGHTS_INDEX = 3;
 let TEXTURES_INDEX = 4;
 let MATERIALS_INDEX = 5;
-let NODES_INDEX = 6;
+let ANIMATIONS_INDEX = 6;
+let NODES_INDEX = 7;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -187,8 +188,8 @@ class MySceneGraph {
         if ((index = nodeNames.indexOf("animations")) == -1)
             return "tag <animations> missing";
         else {
-            if (index != NODES_INDEX)
-                this.onXMLMinorError("tag <nodes> out of order");
+            if (index != ANIMATIONS_INDEX)
+                this.onXMLMinorError("tag <animations> out of order");
 
             //Parse nodes block
             if ((error = this.parseAnimations(nodes[index])) != null)
@@ -774,7 +775,6 @@ class MySceneGraph {
             }
             let animation;
             if (animationIndex < 0) {
-                this.onXMLMinorError("Material block for '" + nodeID + "' not found, using 'null' value")
                 animation = null;
             } else {
                 animation = nodesList[i].children[animationIndex];
