@@ -24,7 +24,6 @@
         <background r="0.529" g="0.808" b="0.921" a="1.0" />        <!-- background color -->
     </illumination>
 
-
     <lights>
         <!-- NOTE: this block "light" must be repeated as necessary with different "id". At least one light should be present, and a maximum of eight lights is accepted. -->
         <light id="luz_ambiente">          <!-- light identifier -->

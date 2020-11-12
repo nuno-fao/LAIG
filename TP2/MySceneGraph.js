@@ -775,7 +775,6 @@ class MySceneGraph {
             }
             let animation;
             if (animationIndex < 0) {
-                this.onXMLMinorError("Material block for '" + nodeID + "' not found, using 'null' value")
                 animation = null;
             } else {
                 animation = nodesList[i].children[animationIndex];
