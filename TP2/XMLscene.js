@@ -45,9 +45,6 @@ class XMLscene extends CGFscene {
         this.frames = 0;
         this.seeLights = false;
 
-        this.spriteShader = new CGFshader(this.gl,"shaders/Spritesheet.vert","shaders/Spritesheet.frag");
-        this.setActiveShader(this.spriteShader);
-
         this.defaultMaterial = new CGFappearance(this);
         this.defaultMaterial.setAmbient(0.2, 0.2, 0.2, 1.0);
         this.defaultMaterial.setDiffuse(0.5, 0.5, 0.5, 1.0);

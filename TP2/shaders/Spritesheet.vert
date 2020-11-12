@@ -12,6 +12,11 @@ uniform mat4 uNMatrix;
 attribute vec2 aTextureCoord;
 varying vec2 vTextureCoord;
 
+uniform float x;
+uniform float y;
+uniform float width;
+uniform float height;
+
 void main() {
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 
