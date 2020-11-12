@@ -134,19 +134,22 @@ class XMLscene extends CGFscene {
 
         this.interface.initCameras();
         this.interface.initLights();
+        this.setUpdatePeriod(20); //50 fps
 
         this.sceneInited = true;
+    }
+
+    update(time){
+        for (let a in this.graph.parsedAnimations) {
+            this.graph.parsedAnimations[a].update(time - this.lastTime);
+        }
+        this.lastTime = time;
     }
 
     /**
      * Displays the scene.
      */
     display() {
-        let actTime = Date.now();
-        for (let a in this.graph.parsedAnimations) {
-            this.graph.parsedAnimations[a].update(actTime - this.lastTime);
-        }
-        this.lastTime = actTime;
 
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
