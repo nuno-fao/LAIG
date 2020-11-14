@@ -75,6 +75,11 @@
         <texture id="backWood" path="./scenes/images/backWood.jpg" />
     </textures>
 
+    <!-- spritesheets -->
+
+    <spritesheets>
+        <spritesheet id="teste" path="spritesheets/font.png" sizeM="16" sizeN="16" />
+    </spritesheets>
 
         <!-- NOTE: the "MATERIAL" block may be repeated as required. Each defined material
          requires a distinct "id". At least one material should be present. -->

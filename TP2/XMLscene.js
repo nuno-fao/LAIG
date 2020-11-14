@@ -53,6 +53,8 @@ class XMLscene extends CGFscene {
         this.defaultMaterial.setEmission(0, 0, 0, 1);
 
 
+        this.spriteShader = new CGFshader(this.gl,"shaders/spritesheet.vert","shaders/spritesheet.frag");
+
         //GUI
         this.selectedCamera = 0;
 

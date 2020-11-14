@@ -6,9 +6,10 @@ let VIEWS_INDEX = 1;
 let ILLUMINATION_INDEX = 2;
 let LIGHTS_INDEX = 3;
 let TEXTURES_INDEX = 4;
-let MATERIALS_INDEX = 5;
-let ANIMATIONS_INDEX = 6;
-let NODES_INDEX = 7;
+let SPRITESHEETS_INDEX = 5;
+let MATERIALS_INDEX = 6;
+let ANIMATIONS_INDEX = 7;
+let NODES_INDEX = 8;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -172,6 +173,19 @@ class MySceneGraph {
             //Parse textures block
             if ((error = this.parseTextures(nodes[index])) != null)
                 return error;
+        }
+
+        // <spritesheets>
+        if ((index = nodeNames.indexOf("spritesheets")) == -1)
+            return "tag <spritesheets> missing";
+        else {
+            if (index != SPRITESHEETS_INDEX)
+                this.onXMLMinorError("tag <spritesheets> out of order");
+
+            //Parse textures block
+            if ((error = this.parseSpritesheets(nodes[index])) != null)
+                return error;
+            console.log(this.spritesheets);
         }
 
         // <materials>
@@ -603,6 +617,46 @@ class MySceneGraph {
         this.log("Parsed lights");
         return null;
     }
+
+    /**
+     * Parses the <spritesheets> block. 
+     * @param {spritesheets block element} texturesNode
+     */
+    parseSpritesheets(spritesheetsNode) {
+        let spritesheets = spritesheetsNode.children;
+        this.spritesheets = [];
+        for (let i = 0; i < spritesheets.length; i++) {
+            let spritesheetID = this.reader.getString(spritesheets[i], "id", false);
+            let path = this.reader.getString(spritesheets[i], "path", false);
+            let sizeM = this.reader.getInteger(spritesheets[i],"sizeM",false);
+            let sizeN = this.reader.getInteger(spritesheets[i],"sizeN",false);
+
+            // check if spritesheet and path are valid
+            if (spritesheetID == null) {
+                this.onXMLError("There is one texture without a defined id, ignoring that texture (texture number " + (i + 1) + ")");
+                continue;
+            } else if (path == null) {
+                this.onXMLError("Path not defined for node '" + spritesheetID + "'");
+                continue;
+            }
+            // Checks for repeated IDs.
+            if (this.spritesheets[spritesheetID] != null) {
+                this.onXMLError("ID must be unique for each texture (conflict: ID = " + spritesheetID + "), using only the first texture with this id");
+                continue;
+            }
+
+            let exists = this.checkFileExist(path);
+
+            //if the texture was not found, the texture will be set to 'clear'
+            if (exists == true) {
+                this.spritesheets[spritesheetID] = new MySpritesheet(this.scene,path,sizeM,sizeN);
+            } else {
+                this.onXMLError("texture file not found for spritesheet "+ spritesheetID);
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Parses the <textures> block. 

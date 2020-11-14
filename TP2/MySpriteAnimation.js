@@ -1,8 +1,8 @@
 class MySpriteAnimation{
-    constructor(scene,sprites,sizeM,sizeN,duration,startCell,endCell){
+    constructor(scene,spritesheet,duration,startCell,endCell){
         this.scene=scene;
         this.sprites=sprites;
-        this.spritesheet = new MySpritesheet(scene,sprites,sizeM,sizeN);
+        this.spritesheet = spritesheet;
         this.duration=duration;
         this.startCell=startCell;
         this.endCell=endCell;
