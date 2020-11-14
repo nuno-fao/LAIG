@@ -10,9 +10,7 @@ class MySpriteAnimation{
     }
 
     update(time){
-        if(time<=duration*1000){
-            this.spritesheet.activateCellP(this.startCell +  (time/duration)*(this.endCell-startCell));
-        }
+        this.spritesheet.activateCellP(this.startCell +  Math.floor(((time%duration)/duration)*(this.endCell-startCell)));
     }
 
     display(){

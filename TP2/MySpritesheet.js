@@ -1,7 +1,7 @@
 class MySpritesheet{
     constructor(scene, texture, sizeM, sizeN){
         this.scene=scene;
-        this.texture=texture;
+        this.texture= new CGFTexture(scene,texture);
         this.sizeM=sizeM;
         this.sizeN=sizeN;
 
