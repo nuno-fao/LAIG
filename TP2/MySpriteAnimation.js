@@ -1,12 +1,12 @@
 class MySpriteAnimation{
     constructor(scene,spritesheet,duration,startCell,endCell){
-        this.scene=scene;
-        this.sprites=sprites;
+        this.scene = scene;
+        this.sprites = sprites;
         this.spritesheet = spritesheet;
         this.duration=duration;
         this.startCell=startCell;
         this.endCell=endCell;
-        this.rect = new MyRectangle(scene,0,1,1,0);
+        this.rect = new MyRectangle(this.scene,0,1,1,0);
     }
 
     update(time){

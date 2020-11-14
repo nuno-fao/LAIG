@@ -1086,38 +1086,38 @@ class MySceneGraph {
                 {
                     let x1 = this.graphGetFloat(leaf, 'x1', false);
                     if (x1 == null) {
-                        this.onXMLMinorError("x1 value not set for triangle on node " + nodeID + ", using value 0")
-                        x1 = 0
+                        this.onXMLMinorError("x1 value not set for triangle on node " + nodeID + ", using value 0");
+                        x1 = 0;
                     }
 
                     let x2 = this.graphGetFloat(leaf, 'x2', false);
                     if (x2 == null) {
-                        this.onXMLMinorError("x2 value not set for triangle on node " + nodeID + ", using value 0")
-                        x2 = 0
+                        this.onXMLMinorError("x2 value not set for triangle on node " + nodeID + ", using value 0");
+                        x2 = 0;
                     }
 
                     let x3 = this.graphGetFloat(leaf, 'x3', false);
                     if (x3 == null) {
-                        this.onXMLMinorError("x3 value not set for triangle on node " + nodeID + ", using value 0")
-                        x3 = 0
+                        this.onXMLMinorError("x3 value not set for triangle on node " + nodeID + ", using value 0");
+                        x3 = 0;
                     }
 
                     let y1 = this.graphGetFloat(leaf, 'y1', false);
                     if (y1 == null) {
-                        this.onXMLMinorError("y1 value not set for triangle on node " + nodeID + ", using value 0")
-                        y1 = 0
+                        this.onXMLMinorError("y1 value not set for triangle on node " + nodeID + ", using value 0");
+                        y1 = 0;
                     }
 
                     let y2 = this.graphGetFloat(leaf, 'y2', false);
                     if (y2 == null) {
-                        this.onXMLMinorError("y2 value not set for triangle on node " + nodeID + ", using value 0")
-                        y2 = 0
+                        this.onXMLMinorError("y2 value not set for triangle on node " + nodeID + ", using value 0");
+                        y2 = 0;
                     }
 
                     let y3 = this.graphGetFloat(leaf, 'y3', false);
                     if (y3 == null) {
-                        this.onXMLMinorError("y3 value not set for triangle on node " + nodeID + ", using value 0")
-                        y3 = 0
+                        this.onXMLMinorError("y3 value not set for triangle on node " + nodeID + ", using value 0");
+                        y3 = 0;
                     }
 
                     let t = new MyTriangle(this.scene, x1, y1, x2, y2, x3, y3, afs, aft);
@@ -1129,26 +1129,26 @@ class MySceneGraph {
                 {
                     let x1 = this.graphGetFloat(leaf, 'x1', false);
                     if (x1 == null) {
-                        this.onXMLMinorError("x1 value not set for rectangle on node " + nodeID + ", using value 0")
-                        x1 = 0
+                        this.onXMLMinorError("x1 value not set for rectangle on node " + nodeID + ", using value 0");
+                        x1 = 0;
                     }
 
                     let x2 = this.graphGetFloat(leaf, 'x2', false);
                     if (x2 == null) {
-                        this.onXMLMinorError("x2 value not set for rectangle on node " + nodeID + ", using value 0")
-                        x2 = 0
+                        this.onXMLMinorError("x2 value not set for rectangle on node " + nodeID + ", using value 0");
+                        x2 = 0;
                     }
 
                     let y1 = this.graphGetFloat(leaf, 'y1', false);
                     if (y1 == null) {
-                        this.onXMLMinorError("y1 value not set for rectangle on node " + nodeID + ", using value 0")
-                        y1 = 0
+                        this.onXMLMinorError("y1 value not set for rectangle on node " + nodeID + ", using value 0");
+                        y1 = 0;
                     }
 
                     let y2 = this.graphGetFloat(leaf, 'y2', false);
                     if (y2 == null) {
-                        this.onXMLMinorError("y2 value not set for rectangle on node " + nodeID + ", using value 0")
-                        y2 = 0
+                        this.onXMLMinorError("y2 value not set for rectangle on node " + nodeID + ", using value 0");
+                        y2 = 0;
                     }
 
                     let r = new MyRectangle(this.scene, x1, y1, x2, y2, afs, aft);
@@ -1159,28 +1159,28 @@ class MySceneGraph {
                 {
                     let height = this.graphGetFloat(leaf, 'height', false);
                     if (height == null) {
-                        this.onXMLMinorError("height value not set for cylinder on node " + nodeID + ", using value 1")
-                        height = 1
+                        this.onXMLMinorError("height value not set for cylinder on node " + nodeID + ", using value 1");
+                        height = 1;
                     }
                     let topRadius = this.graphGetFloat(leaf, 'topRadius', false);
                     if (topRadius == null) {
-                        this.onXMLMinorError("topRadius value not set for cylinder on node " + nodeID + ", using value 1")
-                        topRadius = 1
+                        this.onXMLMinorError("topRadius value not set for cylinder on node " + nodeID + ", using value 1");
+                        topRadius = 1;
                     }
                     let bottomRadius = this.graphGetFloat(leaf, 'bottomRadius', false);
                     if (bottomRadius == null) {
-                        this.onXMLMinorError("bottomRadius value not set for cylinder on node " + nodeID + ", using value 1")
-                        bottomRadius = 1
+                        this.onXMLMinorError("bottomRadius value not set for cylinder on node " + nodeID + ", using value 1");
+                        bottomRadius = 1;
                     }
                     let stacks = this.graphGetFloat(leaf, 'stacks', false);
                     if (stacks == null) {
-                        this.onXMLMinorError("stacks value not set for cylinder on node " + nodeID + ", using value 30")
-                        stacks = 30
+                        this.onXMLMinorError("stacks value not set for cylinder on node " + nodeID + ", using value 30");
+                        stacks = 30;
                     }
                     let slices = this.graphGetFloat(leaf, 'slices', false);
                     if (slices == null) {
-                        this.onXMLMinorError("slices value not set for cylinder on node " + nodeID + ", using value 30")
-                        slices = 30
+                        this.onXMLMinorError("slices value not set for cylinder on node " + nodeID + ", using value 30");
+                        slices = 30;
                     }
                     this.nodes[nodeID].addDescendente(new MyCylinder(this.scene, bottomRadius, topRadius, height, slices, stacks));
                     break;
@@ -1189,18 +1189,18 @@ class MySceneGraph {
                 {
                     let radius = this.graphGetFloat(leaf, 'radius', false);
                     if (radius == null) {
-                        this.onXMLMinorError("radius value not set for sphere on node " + nodeID + ", using value 1")
-                        radius = 1
+                        this.onXMLMinorError("radius value not set for sphere on node " + nodeID + ", using value 1");
+                        radius = 1;
                     }
                     let stacks = this.graphGetFloat(leaf, 'stacks', false);
                     if (stacks == null) {
-                        this.onXMLMinorError("stacks value not set for sphere on node " + nodeID + ", using value 30")
-                        stacks = 30
+                        this.onXMLMinorError("stacks value not set for sphere on node " + nodeID + ", using value 30");
+                        stacks = 30;
                     }
                     let slices = this.graphGetFloat(leaf, 'slices', false);
                     if (slices == null) {
-                        this.onXMLMinorError("slices value not set for sphere on node " + nodeID + ", using value 30")
-                        slices = 30
+                        this.onXMLMinorError("slices value not set for sphere on node " + nodeID + ", using value 30");
+                        slices = 30;
                     }
                     this.nodes[nodeID].addDescendente(new MySphere(this.scene, radius, slices, stacks));
                     break;
@@ -1209,25 +1209,65 @@ class MySceneGraph {
                 {
                     let inner = this.graphGetFloat(leaf, 'inner', false);
                     if (inner == null) {
-                        this.onXMLMinorError("inner value not set for torus on node " + nodeID + ", using value 0.1")
-                        inner = 0.1
+                        this.onXMLMinorError("inner value not set for torus on node " + nodeID + ", using value 0.1");
+                        inner = 0.1;
                     }
                     let outer = this.graphGetFloat(leaf, 'outer', false);
                     if (outer == null) {
-                        this.onXMLMinorError("outer value not set for torus on node " + nodeID + ", using value 1")
-                        outer = 1
+                        this.onXMLMinorError("outer value not set for torus on node " + nodeID + ", using value 1");
+                        outer = 1;
                     }
                     let slices = this.graphGetFloat(leaf, 'slices', false);
                     if (slices == null) {
-                        this.onXMLMinorError("outer value not set for torus on node " + nodeID + ", using value 30")
-                        slices = 30
+                        this.onXMLMinorError("outer value not set for torus on node " + nodeID + ", using value 30");
+                        slices = 30;
                     }
                     let loops = this.graphGetFloat(leaf, 'loops', false);
                     if (loops == null) {
-                        this.onXMLMinorError("loops value not set for torus on node " + nodeID + ", using value 30")
-                        loops = 30
+                        this.onXMLMinorError("loops value not set for torus on node " + nodeID + ", using value 30");
+                        loops = 30;
                     }
                     this.nodes[nodeID].addDescendente(new MyTorus(this.scene, inner, outer, slices, loops));
+                    break;
+                }
+            case "spritetext":
+                {
+                    let text = this.reader.getString(leaf,'text',false);
+                    if (text == null) {
+                        this.onXMLMinorError("text not set for spritetext on node " + nodeID + ", using 'Hello World!'");
+                        text = "Hello World!";
+                    }
+                    this.nodes[nodeID].addDescendente(new MySpriteText(this.scene,text));
+                    break;
+                }
+            case "spriteanim":
+                {
+                    let id = this.reader.getString(leaf,'ssid',false);
+                    if(id==null){
+                        this.onXMLError("id not set for spriteanim on node " + nodeID + "!");
+                        return;
+                    }
+                    else if (this.spritesheets[id] == null) {
+                        this.onXMLError("spritesheet with id " + id + " declared in the spriteanim leaf on node " + nodeID + " not found ");
+                        return;
+                    }
+                    let duration = this.reader.getFloat(leaf,'duration',false);
+                    if (duration == null) {
+                        this.onXMLMinorError("duration not set for spriteanim on node " + nodeID + ", using 1 second");
+                        duration = 1;
+                    }
+                    let startcell = this.reader.getInteger(leaf, 'startCell',false);
+                    if (startcell == null) {
+                        this.onXMLMinorError("startCell not set for spriteanim on node " + nodeID + ", using 1");
+                        startcell = 1;
+                    }
+                    let endcell = this.reader.getInteger(leaf, 'endCell',false);
+                    if (endcell == null) {
+                        this.onXMLMinorError("endCell not set for spriteanim on node " + nodeID + ", using 1");
+                        endcell = 1;
+                    }
+                    this.nodes[nodeID].addDescendente(new MySpriteAnimation(this.scene,this.spritesheets[id],duration,startcell,endcell));
+                    break;
                 }
         }
     }
