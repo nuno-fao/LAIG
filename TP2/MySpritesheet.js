@@ -25,8 +25,8 @@ class MySpritesheet{
         this.spriteShader.setUniformsValues({x: startX, y: startY});
     }
     activateCellP(p){
-        let startX = (p%this.sizeM) * this.cellWidth;
-        let startY = Math.floor(p/this.sizeM) * this.cellHeight;
+        let startX = ((p-1)%this.sizeM) * this.cellWidth;
+        let startY = Math.floor((p-1)/this.sizeM) * this.cellHeight;
         this.spriteShader.setUniformsValues({x: startX, y: startY});
     }
 }

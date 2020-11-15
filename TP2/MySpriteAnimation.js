@@ -9,8 +9,7 @@ class MySpriteAnimation{
     }
 
     update(time){
-        console.log(this.startCell +  Math.floor(((time%this.duration)/this.duration)*(this.endCell-this.startCell)));
-        this.spritesheet.activateCellP(this.startCell +  Math.floor(((time%this.duration+1)/this.duration+1)*(this.endCell-this.startCell)));
+        this.spritesheet.activateCellP(this.startCell +  Math.floor(((time%this.duration)/this.duration)*(this.endCell-this.startCell+1)));
     }
 
     display(){

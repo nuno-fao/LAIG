@@ -7,7 +7,7 @@ class MySpriteText{
     }
 
     getCharacterPosition(character){
-       return character.charCodeAt(0) - 32; 
+       return character.charCodeAt(0) - 31; 
     }  
 
     display(){

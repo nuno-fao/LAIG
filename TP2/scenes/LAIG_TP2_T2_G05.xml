@@ -246,7 +246,7 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="spriteanim" ssid="explosion" duration="16" startCell="1" endCell="16" />
+                <leaf type="spriteanim" ssid="explosion" duration="2" startCell="1" endCell="16" />
             </descendants>
         </node>
         <node id="bbq">            <!-- defines one intermediate node; may be repeated as necessary -->
