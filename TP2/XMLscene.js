@@ -52,9 +52,6 @@ class XMLscene extends CGFscene {
         this.defaultMaterial.setShininess(10.0);
         this.defaultMaterial.setEmission(0, 0, 0, 1);
 
-
-        this.spriteShader = new CGFshader(this.gl,"shaders/spritesheet.vert","shaders/spritesheet.frag");
-
         //GUI
         this.selectedCamera = 0;
 
@@ -144,6 +141,11 @@ class XMLscene extends CGFscene {
         for (let a in this.graph.parsedAnimations) {
             this.graph.parsedAnimations[a].update(time - this.lastTime);
         }
+
+        for(let i in this.graph.spriteAnimations){
+            this.graph.spriteAnimations[i].update(time/1000);
+        }
+
         this.lastTime = time;
     }
 

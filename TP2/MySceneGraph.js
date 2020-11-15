@@ -48,6 +48,7 @@ class MySceneGraph {
          */
         this.reader.open('scenes/' + filename, this);
         this.parsedAnimations = [];
+        this.spriteAnimations = [];
     }
 
     /*
@@ -185,7 +186,6 @@ class MySceneGraph {
             //Parse textures block
             if ((error = this.parseSpritesheets(nodes[index])) != null)
                 return error;
-            console.log(this.spritesheets);
         }
 
         // <materials>
@@ -1266,7 +1266,9 @@ class MySceneGraph {
                         this.onXMLMinorError("endCell not set for spriteanim on node " + nodeID + ", using 1");
                         endcell = 1;
                     }
-                    this.nodes[nodeID].addDescendente(new MySpriteAnimation(this.scene,this.spritesheets[id],duration,startcell,endcell));
+
+                    this.spriteAnimations.push(new MySpriteAnimation(this.scene,this.spritesheets[id],duration,startcell,endcell));
+                    this.nodes[nodeID].addDescendente( this.spriteAnimations[this.spriteAnimations.length - 1]);
                     break;
                 }
         }

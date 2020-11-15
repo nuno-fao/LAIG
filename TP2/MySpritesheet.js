@@ -11,7 +11,9 @@ class MySpritesheet{
         
         this.spriteShader = new CGFshader(this.scene.gl,"shaders/spritesheet.vert","shaders/spritesheet.frag");
 
-        this.spriteShader.setUniformsValues({width: this.cellWidth, height: this.cellHeight});
+        this.spriteShader.setUniformsValues({width: this.cellWidth});
+        this.spriteShader.setUniformsValues({height: this.cellHeight});
+        this.spriteShader.setUniformsValues({uSampler2: 1});
 
         
     }
