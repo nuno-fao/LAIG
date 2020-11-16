@@ -1271,6 +1271,18 @@ class MySceneGraph {
                     this.nodes[nodeID].addDescendente( this.spriteAnimations[this.spriteAnimations.length - 1]);
                     break;
                 }
+            case "plane":
+                {
+                    
+                }
+            case "patch":
+                {
+                    break;
+                }
+            case "defbarrel":
+                {
+                    break;
+                }
         }
     }
 

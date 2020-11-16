@@ -5,7 +5,7 @@ class MySpriteAnimation{
         this.duration=duration;
         this.startCell=startCell;
         this.endCell=endCell;
-        this.rect = new MyRectangle(this.scene,0,0,1,1,1,1);
+        this.rect = new MyRectangle(this.scene,-0.5,-0.5,0.5,0.5,1,1);
     }
 
     update(time){
@@ -14,7 +14,8 @@ class MySpriteAnimation{
 
     display(){
         this.spritesheet.texture.bind(1);
-        this.scene.setActiveShader(this.spritesheet.spriteShader);
+        this.scene.setActiveShaderSimple(this.spritesheet.spriteShader);
+        this.spritesheet.updateUniforms();
         this.rect.display();
         this.scene.setActiveShader(this.scene.defaultShader);
     }

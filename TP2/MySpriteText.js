@@ -3,7 +3,7 @@ class MySpriteText{
         this.scene=scene;
         this.text=text;
         this.spritesheet = new MySpritesheet(this.scene,"spritesheets/fonte.png",16,14);
-        //this.offset=text.length/2;
+        this.offset=text.length/2;
     }
 
     getCharacterPosition(character){
@@ -12,10 +12,11 @@ class MySpriteText{
 
     display(){
         this.spritesheet.texture.bind(1);
-        this.scene.setActiveShader(this.spritesheet.spriteShader);
+        this.scene.setActiveShaderSimple(this.spritesheet.spriteShader);
         for(let i=0;i<this.text.length;i++){
-            let rect = new MyRectangle(this.scene, 0+i, 0 , 1+i ,1,1,1);
+            let rect = new MyRectangle(this.scene, 0+i - this.offset, -0.5 , 1+i- this.offset ,0.5,1,1);
             this.spritesheet.activateCellP(this.getCharacterPosition(this.text[i]));
+            this.spritesheet.updateUniforms();
             rect.display();
         }
         this.scene.setActiveShader(this.scene.defaultShader);

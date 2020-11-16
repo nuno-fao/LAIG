@@ -15,18 +15,19 @@ class MySpritesheet{
         this.spriteShader.setUniformsValues({height: this.cellHeight});
         this.spriteShader.setUniformsValues({uSampler2: 1});
 
-        
+        this.activeX=null;
+        this.activeY=null;
     }
 
     activateCellMN(m,n){
-
-        let startX = this.cellWidth*m;
-        let startY = this.cellHeight*n;
-        this.spriteShader.setUniformsValues({x: startX, y: startY});
+        this.activeX = this.cellWidth*m;
+        this.activeY = this.cellHeight*n;
     }
     activateCellP(p){
-        let startX = ((p-1)%this.sizeM) * this.cellWidth;
-        let startY = Math.floor((p-1)/this.sizeM) * this.cellHeight;
-        this.spriteShader.setUniformsValues({x: startX, y: startY});
+        this.activeX = ((p-1)%this.sizeM) * this.cellWidth;
+        this.activeY = Math.floor((p-1)/this.sizeM) * this.cellHeight;
+    }
+    updateUniforms(){
+        this.spriteShader.setUniformsValues({x: this.activeX, y: this.activeY});
     }
 }

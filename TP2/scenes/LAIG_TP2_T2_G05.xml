@@ -220,13 +220,13 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="0" y="1.0" z="0"/>
+                <translation x="0" y="1.5" z="0"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="spritetext" text="batata" />
+                <leaf type="spritetext" text="BATATA" />
             </descendants>
         </node>
 
@@ -240,13 +240,13 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="0" y="2.0" z="0"/>
+                <translation x="0" y="2.5" z="0"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="spriteanim" ssid="explosion" duration="2" startCell="1" endCell="16" />
+                <leaf type="spriteanim" ssid="explosion" duration="0.5" startCell="1" endCell="16" />
             </descendants>
         </node>
         <node id="bbq">            <!-- defines one intermediate node; may be repeated as necessary -->
