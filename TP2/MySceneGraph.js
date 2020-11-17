@@ -1273,14 +1273,10 @@ class MySceneGraph {
                 }
             case "plane":
                 {
-                    
-                }
-            case "patch":
-                {
-                    break;
-                }
-            case "defbarrel":
-                {
+                    let npartsU=this.reader.getInteger(leaf,'npartsU',false);
+                    let npartsV=this.reader.getInteger(leaf,'npartsV',false);
+                    this.nodes[nodeID].addDescendente(new Plane(this.scene,npartsU,npartsV));
+
                     break;
                 }
         }

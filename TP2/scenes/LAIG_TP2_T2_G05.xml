@@ -208,9 +208,11 @@
                 <noderef id="relva"/>
                 <noderef id="testeSpritetext"/>
                 <noderef id="testeSpriteanim"/>
+                <noderef id="testePlane"/>
             </descendants>
         </node>
-        <node id="testeSpritetext">            <!-- defines one intermediate node; may be repeated as necessary -->
+
+         <node id="testePlane">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="defaultMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
@@ -226,10 +228,28 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
+                <leaf type="plane" npartsU="5" npartsV="5" />
+            </descendants>
+        </node>
+        <node id="testeSpritetext">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="defaultMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="brick"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="0" y="3.5" z="-2"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
                 <leaf type="spritetext" text="arigato volte sempre" />
             </descendants>
         </node>
-
         <node id="testeSpriteanim">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="defaultMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
@@ -240,7 +260,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="0" y="2.5" z="0"/>
+                <translation x="0" y="4.5" z="-2"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
