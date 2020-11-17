@@ -1290,27 +1290,41 @@ class MySceneGraph {
                 {
                     let npointsU=this.reader.getInteger(leaf,'npointsU',false);
                     if(npointsU==null){
-                        this.onXMLMinorError("npointsU not set for patch set on node " + nodeID + ", using X");
-                        npointsU=null;
+                        this.onXMLMinorError("npointsU not set for patch set on node " + nodeID + ", using 2");
+                        npointsU=2;
                     }
                     let npointsV=this.reader.getInteger(leaf,'npointsV',false);
                     if(npointsV==null){
-                        this.onXMLMinorError("npointsV not set for patch set on node " + nodeID + ", using X");
-                        npointsV=null;
+                        this.onXMLMinorError("npointsV not set for patch set on node " + nodeID + ", using 2");
+                        npointsV=2;
                     }
                     let npartsU=this.reader.getInteger(leaf,'npartsU',false);
                     if(npartsU==null){
-                        this.onXMLMinorError("npartsU not set for patch set on node " + nodeID + ", using X");
-                        npartsU=null;
+                        this.onXMLMinorError("npartsU not set for patch set on node " + nodeID + ", using 2");
+                        npartsU=2;
                     }
                     let npartsV=this.reader.getInteger(leaf,'npartsV',false);
                     if(npartsV==null){
-                        this.onXMLMinorError("npartsV not set for patch set on node " + nodeID + ", using X");
-                        npartsV=null;
+                        this.onXMLMinorError("npartsV not set for patch set on node " + nodeID + ", using 2");
+                        npartsV=2;
                     }
-                    let controlPoints;
-                    //fazer loop para ler os control points, meter corretamente na lista e verificar se tem a quantidade certa
-                    this.nodes[nodeID].addDescendente(new Patch(this.scene,npointsU,npointsV,npartsU,npartsV,controlPoints));
+                    if(leaf.children.length!=npointsV*npointsU){
+                        this.onXMLError("number of controlPoints for patch set " + nodeID + "incorret, should be npointsU*npointsV");
+                        return;
+                    }
+                    let controlPoints=[];
+                    for(let cps=0; cps < leaf.children.length;cps++){
+                        let auxU = [];
+                        for(let pV=0; pV<npointsV && cps < leaf.children.length; pV++){
+                            let x = this.reader.getFloat(leaf.children[cps],'xx',false);
+                            let y = this.reader.getFloat(leaf.children[cps],'yy',false);
+                            let z = this.reader.getFloat(leaf.children[cps],'zz',false);
+                            auxU.push([x,y,z,1]);
+                            cps++;
+                        }
+                        controlPoints.push(auxU);
+                    }
+                    //this.nodes[nodeID].addDescendente(new Patch(this.scene,npointsU,npointsV,npartsU,npartsV,controlPoints));
                     break;
                 }
             case "defbarrel":

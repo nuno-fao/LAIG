@@ -1,6 +1,6 @@
-class Plane extends CGFobject{
+class Defbarrel extends CGFobject{
     constructor(scene, base,  middle, height, slices, stacks) {
-        this.scene=scene;
+        super(scene);
         this.base=base;
         this.middle=middle;
         this.height=height;
