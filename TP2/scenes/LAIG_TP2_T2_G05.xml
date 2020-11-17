@@ -228,7 +228,7 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="plane" npartsU="5" npartsV="5" />
+                <leaf type="plane" npartsU="2" npartsV="2" />
             </descendants>
         </node>
         <node id="testeSpritetext">            <!-- defines one intermediate node; may be repeated as necessary -->

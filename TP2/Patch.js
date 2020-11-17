@@ -1,21 +1,18 @@
 class Patch extends CGFobject {
-
-    constructor(scene, nPointsU, nPointsV, nPartsU, nPartsV, controlPoints) {
+    constructor(scene, npointsU, npointsV, npartsU, npartsV, controlPoints) {
         super(scene);
-        this.nPointsU = nPointsU;
-        this.nPointsV = nPointsV;
-        this.nPartsU = nPartsU;
-        this.nPartsV = nPartsV;
+        this.npointsU = npointsU;
+        this.npointsV = npointsV;
+        this.npartsU = npartsU;
+        this.npartsV = npartsV;
         this.controlPoints = controlPoints;
 
-        this.initBuffers();
-    }
-
-    initBuffers() {
-
+        this.surface = new CGFnurbsSurface(npointsU-1,npointsV-1,this.controlPoints);
+        this.object = new CGFnurbsObject(this.scene,this.npartsU,this.npartsV,this.surface);
     }
 
     display() {
+        this.object.display();
     }
 
 }

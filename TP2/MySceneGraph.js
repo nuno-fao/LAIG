@@ -1274,9 +1274,73 @@ class MySceneGraph {
             case "plane":
                 {
                     let npartsU=this.reader.getInteger(leaf,'npartsU',false);
+                    if(npartsU==null){
+                        this.onXMLMinorError("npartsU not set for plane on node " + nodeID + ", using 1");
+                        npartsU=1;
+                    }
                     let npartsV=this.reader.getInteger(leaf,'npartsV',false);
+                    if(npartsV==null){
+                        this.onXMLMinorError("npartsV not set for plane on node " + nodeID + ", using 1");
+                        npartsV=1;
+                    }
                     this.nodes[nodeID].addDescendente(new Plane(this.scene,npartsU,npartsV));
-
+                    break;
+                }
+            case "patch":
+                {
+                    let npointsU=this.reader.getInteger(leaf,'npointsU',false);
+                    if(npointsU==null){
+                        this.onXMLMinorError("npointsU not set for patch set on node " + nodeID + ", using X");
+                        npointsU=null;
+                    }
+                    let npointsV=this.reader.getInteger(leaf,'npointsV',false);
+                    if(npointsV==null){
+                        this.onXMLMinorError("npointsV not set for patch set on node " + nodeID + ", using X");
+                        npointsV=null;
+                    }
+                    let npartsU=this.reader.getInteger(leaf,'npartsU',false);
+                    if(npartsU==null){
+                        this.onXMLMinorError("npartsU not set for patch set on node " + nodeID + ", using X");
+                        npartsU=null;
+                    }
+                    let npartsV=this.reader.getInteger(leaf,'npartsV',false);
+                    if(npartsV==null){
+                        this.onXMLMinorError("npartsV not set for patch set on node " + nodeID + ", using X");
+                        npartsV=null;
+                    }
+                    let controlPoints;
+                    //fazer loop para ler os control points, meter corretamente na lista e verificar se tem a quantidade certa
+                    this.nodes[nodeID].addDescendente(new Patch(this.scene,npointsU,npointsV,npartsU,npartsV,controlPoints));
+                    break;
+                }
+            case "defbarrel":
+                {
+                    let base=this.reader.getFloat(leaf,'base',false);
+                    if(base==null){
+                        this.onXMLMinorError("base not set for defbarrel set on node " + nodeID + ", using X");
+                        base=null;
+                    }
+                    let middle=this.reader.getFloat(leaf,'middle',false);
+                    if(middle==null){
+                        this.onXMLMinorError("middle not set for defbarrel set on node " + nodeID + ", using X");
+                        middle=null;
+                    }
+                    let height=this.reader.getFloat(leaf,'height',false);
+                    if(base==null){
+                        this.onXMLMinorError("height not set for defbarrel set on node " + nodeID + ", using X");
+                        height=null;
+                    }
+                    let slices=this.reader.getInteger(leaf,'slices',false);
+                    if(slices==null){
+                        this.onXMLMinorError("slices not set for defbarrel set on node " + nodeID + ", using X");
+                        slices=null;
+                    }
+                    let stacks=this.reader.getInteger(leaf,'stacks',false);
+                    if(stacks==null){
+                        this.onXMLMinorError("stacks not set for defbarrel set on node " + nodeID + ", using X");
+                        stacks=null;
+                    }
+                    this.nodes[nodeID].addDescendente(new Defbarrel(this.scene,base,middle,height,slices,stacks));
                     break;
                 }
         }

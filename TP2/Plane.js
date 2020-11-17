@@ -3,7 +3,7 @@ class Plane extends CGFobject{
         super(scene);
         this.nPartsU = nPartsU;
         this.nPartsV = nPartsV;
-        this.points = [
+        this.controlPoints = [
             // U = 0
             [   // V = 0, 1
                 [0.5, 0.0, -0.5, 1.0],
@@ -16,7 +16,7 @@ class Plane extends CGFobject{
             ]
         ];
 
-        this.surface = new CGFnurbsSurface(1,1,this.points);
+        this.surface = new CGFnurbsSurface(1,1,this.controlPoints);
         this.object = new CGFnurbsObject(this.scene,this.nPartsU,this.nPartsV,this.surface);
     }
     display(){
