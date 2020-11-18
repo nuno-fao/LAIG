@@ -1275,13 +1275,13 @@ class MySceneGraph {
                 {
                     let npartsU=this.reader.getInteger(leaf,'npartsU',false);
                     if(npartsU==null){
-                        this.onXMLMinorError("npartsU not set for plane on node " + nodeID + ", using 1");
-                        npartsU=1;
+                        this.onXMLMinorError("npartsU not set for plane on node " + nodeID + ", using 20");
+                        npartsU=20;
                     }
                     let npartsV=this.reader.getInteger(leaf,'npartsV',false);
                     if(npartsV==null){
-                        this.onXMLMinorError("npartsV not set for plane on node " + nodeID + ", using 1");
-                        npartsV=1;
+                        this.onXMLMinorError("npartsV not set for plane on node " + nodeID + ", using 20");
+                        npartsV=20;
                     }
                     this.nodes[nodeID].addDescendente(new Plane(this.scene,npartsU,npartsV));
                     break;
@@ -1290,23 +1290,23 @@ class MySceneGraph {
                 {
                     let npointsU=this.reader.getInteger(leaf,'npointsU',false);
                     if(npointsU==null){
-                        this.onXMLMinorError("npointsU not set for patch on node " + nodeID + ", using 2");
-                        npointsU=2;
+                        this.onXMLError("npointsU not set for patch on node " + nodeID);
+                        return;
                     }
                     let npointsV=this.reader.getInteger(leaf,'npointsV',false);
                     if(npointsV==null){
-                        this.onXMLMinorError("npointsV not set for patch on node " + nodeID + ", using 2");
-                        npointsV=2;
+                        this.onXMLError("npointsV not set for patch on node " + nodeID);
+                        return;
                     }
                     let npartsU=this.reader.getInteger(leaf,'npartsU',false);
                     if(npartsU==null){
-                        this.onXMLMinorError("npartsU not set for patch on node " + nodeID + ", using 2");
-                        npartsU=2;
+                        this.onXMLMinorError("npartsU not set for patch on node " + nodeID + ", using 20");
+                        npartsU=20;
                     }
                     let npartsV=this.reader.getInteger(leaf,'npartsV',false);
                     if(npartsV==null){
-                        this.onXMLMinorError("npartsV not set for patch on node " + nodeID + ", using 2");
-                        npartsV=2;
+                        this.onXMLMinorError("npartsV not set for patch on node " + nodeID + ", using 20");
+                        npartsV=20;
                     }
                     if(leaf.children.length!=npointsV*npointsU){
                         this.onXMLError("number of controlPoints for patch on node " + nodeID + "incorret, should be npointsU*npointsV");
