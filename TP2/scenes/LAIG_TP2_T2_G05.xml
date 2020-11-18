@@ -217,7 +217,7 @@
             <!-- next two lines are mandatory -->
             <material id="defaultMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="brick"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="chairWood"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
@@ -229,7 +229,7 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="defbarrel" base="1" middle="1.5" height="2" slices="20" stacks="20" />
+                <leaf type="defbarrel" base="1" middle="1.5" height="2" angle="50" slices="20" stacks="20" />
             </descendants>
         </node>
         <node id="testePatch">            <!-- defines one intermediate node; may be repeated as necessary -->

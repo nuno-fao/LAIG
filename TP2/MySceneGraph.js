@@ -1367,7 +1367,12 @@ class MySceneGraph {
                         this.onXMLMinorError("stacks not set for defbarrel set on node " + nodeID + ", using X");
                         stacks=null;
                     }
-                    this.nodes[nodeID].addDescendente(new Defbarrel(this.scene,base,middle,height,slices,stacks));
+                    let angle=this.reader.getFloat(leaf,'angle',false);
+                    if(angle==null){
+                        angle=20;
+                    }
+                    angle = angle * 0.0174532925;
+                    this.nodes[nodeID].addDescendente(new Defbarrel(this.scene,base,middle,height,angle,slices,stacks));
                     break;
                 }
         }
