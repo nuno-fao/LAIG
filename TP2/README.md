@@ -10,11 +10,26 @@
 ----
 ## Project information
 
-- (items describing main strong points)
-- Scene
+### Scene
   - (Brief description of the created scene)
   - (relative link to the scene)
+
+### Main Strong Points
+  - Parsing support for KeyFrame Animations, SpriteText, SpriteAnimation and various NURBS objects: Plane, Patch and Defbarrel
+  - Fully functional KeyFrame Animations 
+  - Spritesheet based animations with user chosen start and end cells and duration
+  - Spritesheet based text with most of the relevant ASCII characters
+  - Planes draws a proper 1x1 square using NURBS
+  - Patch draws NURBS based objects with the controlPoints it receives
+  - Defbarrel draws half a barrel with varying angle, height, base readius and middle radius
+
+### Adittional Features
+  - Nodes that subscribe an animation stay invisible until the first KeyFrame
+  - Animations block on xml is optional
+  - Some values on the primites like npartsU and npartsV have defaults
+  - Defbarrel has optional angle parameter. If it is not specificied 20º will be used as default
+  - Badly declared leafs on xml will not cause any errors. Instead it will produce a warning and will not be drawn
+
 ----
 ## Issues/Problems
-
-- (items describing unimplemented features, bugs, problems, etc.)
+  - chars '<' and '>' can't be used with SpriteTexts due to lib limitations

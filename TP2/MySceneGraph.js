@@ -199,8 +199,10 @@ class MySceneGraph {
             if ((error = this.parseMaterials(nodes[index])) != null)
                 return error;
         }
+        // <animations>
+        let offset=0;
         if ((index = nodeNames.indexOf("animations")) == -1)
-            return "tag <animations> missing";
+            offset++;
         else {
             if (index != ANIMATIONS_INDEX)
                 this.onXMLMinorError("tag <animations> out of order");
@@ -214,7 +216,7 @@ class MySceneGraph {
         if ((index = nodeNames.indexOf("nodes")) == -1)
             return "tag <nodes> missing";
         else {
-            if (index != NODES_INDEX)
+            if (index != NODES_INDEX - offset)
                 this.onXMLMinorError("tag <nodes> out of order");
 
             //Parse nodes block
@@ -1344,28 +1346,28 @@ class MySceneGraph {
                 {
                     let base=this.reader.getFloat(leaf,'base',false);
                     if(base==null){
-                        this.onXMLMinorError("base not set for defbarrel set on node " + nodeID + ", using X");
-                        base=null;
+                        this.onXMLError("base not set for defbarrel set on node " + nodeID);
+                        return;
                     }
                     let middle=this.reader.getFloat(leaf,'middle',false);
                     if(middle==null){
-                        this.onXMLMinorError("middle not set for defbarrel set on node " + nodeID + ", using X");
-                        middle=null;
+                        this.onXMLError("middle not set for defbarrel set on node " + nodeID);
+                        return;
                     }
                     let height=this.reader.getFloat(leaf,'height',false);
                     if(base==null){
-                        this.onXMLMinorError("height not set for defbarrel set on node " + nodeID + ", using X");
-                        height=null;
+                        this.onXMLError("height not set for defbarrel set on node " + nodeID);
+                        return;
                     }
                     let slices=this.reader.getInteger(leaf,'slices',false);
                     if(slices==null){
-                        this.onXMLMinorError("slices not set for defbarrel set on node " + nodeID + ", using X");
-                        slices=null;
+                        this.onXMLMinorError("slices not set for defbarrel set on node " + nodeID + ", using 20");
+                        slices=20;
                     }
                     let stacks=this.reader.getInteger(leaf,'stacks',false);
                     if(stacks==null){
-                        this.onXMLMinorError("stacks not set for defbarrel set on node " + nodeID + ", using X");
-                        stacks=null;
+                        this.onXMLMinorError("stacks not set for defbarrel set on node " + nodeID + ", using 20");
+                        stacks=20;
                     }
                     let angle=this.reader.getFloat(leaf,'angle',false);
                     if(angle==null){
