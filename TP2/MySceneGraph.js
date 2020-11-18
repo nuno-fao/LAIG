@@ -1290,41 +1290,54 @@ class MySceneGraph {
                 {
                     let npointsU=this.reader.getInteger(leaf,'npointsU',false);
                     if(npointsU==null){
-                        this.onXMLMinorError("npointsU not set for patch set on node " + nodeID + ", using 2");
+                        this.onXMLMinorError("npointsU not set for patch on node " + nodeID + ", using 2");
                         npointsU=2;
                     }
                     let npointsV=this.reader.getInteger(leaf,'npointsV',false);
                     if(npointsV==null){
-                        this.onXMLMinorError("npointsV not set for patch set on node " + nodeID + ", using 2");
+                        this.onXMLMinorError("npointsV not set for patch on node " + nodeID + ", using 2");
                         npointsV=2;
                     }
                     let npartsU=this.reader.getInteger(leaf,'npartsU',false);
                     if(npartsU==null){
-                        this.onXMLMinorError("npartsU not set for patch set on node " + nodeID + ", using 2");
+                        this.onXMLMinorError("npartsU not set for patch on node " + nodeID + ", using 2");
                         npartsU=2;
                     }
                     let npartsV=this.reader.getInteger(leaf,'npartsV',false);
                     if(npartsV==null){
-                        this.onXMLMinorError("npartsV not set for patch set on node " + nodeID + ", using 2");
+                        this.onXMLMinorError("npartsV not set for patch on node " + nodeID + ", using 2");
                         npartsV=2;
                     }
                     if(leaf.children.length!=npointsV*npointsU){
-                        this.onXMLError("number of controlPoints for patch set " + nodeID + "incorret, should be npointsU*npointsV");
+                        this.onXMLError("number of controlPoints for patch on node " + nodeID + "incorret, should be npointsU*npointsV");
                         return;
                     }
                     let controlPoints=[];
-                    for(let cps=0; cps < leaf.children.length;cps++){
+                    let cps = 0;
+                    while(cps<leaf.children.length){
                         let auxU = [];
                         for(let pV=0; pV<npointsV && cps < leaf.children.length; pV++){
                             let x = this.reader.getFloat(leaf.children[cps],'xx',false);
+                            if(x==null){
+                                this.onXMLError("xx coordinate not set for controlPoint on node "+ nodeID );
+                                return;
+                            }
                             let y = this.reader.getFloat(leaf.children[cps],'yy',false);
+                            if(y==null){
+                                this.onXMLError("yy coordinate not set for controlPoint on node "+ nodeID );
+                                return;
+                            }
                             let z = this.reader.getFloat(leaf.children[cps],'zz',false);
-                            auxU.push([x,y,z,1]);
+                            if(z==null){
+                                this.onXMLError("zz coordinate not set for controlPoint on node "+ nodeID );
+                                return;
+                            }
+                            auxU.push([x,y,z,1.0]);
                             cps++;
                         }
                         controlPoints.push(auxU);
                     }
-                    //this.nodes[nodeID].addDescendente(new Patch(this.scene,npointsU,npointsV,npartsU,npartsV,controlPoints));
+                    this.nodes[nodeID].addDescendente(new Patch(this.scene,npointsU,npointsV,npartsU,npartsV,controlPoints));
                     break;
                 }
             case "defbarrel":
