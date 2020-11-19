@@ -200,7 +200,7 @@ class MySceneGraph {
                 return error;
         }
         // <animations>
-        let offset=0;
+        let offset = 0;
         if ((index = nodeNames.indexOf("animations")) == -1)
             offset++;
         else {
@@ -630,8 +630,8 @@ class MySceneGraph {
         for (let i = 0; i < spritesheets.length; i++) {
             let spritesheetID = this.reader.getString(spritesheets[i], "id", false);
             let path = this.reader.getString(spritesheets[i], "path", false);
-            let sizeM = this.reader.getInteger(spritesheets[i],"sizeM",false);
-            let sizeN = this.reader.getInteger(spritesheets[i],"sizeN",false);
+            let sizeM = this.reader.getInteger(spritesheets[i], "sizeM", false);
+            let sizeN = this.reader.getInteger(spritesheets[i], "sizeN", false);
 
             // check if spritesheet and path are valid
             if (spritesheetID == null) {
@@ -651,9 +651,9 @@ class MySceneGraph {
 
             //if the texture was not found, the texture will be set to 'clear'
             if (exists == true) {
-                this.spritesheets[spritesheetID] = new MySpritesheet(this.scene,path,sizeM,sizeN);
+                this.spritesheets[spritesheetID] = new MySpritesheet(this.scene, path, sizeM, sizeN);
             } else {
-                this.onXMLError("texture file not found for spritesheet "+ spritesheetID);
+                this.onXMLError("texture file not found for spritesheet " + spritesheetID);
             }
         }
         return null;
@@ -1234,147 +1234,146 @@ class MySceneGraph {
                 }
             case "spritetext":
                 {
-                    let text = this.reader.getString(leaf,'text',false);
+                    let text = this.reader.getString(leaf, 'text', false);
                     if (text == null) {
                         this.onXMLMinorError("text not set for spritetext on node " + nodeID + ", using 'Hello World!'");
                         text = "Hello World!";
                     }
-                    this.nodes[nodeID].addDescendente(new MySpriteText(this.scene,text));
+                    this.nodes[nodeID].addDescendente(new MySpriteText(this.scene, text));
                     break;
                 }
             case "spriteanim":
                 {
-                    let id = this.reader.getString(leaf,'ssid',false);
-                    if(id==null){
+                    let id = this.reader.getString(leaf, 'ssid', false);
+                    if (id == null) {
                         this.onXMLError("id not set for spriteanim on node " + nodeID + "!");
                         return;
-                    }
-                    else if (this.spritesheets[id] == null) {
+                    } else if (this.spritesheets[id] == null) {
                         this.onXMLError("spritesheet with id " + id + " declared in the spriteanim leaf on node " + nodeID + " not found ");
                         return;
                     }
-                    let duration = this.reader.getFloat(leaf,'duration',false);
+                    let duration = this.reader.getFloat(leaf, 'duration', false);
                     if (duration == null) {
                         this.onXMLMinorError("duration not set for spriteanim on node " + nodeID + ", using 1 second");
                         duration = 1;
                     }
-                    let startcell = this.reader.getInteger(leaf, 'startCell',false);
+                    let startcell = this.reader.getInteger(leaf, 'startCell', false);
                     if (startcell == null) {
                         this.onXMLMinorError("startCell not set for spriteanim on node " + nodeID + ", using 1");
                         startcell = 1;
                     }
-                    let endcell = this.reader.getInteger(leaf, 'endCell',false);
+                    let endcell = this.reader.getInteger(leaf, 'endCell', false);
                     if (endcell == null) {
                         this.onXMLMinorError("endCell not set for spriteanim on node " + nodeID + ", using 1");
                         endcell = 1;
                     }
 
-                    this.spriteAnimations.push(new MySpriteAnimation(this.scene,this.spritesheets[id],duration,startcell,endcell));
-                    this.nodes[nodeID].addDescendente( this.spriteAnimations[this.spriteAnimations.length - 1]);
+                    this.spriteAnimations.push(new MySpriteAnimation(this.scene, this.spritesheets[id], duration, startcell, endcell));
+                    this.nodes[nodeID].addDescendente(this.spriteAnimations[this.spriteAnimations.length - 1]);
                     break;
                 }
             case "plane":
                 {
-                    let npartsU=this.reader.getInteger(leaf,'npartsU',false);
-                    if(npartsU==null){
+                    let npartsU = this.reader.getInteger(leaf, 'npartsU', false);
+                    if (npartsU == null) {
                         this.onXMLMinorError("npartsU not set for plane on node " + nodeID + ", using 20");
-                        npartsU=20;
+                        npartsU = 20;
                     }
-                    let npartsV=this.reader.getInteger(leaf,'npartsV',false);
-                    if(npartsV==null){
+                    let npartsV = this.reader.getInteger(leaf, 'npartsV', false);
+                    if (npartsV == null) {
                         this.onXMLMinorError("npartsV not set for plane on node " + nodeID + ", using 20");
-                        npartsV=20;
+                        npartsV = 20;
                     }
-                    this.nodes[nodeID].addDescendente(new Plane(this.scene,npartsU,npartsV));
+                    this.nodes[nodeID].addDescendente(new Plane(this.scene, npartsU, npartsV));
                     break;
                 }
             case "patch":
                 {
-                    let npointsU=this.reader.getInteger(leaf,'npointsU',false);
-                    if(npointsU==null){
+                    let npointsU = this.reader.getInteger(leaf, 'npointsU', false);
+                    if (npointsU == null) {
                         this.onXMLError("npointsU not set for patch on node " + nodeID);
                         return;
                     }
-                    let npointsV=this.reader.getInteger(leaf,'npointsV',false);
-                    if(npointsV==null){
+                    let npointsV = this.reader.getInteger(leaf, 'npointsV', false);
+                    if (npointsV == null) {
                         this.onXMLError("npointsV not set for patch on node " + nodeID);
                         return;
                     }
-                    let npartsU=this.reader.getInteger(leaf,'npartsU',false);
-                    if(npartsU==null){
+                    let npartsU = this.reader.getInteger(leaf, 'npartsU', false);
+                    if (npartsU == null) {
                         this.onXMLMinorError("npartsU not set for patch on node " + nodeID + ", using 20");
-                        npartsU=20;
+                        npartsU = 20;
                     }
-                    let npartsV=this.reader.getInteger(leaf,'npartsV',false);
-                    if(npartsV==null){
+                    let npartsV = this.reader.getInteger(leaf, 'npartsV', false);
+                    if (npartsV == null) {
                         this.onXMLMinorError("npartsV not set for patch on node " + nodeID + ", using 20");
-                        npartsV=20;
+                        npartsV = 20;
                     }
-                    if(leaf.children.length!=npointsV*npointsU){
+                    if (leaf.children.length != npointsV * npointsU) {
                         this.onXMLError("number of controlPoints for patch on node " + nodeID + "incorret, should be npointsU*npointsV");
                         return;
                     }
-                    let controlPoints=[];
+                    let controlPoints = [];
                     let cps = 0;
-                    while(cps<leaf.children.length){
+                    while (cps < leaf.children.length) {
                         let auxU = [];
-                        for(let pV=0; pV<npointsV && cps < leaf.children.length; pV++){
-                            let x = this.reader.getFloat(leaf.children[cps],'xx',false);
-                            if(x==null){
-                                this.onXMLError("xx coordinate not set for controlPoint on node "+ nodeID );
+                        for (let pV = 0; pV < npointsV && cps < leaf.children.length; pV++) {
+                            let x = this.reader.getFloat(leaf.children[cps], 'xx', false);
+                            if (x == null) {
+                                this.onXMLError("xx coordinate not set for controlPoint on node " + nodeID);
                                 return;
                             }
-                            let y = this.reader.getFloat(leaf.children[cps],'yy',false);
-                            if(y==null){
-                                this.onXMLError("yy coordinate not set for controlPoint on node "+ nodeID );
+                            let y = this.reader.getFloat(leaf.children[cps], 'yy', false);
+                            if (y == null) {
+                                this.onXMLError("yy coordinate not set for controlPoint on node " + nodeID);
                                 return;
                             }
-                            let z = this.reader.getFloat(leaf.children[cps],'zz',false);
-                            if(z==null){
-                                this.onXMLError("zz coordinate not set for controlPoint on node "+ nodeID );
+                            let z = this.reader.getFloat(leaf.children[cps], 'zz', false);
+                            if (z == null) {
+                                this.onXMLError("zz coordinate not set for controlPoint on node " + nodeID);
                                 return;
                             }
-                            auxU.push([x,y,z,1.0]);
+                            auxU.push([x, y, z, 1.0]);
                             cps++;
                         }
                         controlPoints.push(auxU);
                     }
-                    this.nodes[nodeID].addDescendente(new Patch(this.scene,npointsU,npointsV,npartsU,npartsV,controlPoints));
+                    this.nodes[nodeID].addDescendente(new Patch(this.scene, npointsU, npointsV, npartsU, npartsV, controlPoints));
                     break;
                 }
             case "defbarrel":
                 {
-                    let base=this.reader.getFloat(leaf,'base',false);
-                    if(base==null){
+                    let base = this.reader.getFloat(leaf, 'base', false);
+                    if (base == null) {
                         this.onXMLError("base not set for defbarrel set on node " + nodeID);
                         return;
                     }
-                    let middle=this.reader.getFloat(leaf,'middle',false);
-                    if(middle==null){
+                    let middle = this.reader.getFloat(leaf, 'middle', false);
+                    if (middle == null) {
                         this.onXMLError("middle not set for defbarrel set on node " + nodeID);
                         return;
                     }
-                    let height=this.reader.getFloat(leaf,'height',false);
-                    if(base==null){
+                    let height = this.reader.getFloat(leaf, 'height', false);
+                    if (base == null) {
                         this.onXMLError("height not set for defbarrel set on node " + nodeID);
                         return;
                     }
-                    let slices=this.reader.getInteger(leaf,'slices',false);
-                    if(slices==null){
+                    let slices = this.reader.getInteger(leaf, 'slices', false);
+                    if (slices == null) {
                         this.onXMLMinorError("slices not set for defbarrel set on node " + nodeID + ", using 20");
-                        slices=20;
+                        slices = 20;
                     }
-                    let stacks=this.reader.getInteger(leaf,'stacks',false);
-                    if(stacks==null){
+                    let stacks = this.reader.getInteger(leaf, 'stacks', false);
+                    if (stacks == null) {
                         this.onXMLMinorError("stacks not set for defbarrel set on node " + nodeID + ", using 20");
-                        stacks=20;
+                        stacks = 20;
                     }
-                    let angle=this.reader.getFloat(leaf,'angle',false);
-                    if(angle==null){
-                        angle=20;
+                    let angle = this.reader.getFloat(leaf, 'angle', false);
+                    if (angle == null) {
+                        angle = 30;
                     }
                     angle = angle * 0.0174532925;
-                    this.nodes[nodeID].addDescendente(new Defbarrel(this.scene,base,middle,height,angle,slices,stacks));
+                    this.nodes[nodeID].addDescendente(new Defbarrel(this.scene, base, middle, height, angle, slices, stacks));
                     break;
                 }
         }
