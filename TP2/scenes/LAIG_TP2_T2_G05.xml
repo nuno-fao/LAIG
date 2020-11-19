@@ -229,7 +229,7 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="defbarrel" base="1" middle="1.5" height="2" angle="50" slices="20" stacks="20" />
+                <leaf type="defbarrel" base="0.5" middle="0.8" height="2" angle="50" slices="20" stacks="20" />
             </descendants>
         </node>
         <node id="testePatch">            <!-- defines one intermediate node; may be repeated as necessary -->

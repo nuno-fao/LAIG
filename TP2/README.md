@@ -19,6 +19,7 @@
   - Fully functional KeyFrame Animations 
   - Spritesheet based animations with user chosen start and end cells and duration
   - Spritesheet based text with most of the relevant ASCII characters
+  - Both Sprite Animations and Text can have transparency activated
   - Planes draws a proper 1x1 square using NURBS
   - Patch draws NURBS based objects with the controlPoints it receives
   - Defbarrel draws half a barrel with varying angle, height, base readius and middle radius

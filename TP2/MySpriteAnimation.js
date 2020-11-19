@@ -13,10 +13,13 @@ class MySpriteAnimation{
     }
 
     display(){
+        this.scene.gl.enable(this.scene.gl.BLEND);         // enables blending
+        this.scene.gl.blendFunc(this.scene.gl.SRC_ALPHA, this.scene.gl.ONE_MINUS_SRC_ALPHA);      // defines the blending function
         this.spritesheet.texture.bind(1);
         this.scene.setActiveShaderSimple(this.spritesheet.spriteShader);
         this.spritesheet.updateUniforms();
         this.rect.display();
         this.scene.setActiveShader(this.scene.defaultShader);
+        this.scene.gl.disable(this.scene.gl.BLEND);        // disables blending
     }
 }
