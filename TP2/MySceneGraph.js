@@ -313,6 +313,7 @@ class MySceneGraph {
             }
             this.parsedAnimations[animationID] = new KeyFrameAnimation(parsedkeyframes, this.scene);
 
+            console.log(animations);
             // check if texture and path are valid
             if (animationID == null) {
                 this.onXMLError("There is one texture without a defined id, ignoring that texture (texture number " + (i + 1) + ")");

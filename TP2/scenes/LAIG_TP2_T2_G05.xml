@@ -131,7 +131,38 @@
 
     <animations>
         <animation id="teste" >
-         <keyframe instant="0">
+            <keyframe instant="0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="4">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="8">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="90" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="12">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="180" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </animation>
+
+        <animation id="cadeiraXP" >
+            <keyframe instant="0">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="x" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -210,12 +241,31 @@
                 <noderef id="testeSpriteanim"/>
                 <noderef id="testePlane"/>
                 <noderef id="testePatch"/>
-                <noderef id="testeBarrel"/>
+                <noderef id="barrilDeVinho"/>
             </descendants>
         </node>
-         <node id="testeBarrel">            <!-- defines one intermediate node; may be repeated as necessary -->
+        <node id="barrilDeVinho">
+            <material id="defaultMaterial" />
+            
+            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <transformations>
+                <translation x="1.6" y="0" z="-2.1"/>
+                <scale sx="0.5" sy="0.5" sz="0.5"/>
+                
+            </transformations>
+
+            <descendants>
+                <noderef id="barrilCurva"/>
+                <noderef id="barrilTampas"/>
+            </descendants>
+        </node>
+
+        <node id="barrilCurva">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
-            <material id="defaultMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
             <texture id="chairWood"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
@@ -223,13 +273,33 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="0" y="1.5" z="0"/>
+                <rotation axis="x" angle="-90"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <leaf type="defbarrel" base="0.5" middle="0.8" height="2" angle="50" slices="20" stacks="20" />
+            </descendants>
+        </node>
+        
+        <node id="barrilTampas">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="chairWood"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <rotation axis="x" angle="-90"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="cylinder" height="2" topRadius="0.51" bottomRadius="0.51" stacks="20" slices="20" />
             </descendants>
         </node>
         <node id="testePatch">            <!-- defines one intermediate node; may be repeated as necessary -->
@@ -854,9 +924,6 @@
             <transformations>          
             </transformations>
 
-            
-            <animationref id="teste" />
-
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
@@ -996,6 +1063,9 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
+
+            <animationref id="cadeiraXP"/>
+            
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
