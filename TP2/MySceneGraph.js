@@ -230,6 +230,7 @@ class MySceneGraph {
 
     parseAnimations(animationNode) {
         let animations = animationNode.children;
+
         for (let i = 0; i < animations.length; i++) {
             let parsedkeyframes = [];
             let animationID = this.reader.getString(animations[i], "id", false);
@@ -312,17 +313,15 @@ class MySceneGraph {
                 parsedkeyframes.push(new KeyFrame(keyframeInstant * 1000, x, y, z, s, t));
             }
             this.parsedAnimations[animationID] = new KeyFrameAnimation(parsedkeyframes, this.scene);
-
             // check if texture and path are valid
             if (animationID == null) {
                 this.onXMLError("There is one texture without a defined id, ignoring that texture (texture number " + (i + 1) + ")");
                 continue;
             }
-
-            // Checks for repeated IDs.
-
-            return null;
         }
+        console.log("yyyyyyyyy", this.parsedAnimations)
+            // Checks for repeated IDs.
+        return null;
     }
 
     /**
@@ -843,6 +842,9 @@ class MySceneGraph {
             );
             if (animation != null) {
                 let animID = this.reader.getString(animation, "id", false);
+                if (this.parsedAnimations[animID] == null) {
+                    this.onXMLError("Animation " + animID + " is not defined!");
+                }
                 this.nodes[nodeID].addAnimation(this.parsedAnimations[animID]);
             }
             descendants[nodeID] = nodesList[i].children[descendants[nodeID]]
