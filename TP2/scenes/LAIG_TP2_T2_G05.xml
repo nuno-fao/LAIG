@@ -576,7 +576,7 @@
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <leaf type="spriteanim" ssid="bbqFire" duration="1.5" startCell="1" endCell="16" />
+                <leaf type="spriteanim" ssid="bbqFire" duration="1.5" startCell="0" endCell="15" />
             </descendants>
         </node>
         <node id="pilar1">            <!-- defines one intermediate node; may be repeated as necessary -->

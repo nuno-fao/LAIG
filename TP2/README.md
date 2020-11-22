@@ -11,8 +11,11 @@
 ## Project information
 
 ### Scene
-  - (Brief description of the created scene)
-  - (relative link to the scene)
+  - The scene we created is a simple outdoor dinning table with an orange, a donut, a napkin, a can of coke and 6 chairs
+  - There are also 2 floors, a wall, a BBQ stand and a lamp (with its own light source) to light up the table
+  - In this second project we added a fire with 
+  - [Scene Running](https://web.fe.up.pt/~up201806206/laig/TP2/)
+  - [Scene XML](./scenes/LAIG_TP2_T2_G05.xml)
 
 ### Main Strong Points
   - Parsing support for KeyFrame Animations, SpriteText, SpriteAnimation and various NURBS objects: Plane, Patch and Defbarrel

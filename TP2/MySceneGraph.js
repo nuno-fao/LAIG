@@ -1261,13 +1261,15 @@ class MySceneGraph {
                     let startcell = this.reader.getInteger(leaf, 'startCell', false);
                     if (startcell == null) {
                         this.onXMLMinorError("startCell not set for spriteanim on node " + nodeID + ", using 1");
-                        startcell = 1;
+                        startcell = 0;
                     }
                     let endcell = this.reader.getInteger(leaf, 'endCell', false);
                     if (endcell == null) {
                         this.onXMLMinorError("endCell not set for spriteanim on node " + nodeID + ", using 1");
-                        endcell = 1;
+                        endcell = 0;
                     }
+                    startcell++;
+                    endcell++;
 
                     this.spriteAnimations.push(new MySpriteAnimation(this.scene, this.spritesheets[id], duration, startcell, endcell));
                     this.nodes[nodeID].addDescendente(this.spriteAnimations[this.spriteAnimations.length - 1]);
