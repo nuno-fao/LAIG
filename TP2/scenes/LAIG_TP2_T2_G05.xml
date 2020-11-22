@@ -129,7 +129,7 @@
     </materials>
 
     <animations>
-        <animation id="teste" >
+        <animation id="cadeira5" >
             <keyframe instant="0">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="x" angle="0" />
@@ -137,6 +137,45 @@
                 <rotation axis="z" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
+            <keyframe instant="3">
+                <translation x="0" y="0" z="0.5" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="5">
+                <translation x="0" y="0.6" z="0.5" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="8">
+                <translation x="0" y="1.3" z="0.5" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="180" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="10">
+                <translation x="0" y="1.22" z="-0.02" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="180" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </animation>
+
+        <animation id="orange" >
+            <keyframe instant="0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
             <keyframe instant="4">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="x" angle="0" />
@@ -144,23 +183,17 @@
                 <rotation axis="z" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="8">
-                <translation x="0" y="0" z="0" />
+
+            <keyframe instant="7">
+                <translation x="0.6" y="0" z="0" />
                 <rotation axis="x" angle="0" />
-                <rotation axis="y" angle="90" />
-                <rotation axis="z" angle="0" />
-                <scale sx="1" sy="1" sz="1" />
-            </keyframe>
-            <keyframe instant="12">
-                <translation x="0" y="0" z="0" />
-                <rotation axis="x" angle="0" />
-                <rotation axis="y" angle="180" />
+                <rotation axis="y" angle="0" />
                 <rotation axis="z" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
         </animation>
 
-        <animation id="cadeiraXP" >
+        <animation id="donut" >
             <keyframe instant="0">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="x" angle="0" />
@@ -168,6 +201,26 @@
                 <rotation axis="z" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
+
+            <keyframe instant="4">
+                <translation x="0.2" y="-0.2" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+        </animation>
+
+        <animation id="cadeira" >
+            <keyframe instant="0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
             <keyframe instant="4">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="x" angle="0" />
@@ -175,21 +228,37 @@
                 <rotation axis="z" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="8">
-                <translation x="0" y="0" z="0" />
+
+            <keyframe instant="7">
+                <translation x="0" y="0" z="0.5" />
                 <rotation axis="x" angle="0" />
-                <rotation axis="y" angle="90" />
+                <rotation axis="y" angle="0" />
                 <rotation axis="z" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="12">
-                <translation x="0" y="0" z="0" />
+            <keyframe instant="9">
+                <translation x="0" y="0.6" z="0.5" />
                 <rotation axis="x" angle="0" />
-                <rotation axis="y" angle="180" />
+                <rotation axis="y" angle="0" />
                 <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="13">
+                <translation x="0" y="1.3" z="0.5" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="180" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="16">
+                <translation x="0" y="1.22" z="-0.02" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="180" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
         </animation>
+        
     </animations>
 
     <nodes>
@@ -238,7 +307,6 @@
                 <noderef id="relva"/>
                 <noderef id="testeSpritetext"/>
                 <noderef id="testeSpriteanim"/>
-                <noderef id="testePlane"/>
                 <noderef id="testePatch"/>
                 <noderef id="barrilDeVinho"/>
             </descendants>
@@ -326,26 +394,6 @@
                     <controlpoint xx="1.5" yy="-1.5" zz="0" />
                     <controlpoint xx="1.5" yy="1.5" zz="0" />
                 </leaf>
-            </descendants>
-        </node>
-
-         <node id="testePlane">            <!-- defines one intermediate node; may be repeated as necessary -->
-            <!-- next two lines are mandatory -->
-            <material id="defaultMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
-
-            <texture id="brick"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
-                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
-            </texture>
-
-            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
-            <transformations>
-                <translation x="2" y="1.5" z="0"/>
-            </transformations>
-
-            <!-- declaring descendants, at least one node or one leaf must be present
-             descendants may be mixed, nodes and leafs -->
-            <descendants>
-                <leaf type="plane" npartsU="20" npartsV="20" />
             </descendants>
         </node>
         <node id="testeSpritetext">            <!-- defines one intermediate node; may be repeated as necessary -->
@@ -988,6 +1036,7 @@
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
+            <animationref id="cadeira"/>
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="0.3" y="0" z="0.4"/>
@@ -1003,6 +1052,7 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
+            <animationref id="cadeira5"/>
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
@@ -1022,6 +1072,7 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
+            <animationref id="cadeira5"/>
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
@@ -1042,6 +1093,7 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
+            <animationref id="cadeira"/>
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
@@ -1062,8 +1114,7 @@
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-
-            <animationref id="cadeiraXP"/>
+            <animationref id="cadeira5"/>
             
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
@@ -1084,6 +1135,8 @@
         <node id="cadeira6">            <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <animationref id="cadeira"/>
 
             <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
@@ -1212,6 +1265,9 @@
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
+            <animationref id="orange"/>
+
+
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
                 <translation x="-0.5" y="0.8" z="0"/>
@@ -1230,6 +1286,8 @@
             <texture id="donutTexture"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
+
+            <animationref id="donut"/>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>

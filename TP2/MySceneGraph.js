@@ -319,7 +319,8 @@ class MySceneGraph {
                 continue;
             }
         }
-        // Checks for repeated IDs.
+        console.log("yyyyyyyyy", this.parsedAnimations)
+            // Checks for repeated IDs.
         return null;
     }
 
