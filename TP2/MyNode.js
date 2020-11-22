@@ -13,7 +13,7 @@ class MyNode {
     addAnimation(animation) {
         this.animation = animation;
     }
-    display(time) {
+    display() {
         this.scene.pushMatrix();
 
         let matSize = this.scene.materialStack.length;
@@ -63,12 +63,12 @@ class MyNode {
             this.scene.multMatrix(this.tg_matrix);
         if (this.animation != null)
             this.animation.apply();
-        if(this.animation==null || this.animation.activeFrame!=0){
+        if (this.animation == null || this.animation.activeFrame != 0) {
             for (let i = 0; i < this.descendentes.length; i++) {
                 this.descendentes[i].display();
             }
         }
-        
+
 
         this.scene.materialStack.pop();
         this.scene.textureStack.pop();

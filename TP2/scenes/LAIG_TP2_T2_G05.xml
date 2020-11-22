@@ -426,7 +426,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="0" y="1.5" z="0"/>
+                <translation x="-3" y="0" z="-2.5"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -458,7 +458,18 @@
                     <controlpoint x="-0.8" y="0" z="0"/>
                     <controlpoint x="-0.8" y="1" z="0"/>
 
+                </leaf>
+
+                <leaf type="patch" npointsU="3" npointsV="2" npartsU="20" npartsV="20" >
+                
+                    <controlpoint x="-1" y="1" z="0"/>
+                    <controlpoint x="-0.8" y="1" z="0"/>
+                
+                    <controlpoint x="0" y="1" z="1.5"/>
+                    <controlpoint x="0" y="1" z="1"/>
                     
+                    <controlpoint x="1" y="1" z="0"/>
+                    <controlpoint x="0.8" y="1" z="0"/>
 
                 </leaf>
             </descendants>
@@ -489,7 +500,7 @@
             <!-- next two lines are mandatory -->
             <material id="defaultMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
 
-            <texture id="null"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+            <texture id="clear"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
                 <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
             </texture>
 
