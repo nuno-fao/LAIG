@@ -46,7 +46,8 @@
   - In this second project we added a fire to the BBQ stand (spritesheet animation), text to the wall (sprite text), animations to multiple items on the table and chairs (keyframe animations), a wine barrel and a bar counter (both NURBS surfaces)
   - We added a small easter egg in the form of a jump scare :)
   - [Scene Running](https://web.fe.up.pt/~up201806206/laig/TP2/)
-  - [Scene XML](./scenes/LAIG_TP2_T2_G05.xml)
+  - [Scene XML](./TP2/scenes/LAIG_TP2_T2_G05.xml)
+  - [TP2](./TP2)
 
 ### Main Strong Points
   - Parsing support for KeyFrame Animations, SpriteText, SpriteAnimation and various NURBS objects: Plane, Patch and Defbarrel
