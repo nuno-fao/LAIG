@@ -27,7 +27,6 @@ class KeyFrameAnimation extends Animation {
             while (1) {
                 if (this.timeAccumulator > this.keyFrames[this.activeFrame].time && this.activeFrame < this.keyFrames.length - 1) {
                     this.lastTime = this.keyFrames[this.activeFrame].time;
-                    console.log(this.keyFrames)
                     this.lastt = [...this.keyFrames[this.activeFrame].t];
                     this.lastx = this.keyFrames[this.activeFrame].x;
                     this.lasty = this.keyFrames[this.activeFrame].y;
@@ -39,7 +38,6 @@ class KeyFrameAnimation extends Animation {
                     this.activez = this.keyFrames[this.activeFrame].z - this.lastz;
 
                     this.activet = [...this.keyFrames[this.activeFrame].t];
-                    console.log(this.activet, this.lastt)
                     this.subtractList(this.activet, this.lastt);
 
                     this.addList(this.actives, this.lasts);

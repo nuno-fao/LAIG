@@ -319,7 +319,6 @@ class MySceneGraph {
                 continue;
             }
         }
-        console.log("yyyyyyyyy", this.parsedAnimations)
             // Checks for repeated IDs.
         return null;
     }
@@ -1320,19 +1319,19 @@ class MySceneGraph {
                     while (cps < leaf.children.length) {
                         let auxU = [];
                         for (let pV = 0; pV < npointsV && cps < leaf.children.length; pV++) {
-                            let x = this.reader.getFloat(leaf.children[cps], 'xx', false);
+                            let x = this.reader.getFloat(leaf.children[cps], 'x', false);
                             if (x == null) {
-                                this.onXMLError("xx coordinate not set for controlPoint on node " + nodeID);
+                                this.onXMLError("x coordinate not set for controlPoint on node " + nodeID);
                                 return;
                             }
-                            let y = this.reader.getFloat(leaf.children[cps], 'yy', false);
+                            let y = this.reader.getFloat(leaf.children[cps], 'y', false);
                             if (y == null) {
-                                this.onXMLError("yy coordinate not set for controlPoint on node " + nodeID);
+                                this.onXMLError("y coordinate not set for controlPoint on node " + nodeID);
                                 return;
                             }
-                            let z = this.reader.getFloat(leaf.children[cps], 'zz', false);
+                            let z = this.reader.getFloat(leaf.children[cps], 'z', false);
                             if (z == null) {
-                                this.onXMLError("zz coordinate not set for controlPoint on node " + nodeID);
+                                this.onXMLError("z coordinate not set for controlPoint on node " + nodeID);
                                 return;
                             }
                             auxU.push([x, y, z, 1.0]);
