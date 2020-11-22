@@ -256,11 +256,11 @@ class MySceneGraph {
                                 let angle = this.graphGetFloat(tranfomations[k], "angle", false);
 
                                 if (axis == null) {
-                                    this.onXMLError("Axis Value not set on rotation's block at node '" + nodeID + "'")
+                                    this.onXMLError("Axis Value not set on rotation's block at node '" + animationID + "'")
                                     break;
                                 }
                                 if (angle == null) {
-                                    this.onXMLError("Angle Value not set on rotation's block at node '" + nodeID + "'")
+                                    this.onXMLError("Angle Value not set on rotation's block at node '" + animationID + "'")
                                     break;
                                 }
                                 angle = angle / 180 * Math.PI;
@@ -281,7 +281,7 @@ class MySceneGraph {
                                             break;
                                         }
                                     default:
-                                        this.onXMLError("Axis Value for rotation on node '" + nodeID + "' not valid")
+                                        this.onXMLError("Axis Value for rotation on node '" + animationID + "' not valid")
 
                                 }
                                 break;
@@ -292,22 +292,22 @@ class MySceneGraph {
                                 let sy = this.graphGetFloat(tranfomations[k], "sy", false);
                                 let sz = this.graphGetFloat(tranfomations[k], "sz", false);
                                 if (sx == null) {
-                                    this.onXMLMinorError("sx Value not set for scale on node '" + nodeID + "',using sx=1")
+                                    this.onXMLMinorError("sx Value not set for scale on node '" + animationID + "',using sx=1")
                                     sx = 1;
                                 }
                                 if (sy == null) {
-                                    this.onXMLMinorError("sy Value not set for scale on node '" + nodeID + "',using sy=1")
+                                    this.onXMLMinorError("sy Value not set for scale on node '" + animationID + "',using sy=1")
                                     sy = 1;
                                 }
                                 if (sz == null) {
-                                    this.onXMLMinorError("sz Value not set for scale on node '" + nodeID + "',using sz=1")
+                                    this.onXMLMinorError("sz Value not set for scale on node '" + animationID + "',using sz=1")
                                     sz = 1;
                                 }
                                 s = [sx, sy, sz];
                                 break;
                             }
                         default:
-                            this.onXMLError("Transformation tag '" + tranfomations[k].nodeName + "' not valid on node '" + nodeID + "'")
+                            this.onXMLError("Transformation tag '" + tranfomations[k].nodeName + "' not valid on node '" + animationID + "'")
                     }
                 }
                 parsedkeyframes.push(new KeyFrame(keyframeInstant * 1000, x, y, z, s, t));
