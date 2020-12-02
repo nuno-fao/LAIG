@@ -13,8 +13,8 @@ class KeyFrameAnimation extends Animation {
         this.activex = this.keyFrames[this.activeFrame].x;
         this.activey = this.keyFrames[this.activeFrame].y;
         this.activez = this.keyFrames[this.activeFrame].z;
-        this.activet = this.keyFrames[this.activeFrame].t;
-        this.actives = this.keyFrames[this.activeFrame].s;
+        this.activet = [...this.keyFrames[this.activeFrame].t];
+        this.actives = [...this.keyFrames[this.activeFrame].s];
         this.subtractList(this.actives, this.lasts);
         this.lastTime = 0;
         this.dead = false;
@@ -27,7 +27,7 @@ class KeyFrameAnimation extends Animation {
             while (1) {
                 if (this.timeAccumulator > this.keyFrames[this.activeFrame].time && this.activeFrame < this.keyFrames.length - 1) {
                     this.lastTime = this.keyFrames[this.activeFrame].time;
-                    this.lastt = this.keyFrames[this.activeFrame].t;
+                    this.lastt = [...this.keyFrames[this.activeFrame].t];
                     this.lastx = this.keyFrames[this.activeFrame].x;
                     this.lasty = this.keyFrames[this.activeFrame].y;
                     this.lastz = this.keyFrames[this.activeFrame].z;
@@ -37,12 +37,12 @@ class KeyFrameAnimation extends Animation {
                     this.activey = this.keyFrames[this.activeFrame].y - this.lasty;
                     this.activez = this.keyFrames[this.activeFrame].z - this.lastz;
 
-                    this.activet = this.keyFrames[this.activeFrame].t;
+                    this.activet = [...this.keyFrames[this.activeFrame].t];
                     this.subtractList(this.activet, this.lastt);
 
                     this.addList(this.actives, this.lasts);
                     this.lasts = this.actives;
-                    this.actives = this.keyFrames[this.activeFrame].s;
+                    this.actives = [...this.keyFrames[this.activeFrame].s];
                     this.subtractList(this.actives, this.lasts);
                     this.frameMultiplier = (this.keyFrames[this.activeFrame].time - this.lastTime);
 
@@ -70,6 +70,7 @@ class KeyFrameAnimation extends Animation {
     }
 
     applyTrans(x, y, z, lx, ly, lz, multiplier) {
+        //console.log(lx + x * multiplier, ly + y * multiplier, lz + z * multiplier)
         this.scene.translate(lx + x * multiplier, ly + y * multiplier, lz + z * multiplier);
     }
 

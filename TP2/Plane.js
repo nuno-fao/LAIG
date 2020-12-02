@@ -6,14 +6,18 @@ class Plane extends CGFobject{
         this.controlPoints = [
             // U = 0
             [   // V = 0, 1
-                [0.5, 0.0, -0.5, 1.0],
-                [0.5, 0.0, 0.5, 1.0]
+                
+                [-0.5, 0.0, 0.5, 1.0],
+                [-0.5, 0.0, -0.5, 1.0]
             ],
+           
             // U = 1
             [   // V = 0, 1
-                [-0.5, 0.0, -0.5, 1.0],
-                [-0.5, 0.0, 0.5, 1.0]
+                
+                [0.5, 0.0, 0.5, 1.0],
+                [0.5, 0.0, -0.5, 1.0]
             ]
+            
         ];
 
         this.surface = new CGFnurbsSurface(1,1,this.controlPoints);

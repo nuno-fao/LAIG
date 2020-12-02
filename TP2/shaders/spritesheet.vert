@@ -12,6 +12,7 @@ uniform mat4 uNMatrix;
 attribute vec2 aTextureCoord;
 varying vec2 vTextureCoord;
 
+uniform sampler2D uSampler2;
 uniform float x;
 uniform float y;
 uniform float width;
@@ -22,3 +23,4 @@ void main() {
 
 	vTextureCoord = vec2(aTextureCoord.x*width + x, aTextureCoord.y*height + y);
 }
+
