@@ -1,0 +1,184 @@
+<lsf>
+    <initials>
+        <reference length="0" />
+        <!-- axis length; "0" means no axis displayed -->
+        <root id="root" />
+        <!-- identifier of root node of the scene graph; this node -->
+        <!-- must be defined in one of the following NODE declarations -->
+    </initials>
+    <views default="defaultCamera">
+        <!-- at least one of the following type of cameras must be declared -->
+        <perspective id="defaultCamera" near="0.01" far="500" angle="45">
+            <from x="0" y="12" z="10" />
+            <to x="0" y="5" z="0" />
+        </perspective>
+        <ortho id="demoOrtho" near="0.2" far="100" left="-5" right="5" top="5" bottom="-5">
+            <from x="35" y="70" z="10" />
+            <to x="5" y="8" z="0" />
+            <up x="0" y="1" z="0" /><!-- optional, default 0,1,0 -->
+        </ortho>
+    </views>
+
+    <illumination>
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />           <!-- global ambient -->
+        <background r="0.529" g="0.808" b="0.921" a="1.0" />        <!-- background color -->
+    </illumination>
+
+    <lights>
+        <!-- NOTE: this block "light" must be repeated as necessary with different "id". At least one light should be present, and a maximum of eight lights is accepted. -->
+        <light id="luz_ambiente">          <!-- light identifier -->
+            <enable value="1" /> 
+            <!-- enable/disable -->
+            <position x="10" y="12" z="9.5" w="0.0" /><!-- light position; w=1: point light; w=0: directional light -->
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />                   <!-- ambient component -->
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />             <!-- diffuse component -->
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />            <!-- specular component -->
+        </light>
+        <light id="luz_candeeiro">           <!-- light identifier -->
+            <enable value="0" /> 
+            <!-- enable/disable -->
+            <position x="-2.5" y="5.1" z="-2" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
+            <ambient r="0" g="0" b="0" a="1.0" />                   <!-- ambient component -->
+            <diffuse r="0.2" g="0.2" b="0" a="1.0" />             <!-- diffuse component -->
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />            <!-- specular component -->
+        </light>
+        <light id="luz_por_do_sol">           <!-- light identifier -->
+            <enable value="0" /> 
+            <!-- enable/disable -->
+            <position x="25" y="20" z="20" w="1" /><!-- light position; w=1: point light; w=0: directional light -->
+            <ambient r="0.97" g="0.83" b="0.64" a="1.0" />                   <!-- ambient component -->
+            <diffuse r="0" g="0" b="0" a="1.0" />             <!-- diffuse component -->
+            <specular r="0.97" g="0.83" b="0.64" a="1.0" />            <!-- specular component -->
+        </light>
+    </lights>
+
+
+    <textures>
+        <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
+        <texture id="demoTexture" path="./scenes/images/vidral.jpg" />
+        <texture id="pavewalkTexture" path="./scenes/images/calçada.png" />
+        <texture id="concrete" path="./scenes/images/concrete.png" />
+        <texture id="brick" path="./scenes/images/brick.png" />
+        <texture id="metal" path="./scenes/images/metal.jpg" />
+        <texture id="blackMetal" path="./scenes/images/blackMetal.png" />
+        <texture id="chairWood" path="./scenes/images/chairWood.png" />
+        <texture id="stoneWall" path="./scenes/images/stoneWall.png" />
+        <texture id="donutTexture" path="./scenes/images/donut.jpg" />
+        <texture id="cocacolaTexture" path="./scenes/images/cocacola.png" />
+        <texture id="laranjaTexture" path="./scenes/images/laranja.png" />
+        <texture id="relvaTexture" path="./scenes/images/leaves.jpg" />
+        <texture id="guardanapoTexture" path="./scenes/images/napkin.png" />
+        <texture id="can_top_texture" path="./scenes/images/can_top.png" />
+        <texture id="teste" path="./scenes/images/testTexture2.png" />
+        <texture id="chrome" path="./scenes/images/chrome.png" />
+        <texture id="pernaWood" path="./scenes/images/pernaWood.jpg" />
+        <texture id="backWood" path="./scenes/images/backWood.jpg" />
+    </textures>
+
+    <!-- spritesheets -->
+
+    <spritesheets>
+        <spritesheet id="explosion" path="spritesheets/explosion.png" sizeM="4" sizeN="4" />
+    </spritesheets>
+
+        <!-- NOTE: the "MATERIAL" block may be repeated as required. Each defined material
+         requires a distinct "id". At least one material should be present. -->
+    <materials>
+
+        <material id="lightMaterial">
+            <shininess value="10.0" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.1" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.1" a="1.0" />
+            <emissive r="0.5" g="0.5" b="0.3" a="1.0" />
+        </material>
+        <material id="metalMaterial">
+            <shininess value="300.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <emissive r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="woodMaterial">
+            <shininess value="5.0" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+            <emissive r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="materialLaranja">
+            <shininess value="1.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+            <emissive r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="materialGuardanapo">
+            <shininess value="5.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+            <emissive r="1" g="1" b="1" a="1.0" />
+        </material>
+        <material id="defaultMaterial">
+            <shininess value="5.0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+            <emissive r="0" g="0" b="0" a="1.0" />
+        </material>
+    </materials>
+
+    <animations>
+        <animation id="teste" >
+         <keyframe instant="0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="4">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="8">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="90" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="12">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="x" angle="0" />
+                <rotation axis="y" angle="180" />
+                <rotation axis="z" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </animation>
+    </animations>
+
+    <nodes>
+        <node id="root">            <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="defaultMaterial" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="clear"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+            </descendants>
+        </node>
+    </nodes>
+</lsf>
