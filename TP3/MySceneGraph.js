@@ -1233,6 +1233,16 @@ class MySceneGraph {
                     this.nodes[nodeID].addDescendente(new MyTorus(this.scene, inner, outer, slices, loops));
                     break;
                 }
+            case "hexagon":
+                {
+                    this.nodes[nodeID].addDescendente(new MyHexagon(this.scene));
+                    break;
+                }
+            case "board":
+                {
+                    this.nodes[nodeID].addDescendente(new Board(this.scene));
+                    break;
+                }
             case "spritetext":
                 {
                     let text = this.reader.getString(leaf, 'text', false);

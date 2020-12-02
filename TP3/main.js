@@ -43,7 +43,8 @@ function getUrlVars() {
 serialInclude([     '../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js', 'MyRectangle.js',
                     'MyAxis.js', 'MyNode.js', 'MyTriangle.js', 'MyCylinder.js', 'MySphere.js', 'MyTorus.js',
                     'KeyFrame.js', 'Animation.js', 'KeyFrameAnimation.js', 'MySpritesheet.js', 'MySpriteText.js',
-                    'MySpriteAnimation.js', 'Plane.js', 'Patch.js', 'Defbarrel.js',
+                    'MySpriteAnimation.js', 'Plane.js', 'Patch.js', 'Defbarrel.js', 'MyHexagon.js', 'BoardTile.js',
+                    'Board.js',
 
     main = function() {
         // Standard application, scene and interface setup
@@ -61,7 +62,7 @@ serialInclude([     '../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterf
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
         // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 
-        var filename = getUrlVars()['file'] || "LAIG_TP2_T2_G05.xml";
+        var filename = getUrlVars()['file'] || "LAIG_TP3_T2_G05.xml";
 
         // create and load graph, and associate it to scene. 
         // Check console for loading errors
