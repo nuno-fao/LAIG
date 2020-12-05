@@ -3,10 +3,74 @@ class Board{
     constructor(scene) {
         this.scene=scene;
         this.board=[];
+        this.P1pieces=[];
+        this.P2pieces=[];
+
         this.initBuffers();
     }
 
     initBuffers(){
+        this.initBoard();
+        this.initPlayers();
+    }
+
+    initPlayers(){
+        let ID = 100;
+
+        let startZ=-3;
+        let startX=4;
+
+        for (let i=0;i<5;i++){
+            ID++;
+            this.P1pieces.push(new Piece(this.scene,"P1piece",startX,startZ,ID));
+            startX+=0.5;
+        }
+
+        startZ=-2.5;
+        startX=4;
+
+        for (let i=0;i<5;i++){
+            ID++;
+            this.P1pieces.push(new Piece(this.scene,"P1piece",startX,startZ,ID));
+            startX+=0.5;
+        }
+
+        startZ=-2;
+        startX=4;
+
+        for (let i=0;i<5;i++){
+            ID++;
+            this.P1pieces.push(new Piece(this.scene,"P2piece",startX,startZ,ID));
+            startX+=0.5;
+        }
+
+        startZ=2;
+        startX=4;
+
+        for (let i=0;i<5;i++){
+            ID++;
+            this.P2pieces.push(new Piece(this.scene,"P2piece",startX,startZ,ID));
+            startX+=0.5;
+        }
+        startZ=2.5;
+        startX=4;
+
+        for (let i=0;i<5;i++){
+            ID++;
+            this.P2pieces.push(new Piece(this.scene,"P2piece",startX,startZ,ID));
+            startX+=0.5;
+        }
+
+        startZ=3;
+        startX=4;
+        for (let i=0;i<5;i++){
+            ID++;
+            this.P2pieces.push(new Piece(this.scene,"P1piece",startX,startZ,ID));
+            startX+=0.5;
+        }
+    }
+
+    initBoard(){
         let col1=[];
         let col2=[];
         let col3=[];
@@ -62,6 +126,14 @@ class Board{
                 this.board[i][j].loadTextures();
             }
         }
+
+        for(let i in this.P1pieces){
+            this.P1pieces[i].loadTextures();
+        }
+
+        for(let i in this.P2pieces){
+            this.P2pieces[i].loadTextures();
+        }
     }
 
     
@@ -71,6 +143,14 @@ class Board{
             for(let j in this.board[i]){
                 this.board[i][j].display();
             }
+        }
+
+        for(let i in this.P1pieces){
+            this.P1pieces[i].display();
+        }
+
+        for(let i in this.P2pieces){
+            this.P2pieces[i].display();
         }
     }
 }
