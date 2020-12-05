@@ -21,7 +21,7 @@ class BoardTile extends Pickable{
         this.wallNode=new MyNode(this.scene,this.scene.getMatrix(),this.XMLnode.texture,this.XMLnode.material);
         this.wallNode.addDescendente(this.wall);
 
-        console.log(this.wallNode.texture.image);
+        //console.log(this.wallNode.texture.image);
     }
     
     display(){
