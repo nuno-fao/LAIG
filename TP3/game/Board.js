@@ -139,6 +139,7 @@ class Board{
     
     
     display(){
+        
         for(let i in this.board){
             for(let j in this.board[i]){
                 this.board[i][j].display();

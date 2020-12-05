@@ -1042,9 +1042,12 @@ class MySceneGraph {
 
         // print which nodes were created but not used
         for (let nodeID in this.nodes) {
-            if (this.nodes[nodeID].used == false && nodeID != this.idRoot) {
-                this.onXMLError("Node '" + nodeID + "' created but not referenced!")
+            if(nodeID != "voidTile" && nodeID != "normalTile" && nodeID != "P1piece" && nodeID != "P2piece"){
+                if (this.nodes[nodeID].used == false && nodeID != this.idRoot) {
+                    this.onXMLError("Node '" + nodeID + "' created but not referenced!");
+                }
             }
+            
         }
 
         //if root was not defined, it tries to find a node without any parent and make it root

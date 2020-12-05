@@ -1,15 +1,14 @@
 
 class MyHexagon extends CGFobject {
-    constructor(scene, afs, aft) {
+    constructor(scene) {
         super(scene);
-        this.aft = aft;
-        this.afs = afs;
 
         this.initBuffers();
     }
 
     initBuffers() {
         this.vertices = [
+            //TOPO
             -0.5, 0, 0,  //0
             -0.25, 0, -0.5, //1
             0.25, 0, -0.5,  //2
@@ -47,12 +46,14 @@ class MyHexagon extends CGFobject {
         */
 
         this.texCoords = [
+            //TOPO
             0, 0.5,
             0.25, 0,
             0.75, 0,
             1, 0.5,
             0.75, 1,
-            0.25, 1
+            0.25, 1,
+
         ];
         // this.texCoords = [
         //     0, 0.5/this.aft,

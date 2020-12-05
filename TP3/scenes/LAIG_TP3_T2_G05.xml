@@ -52,7 +52,6 @@
         </light>
     </lights>
 
-
     <textures>
         <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
         <texture id="demoTexture" path="./scenes/images/vidral.jpg" />
