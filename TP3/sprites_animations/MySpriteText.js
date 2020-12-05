@@ -2,7 +2,7 @@ class MySpriteText {
     constructor(scene, text) {
         this.scene = scene;
         this.text = text;
-        this.spritesheet = new MySpritesheet(this.scene, "spritesheets/fonte.png", 16, 14);
+        this.spritesheet = new MySpritesheet(this.scene, "scenes/spritesheets/fonte.png", 16, 14);
         this.offset = text.length / 2;
 
         this.letters = [];

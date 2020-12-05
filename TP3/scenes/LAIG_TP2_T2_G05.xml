@@ -79,8 +79,8 @@
     <!-- spritesheets -->
 
     <spritesheets>
-        <spritesheet id="explosion" path="spritesheets/explosion.png" sizeM="4" sizeN="4" />
-        <spritesheet id="bbqFire" path="spritesheets/bbqFire.png" sizeM="4" sizeN="4" />
+        <spritesheet id="explosion" path="scenes/spritesheets/explosion.png" sizeM="4" sizeN="4" />
+        <spritesheet id="bbqFire" path="scenes/spritesheets/bbqFire.png" sizeM="4" sizeN="4" />
     </spritesheets>
 
         <!-- NOTE: the "MATERIAL" block may be repeated as required. Each defined material

@@ -55,27 +55,26 @@ class KeyFrameAnimation extends Animation {
                 }
             }
             this.multiplier = (this.timeAccumulator - this.lastTime) / this.frameMultiplier;
+            this.rotX = this.lastx + this.activex * this.multiplier;
+            this.rotY = this.lasty + this.activey * this.multiplier;
+            this.rotZ = this.lastz + this.activez * this.multiplier;
+            this.translateX = this.lastt[0] + this.activet[0] * this.multiplier;
+            this.translateY = this.lastt[1] + this.activet[1] * this.multiplier;
+            this.translateZ = this.lastt[2] + this.activet[2] * this.multiplier;
+            this.scaleX = this.lasts[0] + this.actives[0] * this.multiplier;
+            this.scaleY = this.lasts[1] + this.actives[1] * this.multiplier;
+            this.scaleZ = this.lasts[2] + this.actives[2] * this.multiplier;
         }
     }
 
     apply() {
-        this.applyTrans(this.activet[0], this.activet[1], this.activet[2], this.lastt[0], this.lastt[1], this.lastt[2], this.multiplier);
-        this.applyRot([1, 0, 0], this.activex, this.lastx, this.multiplier);
-        this.applyRot([0, 1, 0], this.activey, this.lasty, this.multiplier);
-        this.applyRot([0, 0, 1], this.activez, this.lastz, this.multiplier);
-        this.applyScale(this.actives[0], this.actives[1], this.actives[2], this.lasts[0], this.lasts[1], this.lasts[2], this.multiplier);
-    }
-    applyRot(axis, angle, lastAngle, multiplier) {
-        this.scene.rotate(lastAngle + angle * multiplier, axis[0], axis[1], axis[2]);
-    }
+        this.scene.translate(this.translateX,this.translateY,this.translateZ);
+        
+        this.scene.rotate(this.rotX,1,0,0);
+        this.scene.rotate(this.rotY,0,1,0);
+        this.scene.rotate(this.rotZ,0,0,1);
 
-    applyTrans(x, y, z, lx, ly, lz, multiplier) {
-        //console.log(lx + x * multiplier, ly + y * multiplier, lz + z * multiplier)
-        this.scene.translate(lx + x * multiplier, ly + y * multiplier, lz + z * multiplier);
-    }
-
-    applyScale(x, y, z, lx, ly, lz, multiplier) {
-        this.scene.scale(lx + x * multiplier, ly + y * multiplier, lz + z * multiplier);
+        this.scene.scale(this.scaleX, this.scaleY, this.scaleZ);
     }
 
     subtractList(B, A) {

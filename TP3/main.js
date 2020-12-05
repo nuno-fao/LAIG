@@ -40,11 +40,11 @@ function getUrlVars() {
     return vars;
 }
 //Include additional files here
-serialInclude([     '../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js', 'MyRectangle.js',
-                    'MyAxis.js', 'MyNode.js', 'MyTriangle.js', 'MyCylinder.js', 'MySphere.js', 'MyTorus.js',
-                    'KeyFrame.js', 'Animation.js', 'KeyFrameAnimation.js', 'MySpritesheet.js', 'MySpriteText.js',
-                    'MySpriteAnimation.js', 'Plane.js', 'Patch.js', 'Defbarrel.js', 'MyHexagon.js', 'BoardTile.js',
-                    'Board.js',
+serialInclude([     '../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js', 'primitives/MyRectangle.js',
+                    'MyAxis.js', 'MyNode.js', 'primitives/MyTriangle.js', 'primitives/MyCylinder.js', 'primitives/MySphere.js', 'primitives/MyTorus.js',
+                    'sprites_animations/KeyFrame.js', 'sprites_animations/Animation.js', 'sprites_animations/KeyFrameAnimation.js', 'sprites_animations/MySpritesheet.js', 
+                    'sprites_animations/MySpriteText.js', 'sprites_animations/MySpriteAnimation.js', 'nurbs/Plane.js', 'nurbs/Patch.js', 
+                    'nurbs/Defbarrel.js', 'primitives/MyHexagon.js', 'game/BoardTile.js', 'game/Board.js',
 
     main = function() {
         // Standard application, scene and interface setup
