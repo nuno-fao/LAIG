@@ -88,6 +88,6 @@ class BoardTile {
     }
 
     isPiece(){
-        return super.isPiece();
+        return false;
     }
 }

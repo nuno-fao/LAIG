@@ -36,6 +36,6 @@ class Piece {
     }
 
     isTile(){
-        return super.isTile();
+        return false;
     }
 }
