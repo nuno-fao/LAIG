@@ -102,6 +102,8 @@ class Board{
     }
 
     fillCol(nrOfTiles,col,firstX,firstZ,allVoid,startingID){
+        let tileHeight=0.4330127025*2;
+        firstZ=firstZ*tileHeight;
         for(let i=0;i<nrOfTiles;i++){
             startingID++;
             if(allVoid){
@@ -116,7 +118,7 @@ class Board{
                     col.push(new BoardTile(this.scene,"normalTile",firstX,firstZ,startingID));
                 }
             }
-            firstZ++;
+            firstZ+=tileHeight;
         }
     }
 
@@ -139,7 +141,6 @@ class Board{
     
     
     display(){
-        
         for(let i in this.board){
             for(let j in this.board[i]){
                 this.board[i][j].display();

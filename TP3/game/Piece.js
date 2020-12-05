@@ -1,6 +1,5 @@
-class Piece extends Pickable{
+class Piece {
     constructor(scene, nodeID, centerX, centerZ, objectID) {
-        super();
         this.scene=scene;
         this.nodeID=nodeID;
         this.centerX=centerX;
