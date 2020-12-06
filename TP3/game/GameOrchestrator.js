@@ -2,6 +2,8 @@ class GameOrchestrator{
     constructor(scene){
         this.scene = scene;
         this.board = new Board(this.scene);
+        this.gameSequence = new GameSequence();
+        this.animator = new Animator(this);
         this.lastPicked = null;
     }
 
@@ -13,6 +15,9 @@ class GameOrchestrator{
         this.board.loadXMLNodes();
     }
 
+    getGameSequence(){
+        return this.gameSequence;
+    }
     
 	managePick(mode,results) {
 		if (mode == false) {
@@ -32,7 +37,7 @@ class GameOrchestrator{
     onObjectSelected(obj, id){
         console.log("Picked object: " + obj + ", with pick id " + id);
         if(obj instanceof BoardTile){
-            if(this.lastPicked instanceof Piece && obj.getPiece()==null && obj.getType()==tileType.BOARD_NV){
+            if(this.lastPicked instanceof Piece && obj.getPiece()==null){
                 this.board.movePieceToBoard(this.lastPicked,obj);
             }
             this.lastPicked=obj;

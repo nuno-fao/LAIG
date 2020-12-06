@@ -12,14 +12,15 @@ class BoardTile {
 
         if(this.type==tileType.VOID){
             this.nodeID="voidTile";
+            this.selectable=false;
         }
         else{
             this.nodeID="normalTile";
+            this.selectable=true;
         }
 
         //pointer to holding piece
         this.holdingPiece=null;
-        this.selectable=true;
     }
 
     loadTextures(){
