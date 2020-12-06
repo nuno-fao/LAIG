@@ -4,6 +4,7 @@ class GameOrchestrator{
         this.board = new Board(this.scene);
         this.gameSequence = new GameSequence();
         this.animator = new Animator(this);
+        this.serverComm = new PrologInterface();
         this.lastPicked = null;
     }
 
