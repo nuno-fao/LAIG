@@ -1,12 +1,25 @@
 class BoardTile {
-    constructor(scene, nodeID, centerX, centerZ, objectID) {
+    constructor(scene, board, type, centerX, centerZ, objectID) {
         this.scene=scene;
-        this.nodeID=nodeID;
+        this.board=board;
+        this.type=type;
         this.centerX=centerX;
         this.centerZ=centerZ;
         this.objectID=objectID;
+
         this.height=0.4330127025;
         this.wall = new MyRectangle(this.scene,-0.25,-0.25,0.25,0,1,1);
+
+        if(this.type==tileType.VOID){
+            this.nodeID="voidTile";
+        }
+        else{
+            this.nodeID="normalTile";
+        }
+
+        //pointer to holding piece
+        this.holdingPiece=null;
+        this.selectable=true;
     }
 
     loadTextures(){
@@ -18,9 +31,29 @@ class BoardTile {
         this.wallNode.addDescendente(this.wall);
 
     }
+
+    getType(){
+        return this.type;
+    }
+
+    setPiece(piece){
+        this.holdingPiece=piece;
+        this.selectable=false;
+    }
+
+    getPiece(){
+        return this.holdingPiece;
+    }
+
+    removePiece(){
+        this.holdingPiece=null;
+        this.selectable=true;
+    }
     
     display(){
-        this.scene.registerForPick(this.objectID,this);
+        if(this.selectable){
+            this.scene.registerForPick(this.objectID,this);
+        }
 
         //TOPO
         this.scene.pushMatrix();
@@ -77,17 +110,13 @@ class BoardTile {
         this.wall.display();
         this.scene.popMatrix();
 
+        if(this.selectable){
+            this.scene.clearPickRegistration();
+        }
+
     }
 
     getCenterCoords(){
         return [this.centerX,this.centerZ];
-    }
-
-    isTile(){
-        return true;
-    }
-
-    isPiece(){
-        return false;
     }
 }

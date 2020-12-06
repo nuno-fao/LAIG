@@ -58,7 +58,7 @@ class XMLscene extends CGFscene {
         // enable picking
         this.setPickEnabled(true);
 
-        this.game = new Game(this);
+        this.gameOrchestrator = new GameOrchestrator(this);
 
     }
 
@@ -138,7 +138,7 @@ class XMLscene extends CGFscene {
         this.interface.initLights();
         this.setUpdatePeriod(20); //50 fps
 
-        this.game.onGraphLoaded();
+        this.gameOrchestrator.onGraphLoaded();
 
         this.sceneInited = true;
         
@@ -163,6 +163,9 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
+
+        this.gameOrchestrator.managePick(this.pickMode, this.pickResults);
+        this.clearPickRegistration();
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -194,7 +197,7 @@ class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
             // Displays all the game related objects
-            this.game.display();
+            this.gameOrchestrator.display();
         } else {
             // Show some "loading" visuals
             this.defaultAppearance.apply();

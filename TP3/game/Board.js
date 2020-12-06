@@ -22,7 +22,7 @@ class Board{
 
         for (let i=0;i<5;i++){
             ID++;
-            this.P1pieces.push(new Piece(this.scene,"P1piece",startX,startZ,ID));
+            this.P1pieces.push(new Piece(this.scene,pieceType.RED,startX,startZ,ID));
             startX+=0.5;
         }
 
@@ -31,7 +31,7 @@ class Board{
 
         for (let i=0;i<5;i++){
             ID++;
-            this.P1pieces.push(new Piece(this.scene,"P1piece",startX,startZ,ID));
+            this.P1pieces.push(new Piece(this.scene,pieceType.RED,startX,startZ,ID));
             startX+=0.5;
         }
 
@@ -40,7 +40,7 @@ class Board{
 
         for (let i=0;i<5;i++){
             ID++;
-            this.P1pieces.push(new Piece(this.scene,"P2piece",startX,startZ,ID));
+            this.P1pieces.push(new Piece(this.scene,pieceType.BLUE,startX,startZ,ID));
             startX+=0.5;
         }
 
@@ -49,7 +49,7 @@ class Board{
 
         for (let i=0;i<5;i++){
             ID++;
-            this.P2pieces.push(new Piece(this.scene,"P2piece",startX,startZ,ID));
+            this.P2pieces.push(new Piece(this.scene,pieceType.BLUE,startX,startZ,ID));
             startX+=0.5;
         }
         startZ=2.5;
@@ -57,7 +57,7 @@ class Board{
 
         for (let i=0;i<5;i++){
             ID++;
-            this.P2pieces.push(new Piece(this.scene,"P2piece",startX,startZ,ID));
+            this.P2pieces.push(new Piece(this.scene,pieceType.BLUE,startX,startZ,ID));
             startX+=0.5;
         }
 
@@ -65,7 +65,7 @@ class Board{
         startX=4;
         for (let i=0;i<5;i++){
             ID++;
-            this.P2pieces.push(new Piece(this.scene,"P1piece",startX,startZ,ID));
+            this.P2pieces.push(new Piece(this.scene,pieceType.RED,startX,startZ,ID));
             startX+=0.5;
         }
     }
@@ -107,15 +107,15 @@ class Board{
         for(let i=0;i<nrOfTiles;i++){
             startingID++;
             if(allVoid){
-                col.push(new BoardTile(this.scene,"voidTile",firstX,firstZ,startingID));
+                col.push(new BoardTile(this.scene,this,tileType.VOID,firstX,firstZ,startingID));
 
             }
             else{
                 if(i==0 || i==(nrOfTiles-1)){
-                    col.push(new BoardTile(this.scene,"voidTile",firstX,firstZ,startingID));
+                    col.push(new BoardTile(this.scene,this,tileType.VOID,firstX,firstZ,startingID));
                 }
                 else{
-                    col.push(new BoardTile(this.scene,"normalTile",firstX,firstZ,startingID));
+                    col.push(new BoardTile(this.scene,this,tileType.BOARD_NV,firstX,firstZ,startingID));
                 }
             }
             firstZ+=tileHeight;
@@ -138,6 +138,39 @@ class Board{
         }
     }
 
+    movePieceToBoard(piece,tile){
+        if(tile.getPiece()==null && piece.getTile()==null){
+            piece.setTile(tile);
+            tile.setPiece(piece);
+        }
+    }
+
+    movePiece(piece,startTile,finalTile){
+        if(piece.getTile()==startTile && finalTile.getPiece()==null){
+            piece.setTile(finalTile);
+            startTile.removePiece();
+            finalTile.setPiece(piece);
+        }
+    }
+
+    removePieceFromTile(piece,tile){
+        if(tile.getPiece == piece){
+            piece.removeTile();
+            tile.removePiece();
+        }
+    }
+
+    getTileFromCoordinate(col,line){
+        return board[col-1][line-1];
+    }
+
+    getTileFromPiece(piece){
+        return piece.getTile;
+    }
+
+    getPieceFromTile(tile){
+        return tile.getPiece;
+    }
     
     
     display(){
@@ -155,4 +188,14 @@ class Board{
             this.P2pieces[i].display();
         }
     }
+}
+
+const pieceType = {
+    RED : 0,
+    BLUE : 1
+}
+
+const tileType = {
+    VOID : 0,
+    BOARD_NV : 1,   //board not void
 }
