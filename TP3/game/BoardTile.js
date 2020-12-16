@@ -120,4 +120,13 @@ class BoardTile {
     getCenterCoords(){
         return [this.centerX,this.centerZ];
     }
+
+    getPrologRep(){
+        if(this.holdingPiece==null){
+            return ' ';
+        }
+        else{
+            return this.holdingPiece.getType();
+        }
+    }
 }

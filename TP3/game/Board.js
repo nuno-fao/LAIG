@@ -101,6 +101,25 @@ class Board{
         this.board.push(col7);
     }
 
+    buildBoardString(){
+        let prologBoard=[
+                                                        [this.board[3][0].getPrologRep()],
+                                            [this.board[2][0].getPrologRep(), this.board[4][0].getPrologRep()],
+                                    [this.board[1][0].getPrologRep(), this.board[3][1].getPrologRep(), this.board[5][0].getPrologRep()],
+                        [this.board[0][0].getPrologRep(), this.board[2][1].getPrologRep(), this.board[4][1].getPrologRep(), this.board[6][0].getPrologRep()],
+                                    [this.board[1][1].getPrologRep(), this.board[3][2].getPrologRep(), this.board[5][1].getPrologRep()],
+                        [this.board[0][1].getPrologRep(), this.board[2][2].getPrologRep(), this.board[4][2].getPrologRep(), this.board[6][1].getPrologRep()],
+                                    [this.board[1][2].getPrologRep(), this.board[3][3].getPrologRep(), this.board[5][2].getPrologRep()],
+                        [this.board[0][2].getPrologRep(), this.board[2][3].getPrologRep(), this.board[4][3].getPrologRep(), this.board[6][2].getPrologRep()],
+                                    [this.board[1][3].getPrologRep(), this.board[3][4].getPrologRep(), this.board[5][3].getPrologRep()],
+                        [this.board[0][3].getPrologRep(), this.board[2][4].getPrologRep(), this.board[4][4].getPrologRep(), this.board[6][3].getPrologRep()],
+                                    [this.board[1][4].getPrologRep(), this.board[3][5].getPrologRep(), this.board[5][4]],
+                                            [this.board[2][5].getPrologRep(), this.board[4][5].getPrologRep()],
+                                                        [this.board[3][6].getPrologRep()]
+        ];
+        return prologBoard;
+    }
+
     fillCol(nrOfTiles,col,firstX,firstZ,allVoid,startingID){
         let tileHeight=0.4330127025*2;
         firstZ=firstZ*tileHeight;
@@ -191,8 +210,8 @@ class Board{
 }
 
 const pieceType = {
-    RED : 0,
-    BLUE : 1
+    RED : 'r',
+    BLUE : 'b'
 }
 
 const tileType = {

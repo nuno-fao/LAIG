@@ -12,19 +12,19 @@ class PrologInterface{
         request.send();
     }
     
-    makeRequest()
-    {
-        // Get Parameter Values
-        var requestString = document.querySelector("#query_field").value;				
+    // makeRequest()
+    // {
+    //     // Get Parameter Values
+    //     var requestString = document.querySelector("#query_field").value;				
         
-        // Make Request
-        getPrologRequest(requestString, handleReply);
-    }
+    //     // Make Request
+    //     getPrologRequest(requestString, handleReply);
+    // }
     
-    //Handle the Reply
-    handleReply(data){
-        document.querySelector("#query_result").innerHTML=data.target.response;
-    }
+    // //Handle the Reply
+    // handleReply(data){
+    //     document.querySelector("#query_result").innerHTML=data.target.response;
+    // }
 
 
 
