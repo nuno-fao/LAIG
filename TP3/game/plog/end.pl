@@ -70,7 +70,7 @@ get_right_elem(L1,Red,Blue) :-
   !.
 get_right_elem(L1,Red,Blue) :-
   last(L1,LastE),
-  LastE = ' ',
+  LastE = 'e',
   Red is 0,
   Blue is 0,
   !.
@@ -126,7 +126,7 @@ get_number_void([L1|Tail],Red,Blue,N) :-
   Red is AuxR.
 get_number_void([L1|Tail],Red,Blue,N) :- 
   nth0(0,L1,Piece),
-  Piece = ' ',
+  Piece = 'e',
   !,
   get_right_elem(L1,Red1,Blue1),
   N1 is N+1,

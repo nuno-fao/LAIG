@@ -4,13 +4,15 @@ class GameOrchestrator{
         this.board = new Board(this.scene);
         this.gameSequence = new GameSequence();
         this.animator = new Animator(this);
-        this.serverComm = new PrologInterface();
+        this.prologInterface = new PrologInterface(this);
         this.lastPicked = null;
 
         this.player0=null;
         this.player1=null;
 
         this.turnPlayer=null;
+
+        this.gameState=null;
     }
 
     display(){
@@ -20,12 +22,11 @@ class GameOrchestrator{
     onGraphLoaded(){
         this.board.loadXMLNodes();
 
-        this.serverComm.getPrologRequest("handshake");
-
         this.player0 = new Player(10,5,playerType.HUMAN,0);
         this.player1 = new Player(5,10,playerType.HUMAN,1);
         this.turnPlayer=this.player0;
-        //this.serverComm.getPrologRequest("test(1,2)");
+
+        this.prologInterface.setInitialState();
     }
 
     getGameSequence(){
@@ -57,8 +58,9 @@ class GameOrchestrator{
             if(this.lastPicked instanceof Piece && obj.getPiece()==null){
                 this.board.movePieceToBoard(this.lastPicked,obj);
                 this.turnPlayer.changeUnused(this.lastPicked);
-                
-                console.log(this.generateGameState());
+                this.prologInterface.makeMove(this.gameState,obj.getPrologTargetForMove());
+                //console.log(this.generateGameState());
+
                 this.changeTurn();
             }
             this.lastPicked=obj;

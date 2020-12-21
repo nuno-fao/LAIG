@@ -121,9 +121,17 @@ class BoardTile {
         return [this.centerX,this.centerZ];
     }
 
+    getPrologTargetForMove(){
+        let target = [];
+        target.push(this.holdingPiece.getType());
+        target.push(Math.floor(this.objectID/10));
+        target.push(this.objectID%10);
+        return target;
+    }
+
     getPrologRep(){
         if(this.holdingPiece==null){
-            return ' ';
+            return 'e';
         }
         else{
             return this.holdingPiece.getType();

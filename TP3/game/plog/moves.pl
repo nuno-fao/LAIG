@@ -39,7 +39,7 @@ add_colour_to_pos(Move,Colour,MoveWithColour):-
 %Percore uma linha do tabuleiro e devolve numa lista as posições vazias que não estão no void
 %check_pos(+LinePos,+ColPos,+BoardLine,-List)
 check_pos(Line,P,[H|T],List) :- %posição vazia -> válida -> adicionar à lista
-    H = ' ',
+    H = 'e',
     ext_to_int(Col,Ind,P,Line),
     verify_not_in_void(Col,Ind),
     P1 is P + 1,
@@ -99,22 +99,28 @@ change_turn(1,0).
 %Recebe a jogada, valida-a, coloca a peça na célula, move as 6 peças em cada direção e pesquisa o tabuleiro resultante para remover 4 ou mais peças da mesma cor adjacente
 %Troca também o turno
 %move(+GameState,+Move,-NewGameState)
-move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour,X, Y, ColumnP, LineP),NewGameState):-
+move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, LineP),NewGameState):-
+
+    %write('passou 1'), nl,
+
+    ext_to_int(ColumnP, LineP, Y, X),
 
     %verifica se tem peça disponivel
     verify_available_piece(UnusedPieces,Player,Colour),
 
+    %write('passou 2'), nl,
     %tenta colocar a peça
     nth0(X,Board,Linha),
-    replace_nth0(Linha,Y,' ',Colour,NewLinha),
+    replace_nth0(Linha,Y,'e',Colour,NewLinha),
     replace_nth0(Board,X,Linha,NewLinha,NewBoard),
     verify_not_in_void(ColumnP, LineP),
     
+    %write('passou 3'),nl,
     %remove a peça das Unused
     remove_from_unused(UnusedPieces,Player,Colour,NewUnusedPieces),
 
     %format("Point: ~p ~p ~n",[ColumnP,LineP]),
-
+    %write('passou 4'),nl,
     %move a peça mais proxima em cada uma das 6 direções
     move_dir(NewBoard,get_up_position,get_down_position,Colour,ColumnP,LineP,Board1),
     move_dir(Board1,get_up_right_position,get_down_left_position,Colour,ColumnP,LineP,Board2),
@@ -123,14 +129,20 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour,X, Y, ColumnP,
     move_dir(Board4,get_down_left_position,get_up_right_position,Colour,ColumnP,LineP,Board5),
     move_dir(Board5,get_down_right_position,get_up_left_position,Colour,ColumnP,LineP,Board6),
 
+    %write('passou 5'),nl,
     %procura o tabuleiro por pelas peças adjacentes
     search_board(Board6,OutPieces,Board7,NewOutPieces,0,0),
 
+    %write('passou 6'),nl,
     %troca o turno
     change_turn(Player,NewPlayer),
 
     %constroi um novo GameState com as informações todas atualizadas
     NewGameState =.. [gameState,Board7,NewUnusedPieces,NewOutPieces,NewPlayer].
+move(R,B,NewGameState):-
+    write('FALHOU NA MOVE'), nl,
+    write(R), nl,write(B),nl,
+    NewGameState = 'falha ao ler a move'.
 
 %substitui o OldElem por NewElem em List no index Index
 replace_nth0(List, Index, OldElem, NewElem, NewList) :-
@@ -146,12 +158,12 @@ move_piece(Board,Colour,XI,YI,XF,YF,NewBoard) :-
     ext_to_int(XF,YF,YY2,XX2),
     %mete vazio na inicial
     nth0(XX1,Board,Linha),
-    replace_nth0(Linha,YY1,Colour,' ',NewLinha),
+    replace_nth0(Linha,YY1,Colour,'e',NewLinha),
     replace_nth0(Board,XX1,Linha,NewLinha,BoardInt),
 
     %mete colour no target 
     nth0(XX2,BoardInt,Linha1),
-    replace_nth0(Linha1,YY2,' ',Colour,NewLinha1),
+    replace_nth0(Linha1,YY2,'e',Colour,NewLinha1),
     replace_nth0(BoardInt,XX2,Linha1,NewLinha1,NewBoard).
 
 
@@ -194,7 +206,7 @@ check_dir(Board, _DirPosFunc, XI, YI, XO, YO, PieceO):-
     ext_to_int(XI,YI,XX,YY),
     nth0(YY,Board,Linha),
     nth0(XX,Linha,Piece),
-    Piece \= ' ',
+    Piece \= 'e',
     PieceO = Piece,
     XO is XI,
     YO is YI,
@@ -251,7 +263,7 @@ get_down_left_position(XI,YI,XO,YO):-
 %iterate_col(+Line,+InitC,-Pos)
 iterate_col(Line,InitC,[_,Y,Colour]):-
     nth0(InitC,Line,Pos),
-    Pos \= ' ',
+    Pos \= 'e',
     !,
     Y = InitC,
     Colour = Pos.
@@ -293,7 +305,7 @@ get_colour(Board,X,Y,Colour):-
     !,
     Colour = C.
 get_colour(_,_,_,Colour):-
-    Colour = ' '.
+    Colour = 'e'.
 
 %procura em cada um das seis direções por uma peça da cor Colour e passa-a a add_to_list
 %search_near(+Board,+X,+Y,+Colour)
@@ -364,7 +376,7 @@ remove_pieces(Board,OutPieces,_,NewBoard,NewOutPieces):-
 %remove_from_list(+Board,+OutPieces,-NewBoard,+ListaDePeças,-NewOutPieces)
 remove_from_list(Board,OutPieces,NewBoard,[[X,Y,Colour]|T],NewOutPieces):-
     nth0(X,Board,Linha),
-    replace_nth0(Linha,Y,Colour,' ',NewLinha),
+    replace_nth0(Linha,Y,Colour,'e',NewLinha),
     replace_nth0(Board,X,Linha,NewLinha,NewBoardA),
     update_pieces(OutPieces,NewOPieces,X,Y,Colour),
     remove_from_list(NewBoardA,NewOPieces,NewBoard,T,NewOutPieces).
