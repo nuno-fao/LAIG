@@ -122,13 +122,21 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, Line
     %format("Point: ~p ~p ~n",[ColumnP,LineP]),
     %write('passou 4'),nl,
     %move a peça mais proxima em cada uma das 6 direções
-    move_dir(NewBoard,get_up_position,get_down_position,Colour,ColumnP,LineP,Board1),
-    move_dir(Board1,get_up_right_position,get_down_left_position,Colour,ColumnP,LineP,Board2),
-    move_dir(Board2,get_up_left_position,get_down_right_position,Colour,ColumnP,LineP,Board3),
-    move_dir(Board3,get_down_position,get_up_position,Colour,ColumnP,LineP,Board4),
-    move_dir(Board4,get_down_left_position,get_up_right_position,Colour,ColumnP,LineP,Board5),
-    move_dir(Board5,get_down_right_position,get_up_left_position,Colour,ColumnP,LineP,Board6),
+    move_dir(NewBoard,get_up_position,get_down_position,Colour,ColumnP,LineP,Board1,Change1),
+    move_dir(Board1,get_up_right_position,get_down_left_position,Colour,ColumnP,LineP,Board2,Change2),
+    move_dir(Board2,get_up_left_position,get_down_right_position,Colour,ColumnP,LineP,Board3,Change3),
+    move_dir(Board3,get_down_position,get_up_position,Colour,ColumnP,LineP,Board4,Change4),
+    move_dir(Board4,get_down_left_position,get_up_right_position,Colour,ColumnP,LineP,Board5,Change5),
+    move_dir(Board5,get_down_right_position,get_up_left_position,Colour,ColumnP,LineP,Board6,Change6),
 
+    append(Change1,Change2,Aux1),
+    append(Aux1,Change3,Aux2),
+    append(Aux2,Change4,Aux3),
+    append(Aux3,Change4,Aux4),
+    append(Aux4,Change5,Aux5),
+    append(Aux5,Change6,Change),
+    
+    %Change = [Change1,Change2,Change3,Change4,Change5,Change6],
     %write('passou 5'),nl,
     %procura o tabuleiro por pelas peças adjacentes
     search_board(Board6,OutPieces,Board7,NewOutPieces,0,0),
@@ -136,9 +144,16 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, Line
     %write('passou 6'),nl,
     %troca o turno
     change_turn(Player,NewPlayer),
-
+    
+    %write('CHEGA AQUI'), nl,
     %constroi um novo GameState com as informações todas atualizadas
-    NewGameState =.. [gameState,Board7,NewUnusedPieces,NewOutPieces,NewPlayer].
+    NewAux = [gameState,Board7,NewUnusedPieces,NewOutPieces,NewPlayer],
+    
+    %write('CHEGA AQUI 111'), nl,
+    %json_write(NewGameState,{newstate:NewAux,allchanges:Change}),
+    %NewGameState = {'"gameState"' : NewAux , '"changes"' : Change},
+    %write('CHEGA AQUI 2222222'), nl.
+    NewGameState = [NewAux,Change].
 move(R,B,NewGameState):-
     write('FALHOU NA MOVE'), nl,
     write(R), nl,write(B),nl,
@@ -170,25 +185,35 @@ move_piece(Board,Colour,XI,YI,XF,YF,NewBoard) :-
 
 %Procura um peça na direção GetDirPosFunc e move-a consoante a cor dela e da peça colocada
 %move_dir(+Board, +GetDirPosFunc, +GetOposDirFunc, +Color, +XI, +YI, -NewBoard)
-move_dir(Board, GetDirPosFunc, GetOposDirFunc, Color, XI, YI, NewBoard):-
+move_dir(Board, GetDirPosFunc, GetOposDirFunc, Color, XI, YI, NewBoard, Change):-
+    write('merd0'),
     GetDir =.. [GetDirPosFunc,XI,YI,XT,YT], GetDir, %obter posição imediatamente a seguir na direção pretendida para começar a verificar
     check_dir(Board,GetDirPosFunc,XT,YT,ColumnO,LineO,PieceO),%obter peça mais próxima, se não encontrar muda de instanciação
-    apply_move_dir(Board, GetDirPosFunc, GetOposDirFunc, Color,XI,YI,ColumnO,LineO,PieceO,NewBoard),   %peça encontrada agora falta movê-la
+    apply_move_dir(Board, GetDirPosFunc, GetOposDirFunc, Color,XI,YI,ColumnO,LineO,PieceO,NewBoard, Change),   %peça encontrada agora falta movê-la
     !.
-move_dir(Board,_,_,_,_,_,NewBoard):-
+move_dir(Board,_,_,_,_,_,NewBoard,[]):-
     NewBoard = Board.   %nada acontece, copia board e segue jogo
-apply_move_dir(Board, GetDirPosFunc, _GetOposDirFunc,Color,XColocado,YColocado,XEncontrado,YEncontrado,ColorEncontrada,NewBoard):-
+apply_move_dir(Board, GetDirPosFunc, _GetOposDirFunc,Color,XColocado,YColocado,XEncontrado,YEncontrado,ColorEncontrada,NewBoard,Change):-
+write('merd1'),
     Color \= ColorEncontrada, !,    %quando as peças são de cor diferente
     GetDir =.. [GetDirPosFunc,XColocado,YColocado,XT,YT], GetDir, %obtem posição imediatamente a seguir na direção da que foi colocada
+    
+    Change = [XEncontrado,YEncontrado,XT,YT],
     move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,XT,YT,NewBoard).        %move a peça para a posição obtida no predicado em cima
-apply_move_dir(Board, GetDirPosFunc, GetOposDirFunc,Color,_,_,XEncontrado,YEncontrado,ColorEncontrada,NewBoard):-
+apply_move_dir(Board, GetDirPosFunc, GetOposDirFunc,Color,_,_,XEncontrado,YEncontrado,ColorEncontrada,NewBoard,Change):-
+write('merd2'),
     Color = ColorEncontrada,    %quando as peças são de cor igual
     GetDir =.. [GetDirPosFunc,XEncontrado,YEncontrado,XT,YT], GetDir, %obtem posição imediatamente imediatamente a seguir da peça encontrada na direção pretendida 
     check_dir(Board,GetDirPosFunc,XT,YT,ColumnO,LineO,_), !, %procura outra peça na mesma direção para colidir, se não houver passa à seguinte instanciação
     GetOposDir =.. [GetOposDirFunc,ColumnO,LineO,TargetX,TargetY], GetOposDir,  %obtem posição anterior à encontrada, que é para lá onde se vai mover a peça inicialmente encontrada
+    
+    Change = [XEncontrado,YEncontrado,TargetX,TargetY],
     move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,TargetX,TargetY,NewBoard). %mover a peça
-apply_move_dir(Board, GetDirPosFunc, _GetOposDirFunc,_,XColocado,YColocado,XEncontrado,YEncontrado,ColorEncontrada,NewBoard):- 
+apply_move_dir(Board, GetDirPosFunc, _GetOposDirFunc,_,XColocado,YColocado,XEncontrado,YEncontrado,ColorEncontrada,NewBoard,Change):- 
+write('merd3'),
     get_void_dir(GetDirPosFunc,XColocado,YColocado,XT,YT),   %obtem a célula void encontrada na direção pretendida
+    
+    Change = [XEncontrado,YEncontrado,XT,YT],
     move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,XT,YT,NewBoard).    %move a peça para a zona void encontrada
 get_void_dir(GetDirPosFunc,XI,YI,XV,YV):-    %obtem a célula void encontrada na direção pretendida
     verify_not_in_void(XI,YI), !, %ainda não chegou ao void

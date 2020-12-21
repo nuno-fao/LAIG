@@ -15,9 +15,15 @@ class PrologInterface{
         console.log("request",request);
 
         this.getPrologRequest(request, function(data){
-            this.gameOrchestrator.gameState = data.target.response;
-            console.log(data.target.response);
+            let parsedResponse = JSON.parse(data.target.response);
+            this.gameOrchestrator.gameState =parsedResponse['gamestate'];
+            console.log(parsedResponse);
+            console.log(this.gameOrchestrator.gameState);
         })
+    }
+
+    getStateFromMove(){
+        
     }
 
     getPrologRequest(requestString, onSuccess, onError, port)
