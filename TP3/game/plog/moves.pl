@@ -142,19 +142,11 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, Line
     %procura o tabuleiro por pelas peças adjacentes
     search_board(Board6,OutPieces,Board7,NewOutPieces,0,0),
 
-    write('yo0'),
-
     assert(out('aux','n','a','b','c')),
-
-    write('yo1'),
 
     findall([A,B,C,D],out('out',A,B,C,D),AuxOut),
     
-    write('yo2'),
-    
     Out =.. [out,AuxOut],
-
-    write('yo23'),
 
     retractall(out(_,_,_,_,_)),
 
@@ -427,22 +419,24 @@ update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),Ne
     ext_to_int(C,L,Y,X),
     verify_not_in_void(C,L),
     Out is RedPointPiece +1,
-    assert(out('out',X,Y,'red','bonus')),
+    assert(out('out',C,L,'red','bonus')),
 	NewOutPieces =.. [outPieces,Out,BluePointPiece,VoidPieces1,VoidPieces2].
 update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,X,Y,Colour):-
     Colour = 'r',
     Out is VoidPieces1 +1,
-    assert(out('out',X,Y,'red','risk')),   
+    ext_to_int(C,L,Y,X),
+    assert(out('out',C,L,'red','risk')),   
 	NewOutPieces =.. [outPieces,RedPointPiece,BluePointPiece,Out,VoidPieces2].
 update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,X,Y,Colour):-
     Colour = 'b',
     ext_to_int(C,L,Y,X),
     verify_not_in_void(C,L),
     Out is BluePointPiece +1,  
-    assert(out('out',X,Y,'blue','bonus')),    
+    assert(out('out',C,L,'blue','bonus')),    
 	NewOutPieces =.. [outPieces,RedPointPiece,Out,VoidPieces1,VoidPieces2].
 update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,X,Y,Colour):-
     Colour = 'b',
     Out is VoidPieces2 +1, 
-    assert(out('out',X,Y,'blue','risk')),   
+    ext_to_int(C,L,Y,X),
+    assert(out('out',C,L,'blue','risk')),   
 	NewOutPieces =.. [outPieces,RedPointPiece,BluePointPiece,VoidPieces1,Out].

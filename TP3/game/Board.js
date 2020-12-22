@@ -6,37 +6,43 @@ class Board{
         this.P1pieces=[];
         this.P2pieces=[];
 
+        this.collectZones=null;
+
         this.initBuffers();
     }
 
     initBuffers(){
         this.initBoard();
         this.initPlayers();
+        this.initCollectZones();
+    }
+
+    initCollectZones(){
+        this.collectZones = {
+            'RB' : new CollectZone(this.scene,this,3.5,1.75,"RED BONUS",131),
+            'RR' : new CollectZone(this.scene,this,-7.5,1.75,"RED RISK",146),
+            'BB' : new CollectZone(this.scene,this,3.5,-3.5,"BLUE BONUS",146),
+            'BR' : new CollectZone(this.scene,this,-7.5,-3.5,"BLUE RISK",146),
+        }
+
+        this.riskSS = new MySpriteText(this.scene,"RISK ZONE");
+        this.bonusSS = new MySpriteText(this.scene,"BONUS ZONE");
     }
 
     initPlayers(){
         let ID = 100;
 
-        let startZ=-3;
-        let startX=4;
+        let startZ=4;
+        let startX=-2.25;
 
-        for (let i=0;i<5;i++){
+        for (let i=0;i<10;i++){
             ID++;
             this.P1pieces.push(new Piece(this.scene,pieceType.RED,startX,startZ,ID));
             startX+=0.5;
         }
 
-        startZ=-2.5;
-        startX=4;
-
-        for (let i=0;i<5;i++){
-            ID++;
-            this.P1pieces.push(new Piece(this.scene,pieceType.RED,startX,startZ,ID));
-            startX+=0.5;
-        }
-
-        startZ=-2;
-        startX=4;
+        startZ=3.5;
+        startX=-1;
 
         for (let i=0;i<5;i++){
             ID++;
@@ -44,25 +50,17 @@ class Board{
             startX+=0.5;
         }
 
-        startZ=2;
-        startX=4;
+        startZ=-4;
+        startX=-2.25;
 
-        for (let i=0;i<5;i++){
-            ID++;
-            this.P2pieces.push(new Piece(this.scene,pieceType.BLUE,startX,startZ,ID));
-            startX+=0.5;
-        }
-        startZ=2.5;
-        startX=4;
-
-        for (let i=0;i<5;i++){
+        for (let i=0;i<10;i++){
             ID++;
             this.P2pieces.push(new Piece(this.scene,pieceType.BLUE,startX,startZ,ID));
             startX+=0.5;
         }
 
-        startZ=3;
-        startX=4;
+        startZ=-3.5;
+        startX=-1;
         for (let i=0;i<5;i++){
             ID++;
             this.P2pieces.push(new Piece(this.scene,pieceType.RED,startX,startZ,ID));
@@ -155,6 +153,11 @@ class Board{
         for(let i in this.P2pieces){
             this.P2pieces[i].loadTextures();
         }
+
+        this.collectZones['RB'].loadTextures();
+        this.collectZones['RR'].loadTextures();
+        this.collectZones['BB'].loadTextures();
+        this.collectZones['BR'].loadTextures();
     }
 
     movePieceToBoard(piece,tile){
@@ -162,6 +165,30 @@ class Board{
             piece.setTile(tile);
             tile.setPiece(piece);
         }
+    }
+
+    movePieceToCollectZone(originalTile,color,type){
+        let targetTile = null;
+        let piece = originalTile.getPiece();
+        if(color=='red'){
+            if(type=='risk'){
+                targetTile=this.collectZones['RR'].getNext();
+            }
+            else if(type=='bonus'){
+                targetTile=this.collectZones['RB'].getNext();
+            }
+        }
+        else if(color=='blue'){
+            if(type=='risk'){
+                targetTile=this.collectZones['BR'].getNext();
+            }
+            else if(type=='bonus'){
+                targetTile=this.collectZones['BB'].getNext();
+            }
+        }
+        piece.setTile(targetTile);
+        originalTile.removePiece();
+        targetTile.setPiece(piece);
     }
 
     movePiece(piece,startTile,finalTile){
@@ -199,6 +226,39 @@ class Board{
             }
         }
 
+        this.collectZones['RB'].display();
+        this.collectZones['RR'].display();
+        this.collectZones['BB'].display();
+        this.collectZones['BR'].display();
+
+        this.scene.pushMatrix();
+        this.scene.translate(-5.5,0,1)
+        this.scene.scale(0.5,1,0.7);
+        this.scene.rotate(-Math.PI/2,1,0,0);
+        this.riskSS.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(-5.5,0,-1)
+        this.scene.scale(-0.5,1,0.7);
+        this.scene.rotate(Math.PI/2,1,0,0);
+        this.riskSS.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(5.5,0,1)
+        this.scene.scale(0.5,1,0.7);
+        this.scene.rotate(-Math.PI/2,1,0,0);
+        this.bonusSS.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(5.5,0,-1)
+        this.scene.scale(-0.5,1,0.7);
+        this.scene.rotate(Math.PI/2,1,0,0);
+        this.bonusSS.display();
+        this.scene.popMatrix();
+
         for(let i in this.P1pieces){
             this.P1pieces[i].display();
         }
@@ -206,6 +266,8 @@ class Board{
         for(let i in this.P2pieces){
             this.P2pieces[i].display();
         }
+
+
     }
 }
 

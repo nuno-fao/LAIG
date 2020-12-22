@@ -9,7 +9,7 @@
     <views default="defaultCamera">
         <!-- at least one of the following type of cameras must be declared -->
         <perspective id="defaultCamera" near="0.01" far="500" angle="45">
-            <from x="0" y="5" z="10" />
+            <from x="0" y="15" z="12" />
             <to x="0" y="0" z="0" />
         </perspective>
         <ortho id="demoOrtho" near="0.2" far="100" left="-5" right="5" top="5" bottom="-5">

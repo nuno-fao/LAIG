@@ -55,6 +55,11 @@ class GameOrchestrator{
 
         this.board.movePiece(originalTile.getPiece(),originalTile,newTile);
     }
+
+    applyPieceRemoval(originalCol,originalLine,color,type){
+        let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol),parseInt(originalLine));
+        this.board.movePieceToCollectZone(originalTile,color,type);
+    }
     
 	managePick(mode,results) {
 		if (mode == false) {

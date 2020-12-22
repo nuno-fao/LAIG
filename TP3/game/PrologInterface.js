@@ -46,6 +46,14 @@ class PrologInterface{
 
     applyRemoval(removalStr){
         console.log('Removal',removalStr);
+
+        if(removalStr !== ""){
+            let aux = removalStr.replace(/[\[\]']+/g,'');
+            aux = aux.split(",");
+            for(let i=0;i<aux.length;i+=4){
+                this.gameOrchestrator.applyPieceRemoval(aux[i],aux[i+1],aux[i+2],aux[i+3]);
+            }
+        }
     }
 
     getPrologRequest(requestString, onSuccess, onError, port)

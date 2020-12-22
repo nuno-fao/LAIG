@@ -45,7 +45,7 @@ serialInclude([     '../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterf
                     'sprites_animations/KeyFrame.js', 'sprites_animations/Animation.js', 'sprites_animations/KeyFrameAnimation.js', 'sprites_animations/MySpritesheet.js', 
                     'sprites_animations/MySpriteText.js', 'sprites_animations/MySpriteAnimation.js', 'nurbs/Plane.js', 'nurbs/Patch.js', 
                     'nurbs/Defbarrel.js', 'primitives/MyHexagon.js', 'game/GameOrchestrator.js', 'game/Board.js', 'game/BoardTile.js', 'game/Piece.js', 
-                    'game/GameMove.js', 'game/GameSequence.js', 'game/Animator.js', 'game/PrologInterface.js', 'game/Player.js',
+                    'game/GameMove.js', 'game/GameSequence.js', 'game/Animator.js', 'game/PrologInterface.js', 'game/Player.js', 'game/CollectZone.js',
 
     main = function() {
         // Standard application, scene and interface setup
