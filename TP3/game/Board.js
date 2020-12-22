@@ -21,8 +21,8 @@ class Board{
         this.collectZones = {
             'RB' : new CollectZone(this.scene,this,3.5,1.75,"RED BONUS",131),
             'RR' : new CollectZone(this.scene,this,-7.5,1.75,"RED RISK",146),
-            'BB' : new CollectZone(this.scene,this,3.5,-3.5,"BLUE BONUS",146),
-            'BR' : new CollectZone(this.scene,this,-7.5,-3.5,"BLUE RISK",146),
+            'BB' : new CollectZone(this.scene,this,-7.5,-3.5,"BLUE BONUS",146),
+            'BR' : new CollectZone(this.scene,this,3.5,-3.5,"BLUE RISK",146),
         }
 
         this.riskSS = new MySpriteText(this.scene,"RISK ZONE");
@@ -242,7 +242,7 @@ class Board{
         this.scene.translate(-5.5,0,-1)
         this.scene.scale(-0.5,1,0.7);
         this.scene.rotate(Math.PI/2,1,0,0);
-        this.riskSS.display();
+        this.bonusSS.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
@@ -256,7 +256,7 @@ class Board{
         this.scene.translate(5.5,0,-1)
         this.scene.scale(-0.5,1,0.7);
         this.scene.rotate(Math.PI/2,1,0,0);
-        this.bonusSS.display();
+        this.riskSS.display();
         this.scene.popMatrix();
 
         for(let i in this.P1pieces){
