@@ -15,6 +15,7 @@ class Piece {
 
         //pointer to holding tile if any
         this.holdingTile=null;
+        this.wasMoved=false;
 
         this.selectable=true;
         
@@ -40,6 +41,7 @@ class Piece {
         this.centerZ=coords[1];
         this.holdingTile=tile;
         this.selectable=false;
+        this.wasMoved=true;
     }
 
     removeTile(){

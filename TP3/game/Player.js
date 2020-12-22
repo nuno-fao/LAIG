@@ -1,5 +1,6 @@
 class Player{
-    constructor(redPieces,bluePieces,type,player){
+    constructor(allPieces,redPieces,bluePieces,type,player){
+        this.pieces=allPieces;
         this.redPieces = redPieces;
         this.bluePieces = bluePieces;
         this.bonusPieces = 0;
@@ -39,5 +40,21 @@ class Player{
         }
     }
 
-    
+    makePiecesSelectable(state){
+        if(state){
+            for(let i in this.pieces){
+                if(this.pieces[i].wasMoved){
+                    this.pieces[i].selectable=false;
+                }else{
+                    this.pieces[i].selectable=true;
+                }
+                    
+            }
+        }
+        else{
+            for(let i in this.pieces){
+                this.pieces[i].selectable=false;
+            }
+        }
+    }
 }

@@ -22,9 +22,11 @@ class GameOrchestrator{
     onGraphLoaded(){
         this.board.loadXMLNodes();
 
-        this.player0 = new Player(10,5,playerType.HUMAN,0);
-        this.player1 = new Player(5,10,playerType.HUMAN,1);
+        this.player0 = new Player(this.board.P1pieces,10,5,playerType.HUMAN,0);
+        this.player1 = new Player(this.board.P2pieces,5,10,playerType.HUMAN,1);
         this.turnPlayer=this.player0;
+        this.turnPlayer.makePiecesSelectable(true);
+        this.player1.makePiecesSelectable(false);
 
         this.prologInterface.setInitialState();
     }
@@ -34,7 +36,24 @@ class GameOrchestrator{
     }
 
     changeTurn(){
-        (this.turnPlayer==this.player0) ? this.turnPlayer=this.player1 : this.turnPlayer=this.player0;
+        if(this.turnPlayer==this.player0){
+            this.turnPlayer=this.player1;
+            this.player0.makePiecesSelectable(false);
+        }
+        else if(this.turnPlayer==this.player1){
+            this.turnPlayer=this.player0;
+            this.player1.makePiecesSelectable(false);
+        }
+        
+        this.turnPlayer.makePiecesSelectable(true);
+
+    }
+
+    applyChangeToPiece(originalCol,originalLine,newCol,newLine){
+        let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol),parseInt(originalLine));
+        let newTile = this.board.getTileFromCoordinate(parseInt(newCol),parseInt(newLine));
+
+        this.board.movePiece(originalTile.getPiece(),originalTile,newTile);
     }
     
 	managePick(mode,results) {

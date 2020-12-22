@@ -180,7 +180,7 @@ class Board{
     }
 
     getTileFromCoordinate(col,line){
-        return board[col-1][line-1];
+        return this.board[col-1][line-1];
     }
 
     getTileFromPiece(piece){

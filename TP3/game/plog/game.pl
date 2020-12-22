@@ -51,7 +51,7 @@ play :-
 	initial(GameState),
   main_menu,
   check_exit,
-	get_player(GameState,Player),
+	get_player(GameState,_Player),
 	%display_game(GameState,Player),
   write('Game Started :)'),
   format("~n~n",[]),

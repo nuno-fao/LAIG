@@ -132,9 +132,10 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, Line
     append(Change1,Change2,Aux1),
     append(Aux1,Change3,Aux2),
     append(Aux2,Change4,Aux3),
-    append(Aux3,Change4,Aux4),
-    append(Aux4,Change5,Aux5),
-    append(Aux5,Change6,Change),
+    append(Aux3,Change5,Aux4),
+    append(Aux4,Change6,AuxChange),
+
+    Change =.. [changes,AuxChange],
     
     %Change = [Change1,Change2,Change3,Change4,Change5,Change6],
     %write('passou 5'),nl,
@@ -147,7 +148,7 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, Line
     
     %write('CHEGA AQUI'), nl,
     %constroi um novo GameState com as informações todas atualizadas
-    NewAux = [gameState,Board7,NewUnusedPieces,NewOutPieces,NewPlayer],
+    NewAux =.. [gameState,Board7,NewUnusedPieces,NewOutPieces,NewPlayer],
     
     %write('CHEGA AQUI 111'), nl,
     %json_write(NewGameState,{newstate:NewAux,allchanges:Change}),

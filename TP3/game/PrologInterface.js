@@ -15,14 +15,31 @@ class PrologInterface{
         console.log("request",request);
 
         this.getPrologRequest(request, function(data){
-            let parsedResponse = JSON.parse(data.target.response);
-            this.gameOrchestrator.gameState =parsedResponse['gamestate'];
-            console.log(parsedResponse);
-            console.log(this.gameOrchestrator.gameState);
+
+            let startChangeIndex = data.target.response.indexOf(",changes");
+
+            this.gameOrchestrator.gameState = data.target.response.substring(1,startChangeIndex);
+
+            //console.log(data.target.response);
+            //console.log('Gamestate',this.gameOrchestrator.gameState);
+
+            this.applyChanges(data.target.response.substring(startChangeIndex+10, data.target.response.length-3));
+
         })
     }
 
-    getStateFromMove(){
+    applyChanges(changesStr){
+        //console.log('Changes',changesStr);
+
+        if(changesStr !== ""){
+            let changesArr = changesStr.split(",");
+        
+            for(let i=0;i<changesArr.length;i+=4){
+                if( changesArr[i]!=changesArr[i+2] || changesArr[i+1]!=changesArr[i+3]){
+                    this.gameOrchestrator.applyChangeToPiece(changesArr[i],changesArr[i+1],changesArr[i+2],changesArr[i+3]);
+                }
+            }
+        } 
         
     }
 
