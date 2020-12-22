@@ -112,7 +112,6 @@ parse_input(initial,NewGameState) :-
 	initial(NewGameState).
 
 parse_input(move(GameState,Target),NewGameState):-
-	write('passou 0'),
 	move(GameState,Target,NewGameState).
 
 parse_input(_,'not parsing that command yet').

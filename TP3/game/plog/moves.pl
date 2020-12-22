@@ -142,6 +142,22 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, Line
     %procura o tabuleiro por pelas peças adjacentes
     search_board(Board6,OutPieces,Board7,NewOutPieces,0,0),
 
+    write('yo0'),
+
+    assert(out('aux','n','a','b','c')),
+
+    write('yo1'),
+
+    findall([A,B,C,D],out('out',A,B,C,D),AuxOut),
+    
+    write('yo2'),
+    
+    Out =.. [out,AuxOut],
+
+    write('yo23'),
+
+    retractall(out(_,_,_,_,_)),
+
     %write('passou 6'),nl,
     %troca o turno
     change_turn(Player,NewPlayer),
@@ -154,7 +170,7 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, Line
     %json_write(NewGameState,{newstate:NewAux,allchanges:Change}),
     %NewGameState = {'"gameState"' : NewAux , '"changes"' : Change},
     %write('CHEGA AQUI 2222222'), nl.
-    NewGameState = [NewAux,Change].
+    NewGameState = [NewAux,Change,Out].
 move(R,B,NewGameState):-
     write('FALHOU NA MOVE'), nl,
     write(R), nl,write(B),nl,
@@ -187,7 +203,6 @@ move_piece(Board,Colour,XI,YI,XF,YF,NewBoard) :-
 %Procura um peça na direção GetDirPosFunc e move-a consoante a cor dela e da peça colocada
 %move_dir(+Board, +GetDirPosFunc, +GetOposDirFunc, +Color, +XI, +YI, -NewBoard)
 move_dir(Board, GetDirPosFunc, GetOposDirFunc, Color, XI, YI, NewBoard, Change):-
-    write('merd0'),
     GetDir =.. [GetDirPosFunc,XI,YI,XT,YT], GetDir, %obter posição imediatamente a seguir na direção pretendida para começar a verificar
     check_dir(Board,GetDirPosFunc,XT,YT,ColumnO,LineO,PieceO),%obter peça mais próxima, se não encontrar muda de instanciação
     apply_move_dir(Board, GetDirPosFunc, GetOposDirFunc, Color,XI,YI,ColumnO,LineO,PieceO,NewBoard, Change),   %peça encontrada agora falta movê-la
@@ -195,25 +210,19 @@ move_dir(Board, GetDirPosFunc, GetOposDirFunc, Color, XI, YI, NewBoard, Change):
 move_dir(Board,_,_,_,_,_,NewBoard,[]):-
     NewBoard = Board.   %nada acontece, copia board e segue jogo
 apply_move_dir(Board, GetDirPosFunc, _GetOposDirFunc,Color,XColocado,YColocado,XEncontrado,YEncontrado,ColorEncontrada,NewBoard,Change):-
-write('merd1'),
     Color \= ColorEncontrada, !,    %quando as peças são de cor diferente
     GetDir =.. [GetDirPosFunc,XColocado,YColocado,XT,YT], GetDir, %obtem posição imediatamente a seguir na direção da que foi colocada
-    
     Change = [XEncontrado,YEncontrado,XT,YT],
     move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,XT,YT,NewBoard).        %move a peça para a posição obtida no predicado em cima
 apply_move_dir(Board, GetDirPosFunc, GetOposDirFunc,Color,_,_,XEncontrado,YEncontrado,ColorEncontrada,NewBoard,Change):-
-write('merd2'),
     Color = ColorEncontrada,    %quando as peças são de cor igual
     GetDir =.. [GetDirPosFunc,XEncontrado,YEncontrado,XT,YT], GetDir, %obtem posição imediatamente imediatamente a seguir da peça encontrada na direção pretendida 
     check_dir(Board,GetDirPosFunc,XT,YT,ColumnO,LineO,_), !, %procura outra peça na mesma direção para colidir, se não houver passa à seguinte instanciação
     GetOposDir =.. [GetOposDirFunc,ColumnO,LineO,TargetX,TargetY], GetOposDir,  %obtem posição anterior à encontrada, que é para lá onde se vai mover a peça inicialmente encontrada
-    
     Change = [XEncontrado,YEncontrado,TargetX,TargetY],
     move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,TargetX,TargetY,NewBoard). %mover a peça
 apply_move_dir(Board, GetDirPosFunc, _GetOposDirFunc,_,XColocado,YColocado,XEncontrado,YEncontrado,ColorEncontrada,NewBoard,Change):- 
-write('merd3'),
     get_void_dir(GetDirPosFunc,XColocado,YColocado,XT,YT),   %obtem a célula void encontrada na direção pretendida
-    
     Change = [XEncontrado,YEncontrado,XT,YT],
     move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,XT,YT,NewBoard).    %move a peça para a zona void encontrada
 get_void_dir(GetDirPosFunc,XI,YI,XV,YV):-    %obtem a célula void encontrada na direção pretendida
@@ -418,18 +427,22 @@ update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),Ne
     ext_to_int(C,L,Y,X),
     verify_not_in_void(C,L),
     Out is RedPointPiece +1,
+    assert(out('out',X,Y,'red','bonus')),
 	NewOutPieces =.. [outPieces,Out,BluePointPiece,VoidPieces1,VoidPieces2].
-update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,_,_,Colour):-
+update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,X,Y,Colour):-
     Colour = 'r',
-    Out is VoidPieces1 +1,   
+    Out is VoidPieces1 +1,
+    assert(out('out',X,Y,'red','risk')),   
 	NewOutPieces =.. [outPieces,RedPointPiece,BluePointPiece,Out,VoidPieces2].
 update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,X,Y,Colour):-
     Colour = 'b',
     ext_to_int(C,L,Y,X),
     verify_not_in_void(C,L),
-    Out is BluePointPiece +1,    
+    Out is BluePointPiece +1,  
+    assert(out('out',X,Y,'blue','bonus')),    
 	NewOutPieces =.. [outPieces,RedPointPiece,Out,VoidPieces1,VoidPieces2].
-update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,_,_,Colour):-
+update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,X,Y,Colour):-
     Colour = 'b',
-    Out is VoidPieces2 +1,    
+    Out is VoidPieces2 +1, 
+    assert(out('out',X,Y,'blue','risk')),   
 	NewOutPieces =.. [outPieces,RedPointPiece,BluePointPiece,VoidPieces1,Out].

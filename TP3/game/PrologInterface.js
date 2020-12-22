@@ -17,23 +17,24 @@ class PrologInterface{
         this.getPrologRequest(request, function(data){
 
             let startChangeIndex = data.target.response.indexOf(",changes");
+            let startRemovalIndex = data.target.response.indexOf(",out(");
 
             this.gameOrchestrator.gameState = data.target.response.substring(1,startChangeIndex);
 
-            //console.log(data.target.response);
+            console.log(data.target.response);
             //console.log('Gamestate',this.gameOrchestrator.gameState);
 
-            this.applyChanges(data.target.response.substring(startChangeIndex+10, data.target.response.length-3));
+            this.applyChanges(data.target.response.substring(startChangeIndex+10, startRemovalIndex-2));
+            this.applyRemoval(data.target.response.substring(startRemovalIndex+6, data.target.response.length-3));
 
         })
     }
 
     applyChanges(changesStr){
-        //console.log('Changes',changesStr);
+        console.log('Changes',changesStr);
 
         if(changesStr !== ""){
             let changesArr = changesStr.split(",");
-        
             for(let i=0;i<changesArr.length;i+=4){
                 if( changesArr[i]!=changesArr[i+2] || changesArr[i+1]!=changesArr[i+3]){
                     this.gameOrchestrator.applyChangeToPiece(changesArr[i],changesArr[i+1],changesArr[i+2],changesArr[i+3]);
@@ -41,6 +42,10 @@ class PrologInterface{
             }
         } 
         
+    }
+
+    applyRemoval(removalStr){
+        console.log('Removal',removalStr);
     }
 
     getPrologRequest(requestString, onSuccess, onError, port)
