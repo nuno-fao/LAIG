@@ -153,16 +153,18 @@ move(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour, ColumnP, Line
     %write('passou 6'),nl,
     %troca o turno
     change_turn(Player,NewPlayer),
+
     
     %write('CHEGA AQUI'), nl,
     %constroi um novo GameState com as informações todas atualizadas
     NewAux =.. [gameState,Board7,NewUnusedPieces,NewOutPieces,NewPlayer],
     
+    game_over(NewAux,Winner),
     %write('CHEGA AQUI 111'), nl,
     %json_write(NewGameState,{newstate:NewAux,allchanges:Change}),
     %NewGameState = {'"gameState"' : NewAux , '"changes"' : Change},
     %write('CHEGA AQUI 2222222'), nl.
-    NewGameState = [NewAux,Change,Out].
+    NewGameState = [NewAux,Change,Out,Winner].
 move(R,B,NewGameState):-
     write('FALHOU NA MOVE'), nl,
     write(R), nl,write(B),nl,

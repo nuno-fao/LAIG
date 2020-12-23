@@ -18,6 +18,7 @@ class PrologInterface{
 
             let startChangeIndex = data.target.response.indexOf(",changes");
             let startRemovalIndex = data.target.response.indexOf(",out(");
+            let startPointsIndex = data.target.response.indexOf(",points(");
 
             this.gameOrchestrator.gameState = data.target.response.substring(1,startChangeIndex);
 
@@ -25,9 +26,14 @@ class PrologInterface{
             //console.log('Gamestate',this.gameOrchestrator.gameState);
 
             this.applyChanges(data.target.response.substring(startChangeIndex+10, startRemovalIndex-2));
-            this.applyRemoval(data.target.response.substring(startRemovalIndex+6, data.target.response.length-3));
+            this.applyRemoval(data.target.response.substring(startRemovalIndex+6,startPointsIndex-2));
+            this.updatePoints(data.target.response.substring(startPointsIndex+8, data.target.response.length-2));
 
         })
+    }
+
+    updatePoints(pointsStr){
+        console.log('Points',pointsStr);
     }
 
     applyChanges(changesStr){

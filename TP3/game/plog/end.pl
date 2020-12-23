@@ -9,11 +9,15 @@ game_over(gameState(Board,unusedPieces(R0,B0,R1,B1),OutPieces,_),Winner) :-
   B1=0,
   get_number_void(Board,Red,Blue),
   get_points(P1,P2,Red,Blue,OutPieces),
-  get_winner(P1,P2,Red,Blue,OutPieces,Winner),
-  format("Player0 Points: ~p ~n",[P1]),
-  format("Player1 Points: ~p ~n",[P2]).
-game_over(_,Winner) :-
-  Winner is -1.
+  get_winner(P1,P2,Red,Blue,OutPieces,AuxWinner),
+  Winner =.. [points,AuxWinner,P1,P2].
+
+game_over(gameState(Board,_,OutPieces,_),Winner) :-
+  AuxWinner is -1,
+  get_number_void(Board,Red,Blue),
+  get_points(P1,P2,Red,Blue,OutPieces),
+  Winner =.. [points,AuxWinner,P1,P2].
+
 
 %calcula o vencedor utilizando as regras de jogo
 %para tal utiliza os valores dos pontos dos jogadores, as suas peças no void e as peças na zona de risco
