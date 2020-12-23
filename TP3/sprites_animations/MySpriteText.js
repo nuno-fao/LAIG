@@ -13,6 +13,17 @@ class MySpriteText {
 
     }
 
+    updateText(text){
+        this.letters=[];
+        this.offset = text.length / 2;
+        this.text=text;
+        for (let i = 0; i < this.text.length; i++) {
+            console.log("sadsasdasda",this.offset);
+            let rect = new MyRectangle(this.scene, 0 + i - this.offset, -0.5, 1 + i - this.offset, 0.5, 1, 1);
+            this.letters.push(rect);
+        }
+    }
+
     getCharacterPosition(character) {
         let code = character.charCodeAt(0);
         if (code > 31 && code < 256) {

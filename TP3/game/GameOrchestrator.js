@@ -22,8 +22,8 @@ class GameOrchestrator{
     onGraphLoaded(){
         this.board.loadXMLNodes();
 
-        this.player0 = new Player(this.board.P1pieces,10,5,playerType.HUMAN,0);
-        this.player1 = new Player(this.board.P2pieces,5,10,playerType.HUMAN,1);
+        this.player0 = new Player(this.board.P1pieces,playerType.HUMAN,0);
+        this.player1 = new Player(this.board.P2pieces,playerType.HUMAN,1);
         this.turnPlayer=this.player0;
         this.turnPlayer.makePiecesSelectable(true);
         this.player1.makePiecesSelectable(false);
@@ -61,6 +61,22 @@ class GameOrchestrator{
         this.board.movePieceToCollectZone(originalTile,color,type);
     }
     
+    updatePoints(winner,p0p,p1p){
+
+        this.board.updatePoints(p0p,p1p);
+        if(winner!="-1"){
+            if(winner=="0"){
+                alert("Player 1 wins!");
+            }
+            else if(winner=="1"){
+                alert("Player 2 wins!");
+            }
+            else{
+                alert("The game ended in a tie!");
+            }
+        }
+    }
+    
 	managePick(mode,results) {
 		if (mode == false) {
 			if (results != null && results.length > 0) {
@@ -81,8 +97,8 @@ class GameOrchestrator{
         if(obj instanceof BoardTile){
             if(this.lastPicked instanceof Piece && obj.getPiece()==null){
                 this.board.movePieceToBoard(this.lastPicked,obj);
-                this.turnPlayer.changeUnused(this.lastPicked);
                 this.prologInterface.makeMove(this.gameState,obj.getPrologTargetForMove());
+                this.gameSequence.addMove(this.gameState,{...this.board});
                 //console.log(this.generateGameState());
 
                 this.changeTurn();

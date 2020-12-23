@@ -5,7 +5,8 @@ class Board{
         this.board=[];
         this.P1pieces=[];
         this.P2pieces=[];
-
+        this.P1points=0;
+        this.P2points=0;
         this.collectZones=null;
 
         this.initBuffers();
@@ -27,6 +28,8 @@ class Board{
 
         this.riskSS = new MySpriteText(this.scene,"RISK ZONE");
         this.bonusSS = new MySpriteText(this.scene,"BONUS ZONE");
+        this.P1SS = new MySpriteText(this.scene,this.P1points.toString());
+        this.P2SS = new MySpriteText(this.scene,this.P2points.toString());
     }
 
     initPlayers(){
@@ -217,6 +220,13 @@ class Board{
     getPieceFromTile(tile){
         return tile.getPiece;
     }
+
+    updatePoints(p0,p1){
+        this.P1points=p0;
+        this.P2points=p1;
+        this.P1SS.updateText(p0);
+        this.P2SS.updateText(p1);
+    }
     
     
     display(){
@@ -257,6 +267,20 @@ class Board{
         this.scene.scale(-0.5,1,0.7);
         this.scene.rotate(Math.PI/2,1,0,0);
         this.riskSS.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(9,0.5,-2);
+        this.scene.scale(1,2,2);
+        this.scene.rotate(-Math.PI/2,0,1,0);
+        this.P2SS.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(9,0.5,2);
+        this.scene.scale(1,2,2);
+        this.scene.rotate(-Math.PI/2,0,1,0);
+        this.P1SS.display();
         this.scene.popMatrix();
 
         for(let i in this.P1pieces){

@@ -34,6 +34,9 @@ class PrologInterface{
 
     updatePoints(pointsStr){
         console.log('Points',pointsStr);
+
+        let points = pointsStr.split(",");
+        this.gameOrchestrator.updatePoints(points[0],points[1],points[2]);
     }
 
     applyChanges(changesStr){

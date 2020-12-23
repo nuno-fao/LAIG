@@ -2,14 +2,20 @@ class GameSequence{
     constructor(){
         this.moves=[];
     }
-    addMove(move){
-        this.moves.push(move);
+    addMove(prologState,boardInstance){
+        this.moves.push(new GameState(prologState,boardInstance));
     }
     undo(){
 
     }
-    moveReplay(){
-        
-    }
+    // moveReplay(){
+    // }
 
+}
+
+class GameState{
+    constructor(prologState,boardInstance){
+        this.prologState=prologState;
+        this.boardInstance=boardInstance;
+    }
 }
