@@ -19,6 +19,14 @@ class CollectZone{
         return this.zones[aux];
     }
 
+    getLast(){
+        let aux=this.next;
+        if(aux!=0){
+            this.next--;
+        }
+        return this.zones[aux];
+    }
+
     initBuffers(){
         this.zones = [];
         for(let i=0;i<3;i++){

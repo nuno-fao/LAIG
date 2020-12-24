@@ -2,7 +2,7 @@ class GameOrchestrator{
     constructor(scene){
         this.scene = scene;
         this.board = new Board(this.scene);
-        this.gameSequence = new GameSequence();
+        this.gameSequence = new GameSequence(this);
         this.animator = new Animator(this);
         this.prologInterface = new PrologInterface(this);
         this.lastPicked = null;
@@ -12,11 +12,37 @@ class GameOrchestrator{
 
         this.turnPlayer=null;
 
+        this.gameStateSeq = new GameState();
+
         this.gameState=null;
     }
 
     display(){
         this.board.display();
+    }
+
+    resetGame(){
+        this.board = new Board(this.scene);
+        this.lastPicked = null;
+
+        this.player0=null;
+        this.player1=null;
+
+        this.turnPlayer=null;
+
+        this.gameStateSeq = new GameState();
+
+        this.gameState=null;
+
+        this.board.loadXMLNodes();
+
+        this.player0 = new Player(this.board.P1pieces,playerType.HUMAN,0);
+        this.player1 = new Player(this.board.P2pieces,playerType.HUMAN,1);
+        this.turnPlayer=this.player0;
+        this.turnPlayer.makePiecesSelectable(true);
+        this.player1.makePiecesSelectable(false);
+
+        this.prologInterface.setInitialState();
     }
 
     onGraphLoaded(){
@@ -29,6 +55,7 @@ class GameOrchestrator{
         this.player1.makePiecesSelectable(false);
 
         this.prologInterface.setInitialState();
+        
     }
 
     getGameSequence(){
@@ -52,17 +79,18 @@ class GameOrchestrator{
     applyChangeToPiece(originalCol,originalLine,newCol,newLine){
         let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol),parseInt(originalLine));
         let newTile = this.board.getTileFromCoordinate(parseInt(newCol),parseInt(newLine));
-
+        this.gameStateSeq.addChange(new GameMove(originalTile.getPiece(),originalTile,newTile,originalTile.getCenterCoords(),newTile.getCenterCoords(),this.board));
         this.board.movePiece(originalTile.getPiece(),originalTile,newTile);
     }
 
     applyPieceRemoval(originalCol,originalLine,color,type){
         let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol),parseInt(originalLine));
+        this.gameStateSeq.addRemoved(new GameMove(originalTile.getPiece(),originalTile,null,originalTile.getCenterCoords(),[color,type],this.board));
         this.board.movePieceToCollectZone(originalTile,color,type);
     }
     
     updatePoints(winner,p0p,p1p){
-
+        this.gameStateSeq.addPoints(this.board.P1SS.getText(),this.board.P2SS.getText());
         this.board.updatePoints(p0p,p1p);
         if(winner!="-1"){
             if(winner=="0"){
@@ -96,12 +124,9 @@ class GameOrchestrator{
         console.log("Picked object: " + obj + ", with pick id " + id);
         if(obj instanceof BoardTile){
             if(this.lastPicked instanceof Piece && obj.getPiece()==null){
-                this.board.movePieceToBoard(this.lastPicked,obj);
-                this.prologInterface.makeMove(this.gameState,obj.getPrologTargetForMove());
-                this.gameSequence.addMove(this.gameState,{...this.board});
-                //console.log(this.generateGameState());
 
-                this.changeTurn();
+                this.movePiece(this.lastPicked,obj);
+                
             }
             this.lastPicked=obj;
         }
@@ -113,6 +138,16 @@ class GameOrchestrator{
         }
     }
 
+    movePiece(piece,tile){
+        this.gameStateSeq.addPrologState(this.gameState);
+        this.gameStateSeq.addPlay(new GameMove(piece,null,tile,piece.getCenterCoords(),tile.getCenterCoords(),this.board));
+        this.board.movePieceToBoard(piece,tile);
+        this.prologInterface.makeMove(this.gameState,tile.getPrologTargetForMove());
+        //console.log(this.generateGameState());
+        
+        this.changeTurn();
+    }
+
     generateGameState(){
         return [this.board.buildBoardString(),
             [this.player0.getRedPieces(),this.player0.getBluePieces(),this.player1.getRedPieces(),this.player1.getBluePieces()],
@@ -120,6 +155,10 @@ class GameOrchestrator{
             [this.turnPlayer.getPlayer()]
         ];
 
+    }
+
+    undo(){
+        this.gameSequence.undo();
     }
 }
 

@@ -136,9 +136,11 @@ class XMLscene extends CGFscene {
 
         this.interface.initCameras();
         this.interface.initLights();
+        
         this.setUpdatePeriod(20); //50 fps
 
         this.gameOrchestrator.onGraphLoaded();
+        this.interface.initGameFolder();
 
         this.sceneInited = true;
         

@@ -5,9 +5,9 @@ class Board{
         this.board=[];
         this.P1pieces=[];
         this.P2pieces=[];
-        this.P1points=0;
-        this.P2points=0;
         this.collectZones=null;
+        this.P1SS = new MySpriteText(this.scene,"0");
+        this.P2SS = new MySpriteText(this.scene,"0");
 
         this.initBuffers();
     }
@@ -28,8 +28,6 @@ class Board{
 
         this.riskSS = new MySpriteText(this.scene,"RISK ZONE");
         this.bonusSS = new MySpriteText(this.scene,"BONUS ZONE");
-        this.P1SS = new MySpriteText(this.scene,this.P1points.toString());
-        this.P2SS = new MySpriteText(this.scene,this.P2points.toString());
     }
 
     initPlayers(){
@@ -222,8 +220,6 @@ class Board{
     }
 
     updatePoints(p0,p1){
-        this.P1points=p0;
-        this.P2points=p1;
         this.P1SS.updateText(p0);
         this.P2SS.updateText(p1);
     }

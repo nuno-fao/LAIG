@@ -25,6 +25,8 @@ class MyInterface extends CGFinterface {
 
         this.initKeys();
 
+        
+
         return true;
     }
 
@@ -39,7 +41,7 @@ class MyInterface extends CGFinterface {
             this.scene.cameraKeys.push(key)
         }
         this.gui.add(this.scene, 'selectedCamera', this.scene.cameraKeys).name('Selected camera').onChange(this.scene.setCamera.bind(this.scene));
-        this.gui.add(this.scene, 'seeLights').name("See Lights")
+        this.gui.add(this.scene, 'seeLights').name("See Lights");
     }
 
     initLights() {
@@ -57,6 +59,17 @@ class MyInterface extends CGFinterface {
         this.activeKeys = {};
     }
 
+    initGameFolder(){
+        // var undoFunc = {
+        //     undo: function(){
+        //             this.scene.gameOrchestrator.undo();
+        //         }
+        // };
+        
+        let folder = this.gui.addFolder("Game");
+        folder.add({undo : this.scene.gameOrchestrator.undo.bind(this.scene.gameOrchestrator)},'undo').name('Undo');
+        folder.open();
+    }
     processKeyDown(event) {
         this.activeKeys[event.code] = true;
     };

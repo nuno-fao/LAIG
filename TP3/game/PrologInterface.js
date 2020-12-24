@@ -7,7 +7,9 @@ class PrologInterface{
         let request = "initial";
         this.getPrologRequest(request, function(data){
             this.gameOrchestrator.gameState = data.target.response;
-        })
+            //this.gameOrchestrator.gameSequence.addMove(this.gameOrchestrator.gameState,this.gameOrchestrator.board);
+            console.log(this.gameOrchestrator.gameSequence.moves);
+        });
     }
 
     makeMove(gameState,target){
@@ -29,7 +31,10 @@ class PrologInterface{
             this.applyRemoval(data.target.response.substring(startRemovalIndex+6,startPointsIndex-2));
             this.updatePoints(data.target.response.substring(startPointsIndex+8, data.target.response.length-2));
 
-        })
+            this.gameOrchestrator.gameSequence.addMove();
+            console.log(this.gameOrchestrator.gameSequence.moves);
+
+        });
     }
 
     updatePoints(pointsStr){
