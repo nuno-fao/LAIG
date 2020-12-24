@@ -15,6 +15,10 @@ class GameSequence{
         else{
             this.applyChangesToOrchestrator(this.moves[this.moves.length-1]);
             this.moves.pop();
+            if(this.gameOrchestrator.turnPlayer.type != playerType.human){
+                this.applyChangesToOrchestrator(this.moves[this.moves.length-1]);
+                this.moves.pop();
+            }
         }
     }
     // moveReplay(){

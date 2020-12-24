@@ -110,9 +110,15 @@ parse_input(quit, goodbye).
 
 parse_input(initial,NewGameState) :-
 	initial(NewGameState).
-
 parse_input(move(GameState,Target),NewGameState):-
 	move(GameState,Target,NewGameState).
+parse_input(aimove(GameState,Difficulty),NewGameState):-
+	get_player(GameState,Player),
+	choose_move(GameState,Player,Difficulty,[Colour,X,Y]),
+	ext_to_int(Column1,Line1,Y,X),
+	Target =.. [target,Colour,Column1,Line1],
+	move(GameState,Target,AuxNewGameState),
+	NewGameState = [AuxNewGameState,Target].
 
 parse_input(_,'not parsing that command yet').
 

@@ -15,6 +15,8 @@ class GameOrchestrator{
         this.gameStateSeq = new GameState();
 
         this.gameState=null;
+
+        this.event = Events.WAITING;
     }
 
     display(){
@@ -36,8 +38,8 @@ class GameOrchestrator{
 
         this.board.loadXMLNodes();
 
-        this.player0 = new Player(this.board.P1pieces,playerType.HUMAN,0);
-        this.player1 = new Player(this.board.P2pieces,playerType.HUMAN,1);
+        this.player0 = new Player(this.board.P1pieces,playerType.human,0);
+        this.player1 = new Player(this.board.P2pieces,playerType.human,1);
         this.turnPlayer=this.player0;
         this.turnPlayer.makePiecesSelectable(true);
         this.player1.makePiecesSelectable(false);
@@ -48,14 +50,26 @@ class GameOrchestrator{
     onGraphLoaded(){
         this.board.loadXMLNodes();
 
-        this.player0 = new Player(this.board.P1pieces,playerType.HUMAN,0);
-        this.player1 = new Player(this.board.P2pieces,playerType.HUMAN,1);
+        this.player0 = new Player(this.board.P1pieces,playerType.human,0);
+        this.player1 = new Player(this.board.P2pieces,playerType.human,1);
         this.turnPlayer=this.player0;
         this.turnPlayer.makePiecesSelectable(true);
         this.player1.makePiecesSelectable(false);
 
         this.prologInterface.setInitialState();
         
+    }
+
+    update(time){
+        if(this.event==Events.MOVEDONE){
+            this.changeTurn();
+            this.event = Events.WAITING;
+
+        } 
+        if(this.turnPlayer!=null && this.turnPlayer.type!=playerType.human && this.event==Events.WAITING){
+            this.event=Events.REQUESTING;
+            this.prologInterface.getAIMove(this.gameState,this.turnPlayer.type);
+        }
     }
 
     getGameSequence(){
@@ -127,6 +141,8 @@ class GameOrchestrator{
 
                 this.movePiece(this.lastPicked,obj);
                 
+                this.prologInterface.makeMove(this.gameState,obj.getPrologTargetForMove());
+                
             }
             this.lastPicked=obj;
         }
@@ -142,10 +158,7 @@ class GameOrchestrator{
         this.gameStateSeq.addPrologState(this.gameState);
         this.gameStateSeq.addPlay(new GameMove(piece,null,tile,piece.getCenterCoords(),tile.getCenterCoords(),this.board));
         this.board.movePieceToBoard(piece,tile);
-        this.prologInterface.makeMove(this.gameState,tile.getPrologTargetForMove());
         //console.log(this.generateGameState());
-        
-        this.changeTurn();
     }
 
     generateGameState(){
@@ -158,11 +171,37 @@ class GameOrchestrator{
     }
 
     undo(){
-        this.gameSequence.undo();
+        if(this.player0.type==playerType.human || this.player1.type==playerType.human){
+            if(this.event==Events.WAITING){
+                this.event=Events.REWINDING;
+                this.gameSequence.undo();
+                this.event=Events.WAITING;
+            }
+            else{
+                alert("Wait for previous move to finish");
+            }
+            
+        }
+        else{
+            alert("Can't undo on AI vs AI mode");
+        }
+        
     }
 }
 
 const playerType = {
-    HUMAN : 0,
-    AI : 1
+    human : 0,
+    easyAI : 1,
+    hardAI : 2
+}
+
+const Events = {
+    WAITING : 0,
+    REQUESTING : 1,
+    APLLYING : 2,
+    MOVING : 3,
+    REMOVING : 4,
+    MOVEDONE : 5,
+    END : 6,
+    REWINDING : 7,
 }

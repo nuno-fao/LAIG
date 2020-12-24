@@ -12,7 +12,46 @@ class PrologInterface{
         });
     }
 
+    getAIMove(gameState,difficulty){
+        console.log("MAKING AI MOVE");
+        let level = null;
+        if(difficulty==playerType.easyAI){
+            level='easy';
+        }
+        else if(difficulty==playerType.hardAI){
+            level='hard';
+        }
+        let request = 'aimove(' + gameState + ',' +level + ')';
+        this.getPrologRequest(request, function(data){
+
+            let targetIndex = data.target.response.indexOf(",target");
+            let targetString = data.target.response.substring(targetIndex+8,data.target.response.length-2).split(",");
+
+            let restOfReply = data.target.response.substring(1,targetIndex);
+
+            console.log(targetString,restOfReply);
+
+            this.gameOrchestrator.movePiece(this.gameOrchestrator.turnPlayer.getUnplayedPiece(targetString[0]),this.gameOrchestrator.board.getTileFromCoordinate(parseInt(targetString[1]),parseInt(targetString[2])));
+
+            let startChangeIndex = restOfReply.indexOf(",changes");
+            let startRemovalIndex = restOfReply.indexOf(",out(");
+            let startPointsIndex = restOfReply.indexOf(",points(");
+
+            this.gameOrchestrator.gameState = restOfReply.substring(1,startChangeIndex);
+
+            this.applyChanges(restOfReply.substring(startChangeIndex+10, startRemovalIndex-2));
+            this.applyRemoval(restOfReply.substring(startRemovalIndex+6,startPointsIndex-2));
+            this.updatePoints(restOfReply.substring(startPointsIndex+8,restOfReply.length-2));
+
+            this.gameOrchestrator.gameSequence.addMove();
+            this.gameOrchestrator.event=Events.MOVEDONE;
+            console.log(this.gameOrchestrator.gameSequence.moves);
+
+        });
+    }
+
     makeMove(gameState,target){
+        console.log("MAKING PLAYER MOVE");
         let request = 'move(' + gameState + ',target(' + target.toString() + '))';
         console.log("request",request);
 
@@ -32,6 +71,7 @@ class PrologInterface{
             this.updatePoints(data.target.response.substring(startPointsIndex+8, data.target.response.length-2));
 
             this.gameOrchestrator.gameSequence.addMove();
+            this.gameOrchestrator.event=Events.MOVEDONE;
             console.log(this.gameOrchestrator.gameSequence.moves);
 
         });

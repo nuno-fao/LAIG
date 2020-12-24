@@ -15,7 +15,7 @@ choose_move(GameState, Player ,'easy', Move):-
 %ai(+GameState,+Player,-OutGameState)
 ai(GameState,Player,OutGameState):-
     get_states(GameState,Player,NewGameStates),
-    get_max_of_sons(NewGameStates,Player,-99999,GameState,OutGameState,_).
+    get_max_of_sons(NewGameStates,Player,-99999,GameState,OutGameState,_)  .
 
 %percorre 'iterativamente' a lista NewGameStates, e compara os valores do gamestate atual com o valor do gamestate recebido em InGameState,
 %caso seja superior passa para o próximo get_max_of_sons o gamestate e o value na cabeça da lista, caso contrário passa os gamestate e value recebidos
@@ -57,7 +57,7 @@ get_states(GameState,Player,NewGameStates):-
 %get_valid_moves_states(+Moves,+GameState,-NewGameStates):-
 get_valid_moves_states([[Colour,X,Y]|Moves],GameState,NewGameStates):-
     ext_to_int(CP,LP,Y,X),
-    move(GameState,target(Colour,X, Y, CP, LP),NewGameState),
+    moveAI(GameState,target(Colour,X, Y, CP, LP),NewGameState),
     assert(moves(NewGameState,[Colour,X,Y])),
     get_valid_moves_states(Moves,GameState,GameStates),
     NewGameStates = [NewGameState|GameStates].

@@ -170,6 +170,33 @@ move(R,B,NewGameState):-
     write(R), nl,write(B),nl,
     NewGameState = 'falha ao ler a move'.
 
+%MOVE PARA O AI
+moveAI(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour,X, Y, ColumnP, LineP),NewGameState):-
+    %verifica se tem peça disponivel
+    verify_available_piece(UnusedPieces,Player,Colour),
+    %tenta colocar a peça
+    nth0(X,Board,Linha),
+    replace_nth0(Linha,Y,'e',Colour,NewLinha),
+    replace_nth0(Board,X,Linha,NewLinha,NewBoard),
+    verify_not_in_void(ColumnP, LineP),
+    %remove a peça das Unused
+    remove_from_unused(UnusedPieces,Player,Colour,NewUnusedPieces),
+    %format("Point: ~p ~p ~n",[ColumnP,LineP]),
+    %move a peça mais proxima em cada uma das 6 direções
+    move_dirAI(NewBoard,get_up_position,get_down_position,Colour,ColumnP,LineP,Board1),
+    move_dirAI(Board1,get_up_right_position,get_down_left_position,Colour,ColumnP,LineP,Board2),
+    move_dirAI(Board2,get_up_left_position,get_down_right_position,Colour,ColumnP,LineP,Board3),
+    move_dirAI(Board3,get_down_position,get_up_position,Colour,ColumnP,LineP,Board4),
+    move_dirAI(Board4,get_down_left_position,get_up_right_position,Colour,ColumnP,LineP,Board5),
+    move_dirAI(Board5,get_down_right_position,get_up_left_position,Colour,ColumnP,LineP,Board6),
+    %procura o tabuleiro por pelas peças adjacentes
+    search_board(Board6,OutPieces,Board7,NewOutPieces,0,0),
+    %troca o turno
+    change_turn(Player,NewPlayer),
+    %constroi um novo GameState com as informações todas atualizadas
+    NewGameState =.. [gameState,Board7,NewUnusedPieces,NewOutPieces,NewPlayer].
+
+
 %substitui o OldElem por NewElem em List no index Index
 replace_nth0(List, Index, OldElem, NewElem, NewList) :-
    % predicate works forward: Index,List -> OldElem, Transfer
@@ -224,6 +251,35 @@ get_void_dir(GetDirPosFunc,XI,YI,XV,YV):-    %obtem a célula void encontrada na
     GetDir =.. [GetDirPosFunc,XI,YI,X1,Y1], GetDir,
     get_void_dir(GetDirPosFunc,X1,Y1,XV,YV).
 get_void_dir(_GetDirPosFunc,XI,YI,XV,YV):-    %chegou ao void
+    XV = XI,
+    YV = YI.
+
+%PARA O AI dificil
+move_dirAI(Board, GetDirPosFunc, GetOposDirFunc, Color, XI, YI, NewBoard):-
+    GetDir =.. [GetDirPosFunc,XI,YI,XT,YT], GetDir, %obter posição imediatamente a seguir na direção pretendida para começar a verificar
+    check_dir(Board,GetDirPosFunc,XT,YT,ColumnO,LineO,PieceO),%obter peça mais próxima, se não encontrar muda de instanciação
+    apply_move_dirAI(Board, GetDirPosFunc, GetOposDirFunc, Color,XI,YI,ColumnO,LineO,PieceO,NewBoard),   %peça encontrada agora falta movê-la
+    !.
+move_dirAI(Board,_,_,_,_,_,NewBoard):-
+    NewBoard = Board.   %nada acontece, copia board e segue jogo
+apply_move_dirAI(Board, GetDirPosFunc, _GetOposDirFunc,Color,XColocado,YColocado,XEncontrado,YEncontrado,ColorEncontrada,NewBoard):-
+    Color \= ColorEncontrada, !,    %quando as peças são de cor diferente
+    GetDir =.. [GetDirPosFunc,XColocado,YColocado,XT,YT], GetDir, %obtem posição imediatamente a seguir na direção da que foi colocada
+    move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,XT,YT,NewBoard).        %move a peça para a posição obtida no predicado em cima
+apply_move_dirAI(Board, GetDirPosFunc, GetOposDirFunc,Color,_,_,XEncontrado,YEncontrado,ColorEncontrada,NewBoard):-
+    Color = ColorEncontrada,    %quando as peças são de cor igual
+    GetDir =.. [GetDirPosFunc,XEncontrado,YEncontrado,XT,YT], GetDir, %obtem posição imediatamente imediatamente a seguir da peça encontrada na direção pretendida 
+    check_dir(Board,GetDirPosFunc,XT,YT,ColumnO,LineO,_), !, %procura outra peça na mesma direção para colidir, se não houver passa à seguinte instanciação
+    GetOposDir =.. [GetOposDirFunc,ColumnO,LineO,TargetX,TargetY], GetOposDir,  %obtem posição anterior à encontrada, que é para lá onde se vai mover a peça inicialmente encontrada
+    move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,TargetX,TargetY,NewBoard). %mover a peça
+apply_move_dirAI(Board, GetDirPosFunc, _GetOposDirFunc,_,XColocado,YColocado,XEncontrado,YEncontrado,ColorEncontrada,NewBoard):- 
+    get_void_dirAI(GetDirPosFunc,XColocado,YColocado,XT,YT),   %obtem a célula void encontrada na direção pretendida
+    move_piece(Board,ColorEncontrada,XEncontrado,YEncontrado,XT,YT,NewBoard).    %move a peça para a zona void encontrada
+get_void_dirAI(GetDirPosFunc,XI,YI,XV,YV):-    %obtem a célula void encontrada na direção pretendida
+    verify_not_in_void(XI,YI), !, %ainda não chegou ao void
+    GetDir =.. [GetDirPosFunc,XI,YI,X1,Y1], GetDir,
+    get_void_dirAI(GetDirPosFunc,X1,Y1,XV,YV).
+get_void_dirAI(_GetDirPosFunc,XI,YI,XV,YV):-    %chegou ao void
     XV = XI,
     YV = YI.
 

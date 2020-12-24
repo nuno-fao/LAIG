@@ -149,6 +149,7 @@ class XMLscene extends CGFscene {
     }
 
     update(time){
+        this.gameOrchestrator.update(time);
         for (let a in this.graph.parsedAnimations) {
             this.graph.parsedAnimations[a].update(time - this.lastTime);
         }
@@ -158,6 +159,8 @@ class XMLscene extends CGFscene {
         }
 
         this.lastTime = time;
+
+
     }
 
 

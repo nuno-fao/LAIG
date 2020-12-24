@@ -68,6 +68,8 @@ class MyInterface extends CGFinterface {
         
         let folder = this.gui.addFolder("Game");
         folder.add({undo : this.scene.gameOrchestrator.undo.bind(this.scene.gameOrchestrator)},'undo').name('Undo');
+        folder.add(this.scene.gameOrchestrator.player0, 'type', playerType).name('Player 1');
+        folder.add(this.scene.gameOrchestrator.player1, 'type', playerType).name('Player 2');
         folder.open();
     }
     processKeyDown(event) {

@@ -22,4 +22,13 @@ class Player{
             }
         }
     }
+
+    getUnplayedPiece(color){
+        for(let i in this.pieces){
+            if(this.pieces[i].getType()==color && !this.pieces[i].wasMoved){
+                return this.pieces[i];
+            }
+        }
+        return null;
+    }
 }
