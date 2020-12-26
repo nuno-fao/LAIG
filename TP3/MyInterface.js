@@ -70,6 +70,8 @@ class MyInterface extends CGFinterface {
         folder.add({undo : this.scene.gameOrchestrator.undo.bind(this.scene.gameOrchestrator)},'undo').name('Undo');
         folder.add(this.scene.gameOrchestrator.player0, 'type', playerType).name('Player 1');
         folder.add(this.scene.gameOrchestrator.player1, 'type', playerType).name('Player 2');
+        folder.add({resetCam : this.scene.resetCamera.bind(this.scene)},'resetCam').name('Reset Camera');
+        folder.add({reset : this.scene.gameOrchestrator.resetGame.bind(this.scene.gameOrchestrator)},'reset').name('Restart Game');
         folder.open();
     }
     processKeyDown(event) {

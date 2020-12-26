@@ -12,11 +12,6 @@
             <from x="0" y="15" z="12" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <ortho id="demoOrtho" near="0.2" far="100" left="-5" right="5" top="5" bottom="-5">
-            <from x="35" y="70" z="10" />
-            <to x="5" y="8" z="0" />
-            <up x="0" y="1" z="0" /><!-- optional, default 0,1,0 -->
-        </ortho>
     </views>
 
     <illumination>
