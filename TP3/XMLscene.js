@@ -10,6 +10,8 @@ class XMLscene extends CGFscene {
         super();
         this.lastTime = Date.now();
         this.interface = myinterface;
+        this.rotateTime = 0;
+        this.target = 1;
     }
 
     /**
@@ -40,8 +42,6 @@ class XMLscene extends CGFscene {
 
         this.defaultAppearance = new CGFappearance(this);
 
-        this.previous = Date.now();
-        this.start = Date.now();
         this.frames = 0;
         this.seeLights = false;
 
@@ -59,6 +59,7 @@ class XMLscene extends CGFscene {
         this.setPickEnabled(true);
 
         this.gameOrchestrator = new GameOrchestrator(this);
+        this.initTime = Date.now();
 
     }
 
@@ -136,26 +137,27 @@ class XMLscene extends CGFscene {
 
         this.interface.initCameras();
         this.interface.initLights();
-        
+
         this.setUpdatePeriod(20); //50 fps
 
         this.gameOrchestrator.onGraphLoaded();
         this.interface.initGameFolder();
 
         this.sceneInited = true;
-        
+
 
 
     }
 
-    update(time){
+    update(time) {
+        this.rotateTime = time;
         this.gameOrchestrator.update(time);
         for (let a in this.graph.parsedAnimations) {
             this.graph.parsedAnimations[a].update(time - this.lastTime);
         }
 
-        for(let i in this.graph.spriteAnimations){
-            this.graph.spriteAnimations[i].update(time/1000);
+        for (let i in this.graph.spriteAnimations) {
+            this.graph.spriteAnimations[i].update(time / 1000);
         }
 
         this.lastTime = time;
@@ -184,7 +186,6 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-
         for (let i = 0; i < this.lights.length; i++) {
             if (this.seeLights)
                 this.lights[i].setVisible(true);
@@ -202,6 +203,7 @@ class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
             // Displays all the game related objects
+            this.rotateCamera(this.target);
             this.gameOrchestrator.display();
         } else {
             // Show some "loading" visuals
@@ -215,5 +217,18 @@ class XMLscene extends CGFscene {
 
         this.popMatrix();
         setTimeout(() => {}, 200);
+    }
+
+    rotateCamera(targetPosition) {
+        let targetTime = 2000;
+        if (targetPosition == 1) {
+            this.rotate(3.1415 * (this.rotateTime - this.initTime) / targetTime, 0, 1, 0);
+        } else if (targetPosition == 0) {
+            this.rotate(3.1415 - 3.1415 * (this.rotateTime - this.initTime) / targetTime, 0, 1, 0);
+        }
+        if (this.rotateTime - this.initTime >= targetTime) {
+            this.initTime = this.rotateTime;
+            this.target = (this.target == 0) ? 1 : 0; // comentar para retirar o movimento automatico
+        }
     }
 }

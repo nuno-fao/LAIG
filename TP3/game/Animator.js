@@ -1,22 +1,22 @@
-class Animator{
-    constructor(gameOrchestrator){
-        this.gameOrchestrator=gameOrchestrator;
-        this.gameSequence=gameOrchestrator.getGameSequence();
+class Animator {
+    constructor(gameOrchestrator) {
+        this.gameOrchestrator = gameOrchestrator;
+        this.gameSequence = gameOrchestrator.getGameSequence();
     }
 
-    reset(){
-
-    }
-
-    start(){
+    reset() {
 
     }
 
-    update(time){
+    start() {
 
     }
 
-    display(){
-        
+    update(time) {
+
+    }
+
+    display() {
+
     }
 }
