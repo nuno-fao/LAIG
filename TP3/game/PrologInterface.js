@@ -44,7 +44,7 @@ class PrologInterface{
             this.updatePoints(restOfReply.substring(startPointsIndex+8,restOfReply.length-2));
 
             this.gameOrchestrator.gameSequence.addMove();
-            this.gameOrchestrator.event=Events.MOVEDONE;
+            this.gameOrchestrator.event=Events.MOVE_DONE;
             console.log(this.gameOrchestrator.gameSequence.moves);
 
         });
@@ -71,7 +71,7 @@ class PrologInterface{
             this.updatePoints(data.target.response.substring(startPointsIndex+8, data.target.response.length-2));
 
             this.gameOrchestrator.gameSequence.addMove();
-            this.gameOrchestrator.event=Events.MOVEDONE;
+            this.gameOrchestrator.event=Events.MOVE_DONE;
             console.log(this.gameOrchestrator.gameSequence.moves);
 
         });

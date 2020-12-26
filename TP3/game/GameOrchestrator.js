@@ -61,7 +61,7 @@ class GameOrchestrator{
     }
 
     update(time){
-        if(this.event==Events.MOVEDONE){
+        if(this.event==Events.MOVE_DONE){
             this.changeTurn();
             this.event = Events.WAITING;
 
@@ -201,7 +201,8 @@ const Events = {
     APLLYING : 2,
     MOVING : 3,
     REMOVING : 4,
-    MOVEDONE : 5,
+    MOVE_DONE : 5,
     END : 6,
     REWINDING : 7,
+    CAM_CHANGE : 8
 }

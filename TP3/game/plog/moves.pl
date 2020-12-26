@@ -190,7 +190,7 @@ moveAI(gameState(Board,UnusedPieces,OutPieces,Player),target(Colour,X, Y, Column
     move_dirAI(Board4,get_down_left_position,get_up_right_position,Colour,ColumnP,LineP,Board5),
     move_dirAI(Board5,get_down_right_position,get_up_left_position,Colour,ColumnP,LineP,Board6),
     %procura o tabuleiro por pelas peças adjacentes
-    search_board(Board6,OutPieces,Board7,NewOutPieces,0,0),
+    search_boardAI(Board6,OutPieces,Board7,NewOutPieces,0,0),
     %troca o turno
     change_turn(Player,NewPlayer),
     %constroi um novo GameState com as informações todas atualizadas
@@ -497,4 +497,66 @@ update_pieces(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),Ne
     Out is VoidPieces2 +1, 
     ext_to_int(C,L,Y,X),
     assert(out('out',C,L,'blue','risk')),   
+	NewOutPieces =.. [outPieces,RedPointPiece,BluePointPiece,VoidPieces1,Out].
+
+search_boardAI(Board,OutPieces,NewBoard,NewOutPieces,InitL,InitC):-
+    iterate_line(Board,InitL,InitC,Out),
+    [X,Y,Colour] = Out,
+    X \= 'X',
+    Y2 is Y + 1,
+    !,
+    retractall(sequence(_,_,_)),
+    retractall(processed(_)),
+    assert(sequence(0,0,0)),
+    search_near(Board,X,Y,Colour),
+    retract(sequence(0,0,0)),
+    setof([III,VVV,CCC],sequence(III,VVV,CCC),ConnectedPieces),
+    remove_piecesAI(Board,OutPieces,ConnectedPieces,NewBoardA,NewOPieces),
+    search_boardAI(NewBoardA,NewOPieces,NewBoard,NewOutPieces,X,Y2).
+search_boardAI(Board,OutPieces,NewBoard,NewOutPieces,_,_):-
+    NewBoard = Board,
+    NewOutPieces = OutPieces.
+
+remove_piecesAI(Board,OutPieces,ConnectedPieces,NewBoard,NewOutPieces):-
+    length(ConnectedPieces,Tam),
+    Tam > 3,
+    %print('Removing Whiskas saquetas!\n'),
+    %read(_),
+    remove_from_listAI(Board,OutPieces,NewBoard,ConnectedPieces,NewOutPieces).
+remove_piecesAI(Board,OutPieces,_,NewBoard,NewOutPieces):-
+    NewBoard = Board,
+    NewOutPieces = OutPieces.
+
+%recebe uma lista com as peças a remover do tabuleiro, remove e devolve um tabuleiro e OutPieces atualizados
+%remove_from_list(+Board,+OutPieces,-NewBoard,+ListaDePeças,-NewOutPieces)
+remove_from_listAI(Board,OutPieces,NewBoard,[[X,Y,Colour]|T],NewOutPieces):-
+    nth0(X,Board,Linha),
+    replace_nth0(Linha,Y,Colour,'e',NewLinha),
+    replace_nth0(Board,X,Linha,NewLinha,NewBoardA),
+    update_piecesAI(OutPieces,NewOPieces,X,Y,Colour),
+    remove_from_listAI(NewBoardA,NewOPieces,NewBoard,T,NewOutPieces).
+remove_from_listAI(Board,OutPieces,NewBoard,_,NewOutPieces):-
+    NewBoard = Board,
+    NewOutPieces = OutPieces.
+
+update_piecesAI(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,X,Y,Colour):-
+    Colour = 'r',
+    %print([X,Y]),
+    ext_to_int(C,L,Y,X),
+    verify_not_in_void(C,L),
+    Out is RedPointPiece +1,
+	NewOutPieces =.. [outPieces,Out,BluePointPiece,VoidPieces1,VoidPieces2].
+update_piecesAI(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,_,_,Colour):-
+    Colour = 'r',
+    Out is VoidPieces1 +1,   
+	NewOutPieces =.. [outPieces,RedPointPiece,BluePointPiece,Out,VoidPieces2].
+update_piecesAI(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,X,Y,Colour):-
+    Colour = 'b',
+    ext_to_int(C,L,Y,X),
+    verify_not_in_void(C,L),
+    Out is BluePointPiece +1,    
+	NewOutPieces =.. [outPieces,RedPointPiece,Out,VoidPieces1,VoidPieces2].
+update_piecesAI(outPieces(RedPointPiece,BluePointPiece,VoidPieces1,VoidPieces2),NewOutPieces,_,_,Colour):-
+    Colour = 'b',
+    Out is VoidPieces2 +1,    
 	NewOutPieces =.. [outPieces,RedPointPiece,BluePointPiece,VoidPieces1,Out].
