@@ -10,8 +10,8 @@ class XMLscene extends CGFscene {
         super();
         this.lastTime = Date.now();
         this.interface = myinterface;
-        this.rotateTime = 0;
-        this.target = 1;
+        //this.rotateTime = 0;
+        //this.target = 1;
     }
 
     /**
@@ -81,25 +81,25 @@ class XMLscene extends CGFscene {
 
     setCamera(cameraKey) {
         let auxCam = this.graph.views[cameraKey];
-        this.camera = new CGFcamera(auxCam.fov,auxCam.near,auxCam.far,auxCam.position,auxCam.target);
+        this.camera = new CGFcamera(auxCam.fov, auxCam.near, auxCam.far, auxCam.position, auxCam.target);
         this.selectedCamera = cameraKey;
         this.interface.setActiveCamera(this.camera);
     }
 
-    setCameraMidGame(cameraKey,Player) {
+    setCameraMidGame(cameraKey, Player) {
         let auxCam = this.graph.views[cameraKey];
         let auxPosition = [...auxCam.position];
 
-        if(Player == "2"){
+        if (Player == "2") {
             auxPosition[2] = -auxPosition[2];
         }
-        this.camera = new CGFcamera(auxCam.fov,auxCam.near,auxCam.far,auxPosition,auxCam.target);
+        this.camera = new CGFcamera(auxCam.fov, auxCam.near, auxCam.far, auxPosition, auxCam.target);
         this.selectedCamera = cameraKey;
         this.interface.setActiveCamera(this.camera);
     }
 
-    resetCamera(){
-        this.setCameraMidGame(this.selectedCamera,this.gameOrchestrator.getTurnPlayer());
+    resetCamera() {
+        this.setCameraMidGame(this.selectedCamera, this.gameOrchestrator.getTurnPlayer());
     }
 
     /**
@@ -174,20 +174,20 @@ class XMLscene extends CGFscene {
         this.gameOrchestrator.update(time);
 
         //camera rotation
-        
+
         if (this.rotatingCam) {
             let rotAngle = Math.PI * (time - this.lastTime) / 1500;
-            if(this.camAngle+rotAngle>Math.PI){
+            if (this.camAngle + rotAngle > Math.PI) {
                 rotAngle = Math.PI - this.camAngle;
             }
-			this.camAngle += rotAngle;
-			if (this.camAngle == Math.PI) {
-				rotAngle -= this.camAngle - Math.PI;
-				this.camAngle = 0;
+            this.camAngle += rotAngle;
+            if (this.camAngle == Math.PI) {
+                rotAngle -= this.camAngle - Math.PI;
+                this.camAngle = 0;
                 this.rotatingCam = false;
                 this.gameOrchestrator.event = Events.WAITING;
-			}
-			this.camera.orbit(vec3.fromValues(0, 1, 0), rotAngle);
+            }
+            this.camera.orbit(vec3.fromValues(0, 1, 0), rotAngle);
         }
 
         for (let a in this.graph.parsedAnimations) {
@@ -241,7 +241,7 @@ class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
             // Displays all the game related objects
-            this.rotateCamera(this.target);
+            //this.rotateCamera(this.target);
             this.gameOrchestrator.display();
         } else {
             // Show some "loading" visuals
@@ -266,7 +266,7 @@ class XMLscene extends CGFscene {
         }
         if (this.rotateTime - this.initTime >= targetTime) {
             this.initTime = this.rotateTime;
-            this.target = (this.target == 0) ? 1 : 0; // comentar para retirar o movimento automatico
+            //this.target = (this.target == 0) ? 1 : 0; // comentar para retirar o movimento automatico
         }
     }
 }
