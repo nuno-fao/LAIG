@@ -7,6 +7,7 @@ class PrologInterface{
         let request = "initial";
         this.getPrologRequest(request, function(data){
             this.gameOrchestrator.gameState = data.target.response;
+            this.gameOrchestrator.event = Events.WAITING;
             //this.gameOrchestrator.gameSequence.addMove(this.gameOrchestrator.gameState,this.gameOrchestrator.board);
             console.log(this.gameOrchestrator.gameSequence.moves);
         });

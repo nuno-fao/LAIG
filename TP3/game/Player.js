@@ -1,6 +1,6 @@
 class Player{
-    constructor(allPieces,type,player){
-        this.pieces=allPieces;
+    constructor(pieces,type,player){
+        this.pieces=pieces;
         this.type=type;
         this.player=player;
     }
@@ -30,5 +30,13 @@ class Player{
             }
         }
         return null;
+    }
+
+    setPieces(pieces){
+        this.pieces=pieces;
+    }
+
+    setType(type){
+        this.type=type;
     }
 }

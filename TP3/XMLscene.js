@@ -58,6 +58,9 @@ class XMLscene extends CGFscene {
         // enable picking
         this.setPickEnabled(true);
 
+        this.rotatingCam = false;
+        this.camAngle = 0;
+
         this.gameOrchestrator = new GameOrchestrator(this);
         this.initTime = Date.now();
 
@@ -77,9 +80,26 @@ class XMLscene extends CGFscene {
     }
 
     setCamera(cameraKey) {
-        this.camera = this.graph.views[cameraKey];
+        let auxCam = this.graph.views[cameraKey];
+        this.camera = new CGFcamera(auxCam.fov,auxCam.near,auxCam.far,auxCam.position,auxCam.target);
         this.selectedCamera = cameraKey;
-        this.interface.setActiveCamera(this.graph.views[cameraKey]);
+        this.interface.setActiveCamera(this.camera);
+    }
+
+    setCameraMidGame(cameraKey,Player) {
+        let auxCam = this.graph.views[cameraKey];
+        let auxPosition = [...auxCam.position];
+
+        if(Player == "2"){
+            auxPosition[2] = -auxPosition[2];
+        }
+        this.camera = new CGFcamera(auxCam.fov,auxCam.near,auxCam.far,auxPosition,auxCam.target);
+        this.selectedCamera = cameraKey;
+        this.interface.setActiveCamera(this.camera);
+    }
+
+    resetCamera(){
+        this.setCameraMidGame(this.selectedCamera,this.gameOrchestrator.getTurnPlayer());
     }
 
     /**
@@ -152,6 +172,24 @@ class XMLscene extends CGFscene {
     update(time) {
         this.rotateTime = time;
         this.gameOrchestrator.update(time);
+
+        //camera rotation
+        
+        if (this.rotatingCam) {
+            let rotAngle = Math.PI * (time - this.lastTime) / 1500;
+            if(this.camAngle+rotAngle>Math.PI){
+                rotAngle = Math.PI - this.camAngle;
+            }
+			this.camAngle += rotAngle;
+			if (this.camAngle == Math.PI) {
+				rotAngle -= this.camAngle - Math.PI;
+				this.camAngle = 0;
+                this.rotatingCam = false;
+                this.gameOrchestrator.event = Events.WAITING;
+			}
+			this.camera.orbit(vec3.fromValues(0, 1, 0), rotAngle);
+        }
+
         for (let a in this.graph.parsedAnimations) {
             this.graph.parsedAnimations[a].update(time - this.lastTime);
         }

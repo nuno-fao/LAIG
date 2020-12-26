@@ -12,35 +12,40 @@ class GameOrchestrator {
 
         this.turnPlayer = null;
 
+        this.wasAdjusted=false;
+
         this.gameStateSeq = new GameState();
 
         this.gameState = null;
 
-        this.event = Events.WAITING;
+        this.event = Events.LOADING;
     }
 
     display() {
         this.board.display();
     }
 
-    resetGame() {
+    resetGame(){
+        this.event = Events.LOADING;
+
+        this.wasAdjusted=false;
+
         this.board = new Board(this.scene);
         this.lastPicked = null;
 
-        this.player0 = null;
-        this.player1 = null;
-
-        this.turnPlayer = null;
+        this.turnPlayer=null;
 
         this.gameStateSeq = new GameState();
 
         this.gameState = null;
 
-        this.board.loadXMLNodes();
+        this.player0.setPieces(this.board.P1pieces);
+        this.player1.setPieces(this.board.P2pieces);
 
-        this.player0 = new Player(this.board.P1pieces, playerType.human, 0);
-        this.player1 = new Player(this.board.P2pieces, playerType.human, 1);
-        this.turnPlayer = this.player0;
+
+        this.board.loadXMLNodes();
+        this.turnPlayer=this.player0;
+        this.scene.resetCamera();
         this.turnPlayer.makePiecesSelectable(true);
         this.player1.makePiecesSelectable(false);
 
@@ -76,9 +81,16 @@ class GameOrchestrator {
         return this.gameSequence;
     }
 
-    changeTurn() {
-        if (this.turnPlayer == this.player0) {
-            this.turnPlayer = this.player1;
+    changeTurn(){
+        if(this.player1.type==playerType.human && (this.player0.type==playerType.human || !this.wasAdjusted)){
+            this.wasAdjusted=true;
+            this.event = Events.ROTATE_CAM;
+            this.scene.rotatingCam=true;
+            this.scene.resetCamera();
+        }
+
+        if(this.turnPlayer==this.player0){
+            this.turnPlayer=this.player1;
             this.player0.makePiecesSelectable(false);
         } else if (this.turnPlayer == this.player1) {
             this.turnPlayer = this.player0;
@@ -89,11 +101,20 @@ class GameOrchestrator {
 
     }
 
-    applyChangeToPiece(originalCol, originalLine, newCol, newLine) {
-        let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol), parseInt(originalLine));
-        let newTile = this.board.getTileFromCoordinate(parseInt(newCol), parseInt(newLine));
-        this.gameStateSeq.addChange(new GameMove(originalTile.getPiece(), originalTile, newTile, originalTile.getCenterCoords(), newTile.getCenterCoords(), this.board));
-        this.board.movePiece(originalTile.getPiece(), originalTile, newTile);
+    getTurnPlayer(){
+        if(this.turnPlayer==this.player0){
+            return "1";
+        }
+        else if(this.turnPlayer==this.player1){
+            return "2";
+        }
+    }
+
+    applyChangeToPiece(originalCol,originalLine,newCol,newLine){
+        let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol),parseInt(originalLine));
+        let newTile = this.board.getTileFromCoordinate(parseInt(newCol),parseInt(newLine));
+        this.gameStateSeq.addChange(new GameMove(originalTile.getPiece(),originalTile,newTile,originalTile.getCenterCoords(),newTile.getCenterCoords(),this.board));
+        this.board.movePiece(originalTile.getPiece(),originalTile,newTile);
     }
 
     applyPieceRemoval(originalCol, originalLine, color, type) {
@@ -192,13 +213,14 @@ const playerType = {
 }
 
 const Events = {
-    WAITING: 0,
-    REQUESTING: 1,
-    APLLYING: 2,
-    MOVING: 3,
-    REMOVING: 4,
-    MOVE_DONE: 5,
-    END: 6,
-    REWINDING: 7,
-    CAM_CHANGE: 8
+    LOADING : -1,
+    WAITING : 0,
+    REQUESTING : 1,
+    APLLYING : 2,
+    MOVING : 3,
+    REMOVING : 4,
+    MOVE_DONE : 5,
+    END : 6,
+    REWINDING : 7,
+    ROTATE_CAM : 8
 }
