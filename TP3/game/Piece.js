@@ -1,5 +1,3 @@
-var time = 0;
-
 class Piece {
     constructor(scene, type, centerX, centerZ, objectID) {
         this.scene = scene;
@@ -7,6 +5,10 @@ class Piece {
         this.centerX = centerX;
         this.centerZ = centerZ;
         this.objectID = objectID;
+        this.pieceAnimation = null;
+        this.pickedTime = 0;
+
+        this.y = 0;
 
         if (this.type == pieceType.RED) {
             this.nodeID = "P1piece";
@@ -38,9 +40,9 @@ class Piece {
 
     setTile(tile) {
         this.holdingTile = tile;
-        let coords = tile.getCenterCoords();
+        /*let coords = tile.getCenterCoords();
         this.centerX = coords[0];
-        this.centerZ = coords[1];
+        this.centerZ = coords[1];*/
         this.holdingTile = tile;
         this.selectable = false;
         this.wasMoved = true;
@@ -55,6 +57,8 @@ class Piece {
             this.scene.registerForPick(this.objectID, this);
         }
         this.scene.pushMatrix();
+        if (this.pieceAnimation != null)
+            this.pieceAnimation.display();
         if (this.picked)
             this.pickedAnimation();
         this.scene.translate(this.centerX, 0.25, this.centerZ);
@@ -72,20 +76,69 @@ class Piece {
     }
 
     pickedAnimation() {
-        time += 20;
-        let y = ParametricBlend(time)
-        console.log(y);
-        this.scene.translate(0, y * 0.2, 0);
+        this.scene.translate(0, this.y * 0.2, 0);
     }
 
     setPicked(isPicked) {
-        time = 0;
+        this.pickedTime = Date.now();
+        this.y = 0;
         this.picked = isPicked;
+    }
+
+    movePiece(tile, hasYValue) {
+        this.pieceAnimation = new PieceAnimation(this, tile, hasYValue);
+    }
+    stopPiece(tile) {
+        this.pieceAnimation = null;
+        let coords = tile.getCenterCoords();
+        this.centerX = coords[0];
+        this.centerZ = coords[1];
+    }
+    update(time) {
+        if (this.pieceAnimation != null)
+            this.pieceAnimation.update(time);
+        if (this.picked)
+            this.y = ParametricBlend(time - this.pickedTime, 750);
     }
 }
 
-function ParametricBlend(t) {
-    let fullTime = 500.0;
+class PieceAnimation {
+    constructor(piece, destinationTile, hasYValue) {
+        this.piece = piece;
+        this.destinationTile = destinationTile;
+        this.startTime = Date.now();
+        this.startP = piece.getCenterCoords();
+        console.log(this.endP);
+        this.endP = destinationTile.getCenterCoords();
+        this.hasYValue = hasYValue;
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+    update(time) {
+        let t = time - this.startTime;
+        if (t >= 2000) {
+            this.piece.stopPiece(this.destinationTile);
+            return;
+        }
+        t /= 2000.0;
+        let sqt = t * t;
+        let mult = sqt / (2.0 * (sqt - t) + 1.0);
+        console.log(this.endP);
+        console.log(this.startP);
+        this.x = (this.endP[0] - this.startP[0]) * mult;
+        if (this.hasYValue)
+            this.y = ParametricBlend(t * 2000, 2000);
+        this.z = (this.endP[1] - this.startP[1]) * mult;
+    }
+    display() {
+        console.log(this.x, this.y, this.z);
+        if (this.piece != null)
+            this.piece.scene.translate(this.x, this.y, this.z);
+    }
+}
+
+function ParametricBlend(t, fullTime) {
     t = t % fullTime;
     t = t / 1000.0;
     t = t / fullTime * 2000.0
@@ -97,13 +150,4 @@ function ParametricBlend(t) {
         let sqt = t * t;
         return -sqt / (2.0 * (sqt - t) + 1.0) + 1.0;
     }
-    /*else if (t <= 3.0) {
-           t = t - 2.0;
-           let sqt = t * t;
-           return -sqt / (2.0 * (sqt - t) + 1.0);
-       } else {
-           t = t - 3.0;
-           let sqt = t * t;
-           return sqt / (2.0 * (sqt - t) + 1.0) - 1.0;
-       }*/
 }

@@ -12,7 +12,7 @@ class GameOrchestrator {
 
         this.turnPlayer = null;
 
-        this.wasAdjusted=false;
+        this.wasAdjusted = false;
 
         this.gameStateSeq = new GameState();
 
@@ -25,15 +25,15 @@ class GameOrchestrator {
         this.board.display();
     }
 
-    resetGame(){
+    resetGame() {
         this.event = Events.LOADING;
 
-        this.wasAdjusted=false;
+        this.wasAdjusted = false;
 
         this.board = new Board(this.scene);
         this.lastPicked = null;
 
-        this.turnPlayer=null;
+        this.turnPlayer = null;
 
         this.gameStateSeq = new GameState();
 
@@ -44,7 +44,7 @@ class GameOrchestrator {
 
 
         this.board.loadXMLNodes();
-        this.turnPlayer=this.player0;
+        this.turnPlayer = this.player0;
         this.scene.resetCamera();
         this.turnPlayer.makePiecesSelectable(true);
         this.player1.makePiecesSelectable(false);
@@ -66,6 +66,16 @@ class GameOrchestrator {
     }
 
     update(time) {
+        for (let i = 0; i < this.board.P1pieces.length; i++) {
+            this.board.P1pieces[i].update(time);
+        }
+        for (let i = 0; i < this.board.P2pieces.length; i++) {
+            this.board.P2pieces[i].update(time);
+        }
+        //console.log(this.board);
+        /*for (let i = 0; i < this.board.board.length; i++) {
+            this.board.board[i].update(time);
+        }*/
         if (this.event == Events.MOVE_DONE) {
             this.changeTurn();
             this.event = Events.WAITING;
@@ -75,22 +85,23 @@ class GameOrchestrator {
             this.event = Events.REQUESTING;
             this.prologInterface.getAIMove(this.gameState, this.turnPlayer.type);
         }
+        //console.log(this.gameState);
     }
 
     getGameSequence() {
         return this.gameSequence;
     }
 
-    changeTurn(){
-        if(this.player1.type==playerType.human && (this.player0.type==playerType.human || !this.wasAdjusted)){
-            this.wasAdjusted=true;
+    changeTurn() {
+        if (this.player1.type == playerType.human && (this.player0.type == playerType.human || !this.wasAdjusted)) {
+            this.wasAdjusted = true;
             this.event = Events.ROTATE_CAM;
-            this.scene.rotatingCam=true;
+            this.scene.rotatingCam = true;
             this.scene.resetCamera();
         }
 
-        if(this.turnPlayer==this.player0){
-            this.turnPlayer=this.player1;
+        if (this.turnPlayer == this.player0) {
+            this.turnPlayer = this.player1;
             this.player0.makePiecesSelectable(false);
         } else if (this.turnPlayer == this.player1) {
             this.turnPlayer = this.player0;
@@ -101,20 +112,19 @@ class GameOrchestrator {
 
     }
 
-    getTurnPlayer(){
-        if(this.turnPlayer==this.player0){
+    getTurnPlayer() {
+        if (this.turnPlayer == this.player0) {
             return "1";
-        }
-        else if(this.turnPlayer==this.player1){
+        } else if (this.turnPlayer == this.player1) {
             return "2";
         }
     }
 
-    applyChangeToPiece(originalCol,originalLine,newCol,newLine){
-        let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol),parseInt(originalLine));
-        let newTile = this.board.getTileFromCoordinate(parseInt(newCol),parseInt(newLine));
-        this.gameStateSeq.addChange(new GameMove(originalTile.getPiece(),originalTile,newTile,originalTile.getCenterCoords(),newTile.getCenterCoords(),this.board));
-        this.board.movePiece(originalTile.getPiece(),originalTile,newTile);
+    applyChangeToPiece(originalCol, originalLine, newCol, newLine) {
+        let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol), parseInt(originalLine));
+        let newTile = this.board.getTileFromCoordinate(parseInt(newCol), parseInt(newLine));
+        this.gameStateSeq.addChange(new GameMove(originalTile.getPiece(), originalTile, newTile, originalTile.getCenterCoords(), newTile.getCenterCoords(), this.board));
+        this.board.movePiece(originalTile.getPiece(), originalTile, newTile);
     }
 
     applyPieceRemoval(originalCol, originalLine, color, type) {
@@ -213,14 +223,14 @@ const playerType = {
 }
 
 const Events = {
-    LOADING : -1,
-    WAITING : 0,
-    REQUESTING : 1,
-    APLLYING : 2,
-    MOVING : 3,
-    REMOVING : 4,
-    MOVE_DONE : 5,
-    END : 6,
-    REWINDING : 7,
-    ROTATE_CAM : 8
+    LOADING: -1,
+    WAITING: 0,
+    REQUESTING: 1,
+    APLLYING: 2,
+    MOVING: 3,
+    REMOVING: 4,
+    MOVE_DONE: 5,
+    END: 6,
+    REWINDING: 7,
+    ROTATE_CAM: 8
 }
