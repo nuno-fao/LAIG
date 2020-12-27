@@ -90,6 +90,10 @@ class GameOrchestrator {
             {
                 if(this.gameStateSeq.play.piece.update(time) == 0){
                     this.event=Events.MOVING;
+
+                    for(let i in this.gameStateSeq.changes){
+                        this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                    }
                 }
                 break;
             }
@@ -103,6 +107,10 @@ class GameOrchestrator {
                 }
                 if(ended){
                     this.event=Events.REMOVING;
+                    for(let i in this.gameStateSeq.removed){
+                        this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
+                        //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                    }
                 }
                 break;
             }
@@ -127,11 +135,11 @@ class GameOrchestrator {
                         this.event=Events.END;
                     }
                     else{
-                        if(this.changeTurn()){
+                        if(this.changeTurn(true)){
                             this.event=Events.ROTATE_CAM;
                         }
                         else{
-                            this.event=Events.WAITING;
+                            this.event=Events.MOVE_DONE;
                         }
                     }
                 }
@@ -145,6 +153,7 @@ class GameOrchestrator {
             case Events.MOVE_DONE: 
             {
                 this.gameSequence.newMove();
+                console.log('YOYOYO',this.gameSequence);
                 this.event=Events.WAITING;
                 break;
             }
@@ -174,13 +183,16 @@ class GameOrchestrator {
         return this.gameSequence;
     }
 
-    changeTurn() {
+    changeTurn(rotate) {
         let out = false;
-        if (this.player1.type == playerType.human && (this.player0.type == playerType.human || !this.wasAdjusted)) {
-            this.wasAdjusted = true;
-            this.scene.rotatingCam = true;
-            this.scene.resetCamera();
-            out=true;
+
+        if(rotate){
+            if (this.player1.type == playerType.human && (this.player0.type == playerType.human || !this.wasAdjusted)) {
+                this.wasAdjusted = true;
+                this.scene.rotatingCam = true;
+                this.scene.resetCamera();
+                out=true;
+            }
         }
 
         if (this.turnPlayer == this.player0) {
@@ -190,8 +202,16 @@ class GameOrchestrator {
             this.turnPlayer = this.player0;
             this.player1.makePiecesSelectable(false);
         }
+        if(this.turnPlayer.type==playerType.human){
+            this.turnPlayer.makePiecesSelectable(true);
+        }
+        else{
+            this.turnPlayer.makePiecesSelectable(false);
+        }
 
-        this.turnPlayer.makePiecesSelectable(true);
+        if(!rotate){
+            this.scene.resetCamera();
+        }
 
         return out;
 
@@ -209,13 +229,13 @@ class GameOrchestrator {
         let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol), parseInt(originalLine));
         let newTile = this.board.getTileFromCoordinate(parseInt(newCol), parseInt(newLine));
         this.gameStateSeq.addChange(new GameMove(originalTile.getPiece(), originalTile, newTile, originalTile.getCenterCoords(), newTile.getCenterCoords(), this.board));
-        this.board.movePiece(originalTile.getPiece(), originalTile, newTile);
+        //this.board.movePiece(originalTile.getPiece(), originalTile, newTile);
     }
 
     applyPieceRemoval(originalCol, originalLine, color, type) {
         let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol), parseInt(originalLine));
         this.gameStateSeq.addRemoved(new GameMove(originalTile.getPiece(), originalTile, null, originalTile.getCenterCoords(), [color, type], this.board));
-        this.board.movePieceToCollectZone(originalTile, color, type);
+        //this.board.movePieceToCollectZone(originalTile, color, type);
     }
 
     updatePoints(winner, p0p, p1p) {
@@ -263,6 +283,7 @@ class GameOrchestrator {
     movePiece(piece, tile) {
         this.gameStateSeq.addPrologState(this.gameState);
         this.gameStateSeq.addPlay(new GameMove(piece, null, tile, piece.getCenterCoords(), tile.getCenterCoords(), this.board));
+        console.log('GAMESTATESEQ',this.gameStateSeq);
         this.board.movePieceToBoard(piece, tile);
         this.event=Events.APLLYING;
         //console.log(this.generateGameState());

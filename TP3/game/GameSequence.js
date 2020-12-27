@@ -13,6 +13,7 @@ class GameSequence{
             //do nothing
         }
         else{
+            console.log(this.moves);
             this.applyChangesToOrchestrator(this.moves[this.moves.length-1]);
             this.moves.pop();
             if(this.gameOrchestrator.turnPlayer.type != playerType.human){
@@ -25,11 +26,18 @@ class GameSequence{
     // }
 
     applyChangesToOrchestrator(move){
+        if(this.gameOrchestrator.lastPicked instanceof Piece){
+            this.gameOrchestrator.lastPicked.picked = false;
+        }
+        this.gameOrchestrator.lastPicked = null;
         //update removed pieces
         for(let i in move.removed){
             move.removed[i].piece.removeTile();
             move.removed[i].piece.setTile(move.removed[i].origin);
             move.removed[i].origin.setPiece(move.removed[i].piece);
+
+            move.removed[i].piece.centerX = move.removed[i].origin.getCenterCoords[0];
+            move.removed[i].piece.centerZ = move.removed[i].origin.getCenterCoords[1];
 
             if(move.removed[i].destCoords[0]=='red'){
                 if(move.removed[i].destCoords[1]=='risk'){
@@ -51,7 +59,15 @@ class GameSequence{
 
         //update changes on board
         for(let i in move.changes){
-            this.gameOrchestrator.board.movePiece( move.changes[i].destination.getPiece(), move.changes[i].destination,move.changes[i].origin);
+            move.changes[i].piece.setTile(move.changes[i].origin);
+            move.changes[i].origin.setPiece(move.changes[i].piece);
+            
+            move.changes[i].piece.centerX = move.changes[i].origin.getCenterCoords[0];
+            move.changes[i].piece.centerZ = move.changes[i].origin.getCenterCoords[1];
+
+            move.changes[i].destination.removePiece();
+
+            //this.gameOrchestrator.board.movePiece( move.changes[i].destination.getPiece(), move.changes[i].destination,move.changes[i].origin);
         }
         
         //revert play
@@ -70,7 +86,7 @@ class GameSequence{
         this.gameOrchestrator.gameState=move.prologState;
 
         //change turn
-        this.gameOrchestrator.changeTurn();
+        this.gameOrchestrator.changeTurn(false);
 
     }
 
