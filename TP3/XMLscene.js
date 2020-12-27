@@ -170,7 +170,7 @@ class XMLscene extends CGFscene {
     }
 
     update(time) {
-        this.rotateTime = time;
+        //this.rotateTime = time;
         this.gameOrchestrator.update(time);
 
         //camera rotation
