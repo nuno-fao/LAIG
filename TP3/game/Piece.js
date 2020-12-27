@@ -96,7 +96,7 @@ class Piece {
     }
     update(time) {
         if (this.pieceAnimation != null)
-            this.pieceAnimation.update(time);
+            return this.pieceAnimation.update(time);
         if (this.picked)
             this.y = ParametricBlend(time - this.pickedTime, 750);
     }
@@ -108,7 +108,7 @@ class PieceAnimation {
         this.destinationTile = destinationTile;
         this.startTime = Date.now();
         this.startP = piece.getCenterCoords();
-        console.log(this.endP);
+        //console.log(this.endP);
         this.endP = destinationTile.getCenterCoords();
         this.hasYValue = hasYValue;
         this.x = 0;
@@ -119,20 +119,21 @@ class PieceAnimation {
         let t = time - this.startTime;
         if (t >= 2000) {
             this.piece.stopPiece(this.destinationTile);
-            return;
+            return 0;
         }
         t /= 2000.0;
         let sqt = t * t;
         let mult = sqt / (2.0 * (sqt - t) + 1.0);
-        console.log(this.endP);
-        console.log(this.startP);
+        // console.log(this.endP);
+        // console.log(this.startP);
         this.x = (this.endP[0] - this.startP[0]) * mult;
         if (this.hasYValue)
             this.y = ParametricBlend(t * 2000, 2000);
         this.z = (this.endP[1] - this.startP[1]) * mult;
+        return 1;
     }
     display() {
-        console.log(this.x, this.y, this.z);
+        // console.log(this.x, this.y, this.z);
         if (this.piece != null)
             this.piece.scene.translate(this.x, this.y, this.z);
     }

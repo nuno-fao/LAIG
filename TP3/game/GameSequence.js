@@ -3,7 +3,7 @@ class GameSequence{
         this.gameOrchestrator=gameOrchestrator;
         this.moves=[];
     }
-    addMove(){
+    newMove(){
         this.moves.push(this.gameOrchestrator.gameStateSeq);
         this.gameOrchestrator.gameStateSeq = new GameState();
     }
@@ -83,6 +83,7 @@ class GameState{
         this.removed = [];
         this.points = [];
         this.prologState = null;
+        this.newPoints = null;
     }
 
     addPlay(play){
@@ -103,5 +104,9 @@ class GameState{
 
     addPrologState(state){
         this.prologState=state;
+    }
+
+    addNewPoints(newPoints){
+        this.newPoints = newPoints;
     }
 }

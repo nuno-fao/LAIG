@@ -185,7 +185,7 @@ class XMLscene extends CGFscene {
                 rotAngle -= this.camAngle - Math.PI;
                 this.camAngle = 0;
                 this.rotatingCam = false;
-                this.gameOrchestrator.event = Events.WAITING;
+                this.gameOrchestrator.event = Events.MOVE_DONE;
             }
             this.camera.orbit(vec3.fromValues(0, 1, 0), rotAngle);
         }

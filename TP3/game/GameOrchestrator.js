@@ -14,8 +14,10 @@ class GameOrchestrator {
 
         this.wasAdjusted = false;
 
+        //will hold every change that happens on the board due to a single move
         this.gameStateSeq = new GameState();
 
+        //prolog gamestate for communication
         this.gameState = null;
 
         this.event = Events.LOADING;
@@ -66,25 +68,105 @@ class GameOrchestrator {
     }
 
     update(time) {
-        for (let i = 0; i < this.board.P1pieces.length; i++) {
-            this.board.P1pieces[i].update(time);
+        console.log(this.event);
+        switch(this.event){
+            case Events.WAITING: 
+            {
+                if(this.lastPicked!=null && this.lastPicked instanceof Piece){
+                    this.lastPicked.update(time);
+                }
+                if (this.turnPlayer != null && this.turnPlayer.type != playerType.human && this.event == Events.WAITING) {
+                    this.event = Events.REQUESTING;
+                    this.prologInterface.getAIMove(this.gameState, this.turnPlayer.type);
+                }
+                break;
+            }
+            case Events.REQUESTING: 
+            {
+                //do nothing
+                break;
+            }
+            case Events.APLLYING: 
+            {
+                if(this.gameStateSeq.play.piece.update(time) == 0){
+                    this.event=Events.MOVING;
+                }
+                break;
+            }
+            case Events.MOVING: 
+            {
+                let ended = true; 
+                for(let i in this.gameStateSeq.changes){
+                    if(this.gameStateSeq.changes[i].piece.update(time) != 0){
+                        ended = false;
+                    }
+                }
+                if(ended){
+                    this.event=Events.REMOVING;
+                }
+                break;
+            }
+            case Events.REMOVING: 
+            {
+                let ended = true; 
+                for(let i in this.gameStateSeq.removed){
+                    if(this.gameStateSeq.removed[i].piece.update(time) != 0){
+                        ended = false;
+                    }
+                }
+                if(ended){
+                    this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
+                    if (this.gameStateSeq.newPoints[0] != "-1") {
+                        if (this.gameStateSeq.newPoints[0] == "0") {
+                            alert("Player 1 wins!");
+                        } else if (this.gameStateSeq.newPoints[0] == "1") {
+                            alert("Player 2 wins!");
+                        } else {
+                            alert("The game ended in a tie!");
+                        }
+                        this.event=Events.END;
+                    }
+                    else{
+                        if(this.changeTurn()){
+                            this.event=Events.ROTATE_CAM;
+                        }
+                        else{
+                            this.event=Events.WAITING;
+                        }
+                    }
+                }
+                break;
+            }
+            case Events.ROTATE_CAM: 
+            {
+                //do nothing
+                break;
+            }
+            case Events.MOVE_DONE: 
+            {
+                this.gameSequence.newMove();
+                this.event=Events.WAITING;
+                break;
+            }
+            default:
+                
+                break;
         }
-        for (let i = 0; i < this.board.P2pieces.length; i++) {
-            this.board.P2pieces[i].update(time);
-        }
+        // for (let i = 0; i < this.board.P1pieces.length; i++) {
+        //     this.board.P1pieces[i].update(time);
+        // }
+        // for (let i = 0; i < this.board.P2pieces.length; i++) {
+        //     this.board.P2pieces[i].update(time);
+        // }
         //console.log(this.board);
         /*for (let i = 0; i < this.board.board.length; i++) {
             this.board.board[i].update(time);
         }*/
-        if (this.event == Events.MOVE_DONE) {
-            this.changeTurn();
-            this.event = Events.WAITING;
-
-        }
-        if (this.turnPlayer != null && this.turnPlayer.type != playerType.human && this.event == Events.WAITING) {
-            this.event = Events.REQUESTING;
-            this.prologInterface.getAIMove(this.gameState, this.turnPlayer.type);
-        }
+        // if (this.event == Events.MOVE_DONE) {
+        //     this.changeTurn();
+        //     this.event = Events.WAITING;
+        // }
+        
         //console.log(this.gameState);
     }
 
@@ -93,11 +175,12 @@ class GameOrchestrator {
     }
 
     changeTurn() {
+        let out = false;
         if (this.player1.type == playerType.human && (this.player0.type == playerType.human || !this.wasAdjusted)) {
             this.wasAdjusted = true;
-            this.event = Events.ROTATE_CAM;
             this.scene.rotatingCam = true;
             this.scene.resetCamera();
+            out=true;
         }
 
         if (this.turnPlayer == this.player0) {
@@ -109,6 +192,8 @@ class GameOrchestrator {
         }
 
         this.turnPlayer.makePiecesSelectable(true);
+
+        return out;
 
     }
 
@@ -135,16 +220,7 @@ class GameOrchestrator {
 
     updatePoints(winner, p0p, p1p) {
         this.gameStateSeq.addPoints(this.board.P1SS.getText(), this.board.P2SS.getText());
-        this.board.updatePoints(p0p, p1p);
-        if (winner != "-1") {
-            if (winner == "0") {
-                alert("Player 1 wins!");
-            } else if (winner == "1") {
-                alert("Player 2 wins!");
-            } else {
-                alert("The game ended in a tie!");
-            }
-        }
+        this.gameStateSeq.addNewPoints([winner, p0p, p1p]);
     }
 
     managePick(mode, results) {
@@ -188,6 +264,7 @@ class GameOrchestrator {
         this.gameStateSeq.addPrologState(this.gameState);
         this.gameStateSeq.addPlay(new GameMove(piece, null, tile, piece.getCenterCoords(), tile.getCenterCoords(), this.board));
         this.board.movePieceToBoard(piece, tile);
+        this.event=Events.APLLYING;
         //console.log(this.generateGameState());
     }
 
