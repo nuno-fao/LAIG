@@ -106,16 +106,20 @@ class PieceAnimation {
     constructor(piece, destinationTile, hasYValue) {
         this.piece = piece;
         this.destinationTile = destinationTile;
-        this.startTime = Date.now();
         this.startP = piece.getCenterCoords();
         //console.log(this.endP);
         this.endP = destinationTile.getCenterCoords();
+        this.startTime = 0;
         this.hasYValue = hasYValue;
         this.x = 0;
         this.y = 0;
         this.z = 0;
     }
     update(time) {
+        if (this.startTime == 0) {
+            this.startTime = time;
+            return 1;
+        }
         let t = time - this.startTime;
         if (t >= 2000) {
             this.piece.stopPiece(this.destinationTile);
