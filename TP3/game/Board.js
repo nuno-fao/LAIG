@@ -5,8 +5,9 @@ class Board {
         this.P1pieces = [];
         this.P2pieces = [];
         this.collectZones = null;
-        this.P1SS = new MySpriteText(this.scene, "0");
-        this.P2SS = new MySpriteText(this.scene, "0");
+        this.P1SS = new MySpriteText(this.scene, "00");
+        this.P2SS = new MySpriteText(this.scene, "00");
+        this.time = new MySpriteText(this.scene, "00");;
 
         this.initBuffers();
     }
@@ -158,6 +159,13 @@ class Board {
         this.collectZones['BR'].loadTextures();
     }
 
+    updateRoundTime(time){
+        if(time.length==1){
+            time="0"+time;
+        }
+        this.time.updateText(time);
+    }
+
     movePieceToBoard(piece, tile) {
         if (tile.getPiece() == null && piece.getTile() == null) {
             piece.movePiece(tile, true);
@@ -217,6 +225,12 @@ class Board {
     }
 
     updatePoints(p0, p1) {
+        if(p0.length==1){
+            p0 = "0"+p0;
+        }
+        if(p1.length==1){
+            p1 = "0"+p1;
+        }
         this.P1SS.updateText(p0);
         this.P2SS.updateText(p1);
     }
@@ -263,17 +277,24 @@ class Board {
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(9, 0.5, -2);
+        this.scene.translate(9, 0.5, -2.5);
         this.scene.scale(1, 2, 2);
         this.scene.rotate(-Math.PI / 2, 0, 1, 0);
         this.P2SS.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(9, 0.5, 2);
+        this.scene.translate(9, 0.5, 3);
         this.scene.scale(1, 2, 2);
         this.scene.rotate(-Math.PI / 2, 0, 1, 0);
         this.P1SS.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(9, 3, 0.35);
+        this.scene.scale(1, 2, 2);
+        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+        this.time.display();
         this.scene.popMatrix();
 
         for (let i in this.P1pieces) {

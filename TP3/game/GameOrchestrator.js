@@ -21,6 +21,12 @@ class GameOrchestrator {
         this.gameState = null;
 
         this.event = Events.LOADING;
+
+        this.roundTime = null;
+        this.startTime = null;
+        this.pauseTime = null;
+        this.startPause = null;
+        this.pauseSum = 0;
     }
 
     display() {
@@ -29,6 +35,9 @@ class GameOrchestrator {
 
     resetGame() {
         this.event = Events.LOADING;
+
+        this.scene.camAngle = 0;
+        this.scene.rotatingCam = false;
 
         this.wasAdjusted = false;
 
@@ -51,6 +60,12 @@ class GameOrchestrator {
         this.turnPlayer.makePiecesSelectable(true);
         this.player1.makePiecesSelectable(false);
 
+        this.roundTime = null;
+        this.startTime = null;
+        this.pauseTime = null;
+        this.startPause = null;
+        this.pauseSum = 0;
+
         this.prologInterface.setInitialState();
     }
 
@@ -68,7 +83,7 @@ class GameOrchestrator {
     }
 
     update(time) {
-        console.log(this.event);
+        //console.log(this.event);
         switch(this.event){
             case Events.WAITING: 
             {
@@ -78,6 +93,22 @@ class GameOrchestrator {
                 if (this.turnPlayer != null && this.turnPlayer.type != playerType.human && this.event == Events.WAITING) {
                     this.event = Events.REQUESTING;
                     this.prologInterface.getAIMove(this.gameState, this.turnPlayer.type);
+                }
+                if(this.startTime==null){
+                    this.startTime=time;
+                }
+                else{
+                    let seconds = (this.roundTime - Math.floor((time-this.startTime)/1000) + this.pauseSum);
+                    this.board.updateRoundTime(seconds.toString());
+                    if(seconds <= 0){
+                        this.event=Events.END;
+                        if(this.turnPlayer==this.player0){
+                            alert("Player 1 ran out of time. Player 2 wins!");
+                        }
+                        else{
+                            alert("Player 2 ran out of time. Player 1 wins!");
+                        }
+                    }
                 }
                 break;
             }
@@ -154,8 +185,16 @@ class GameOrchestrator {
             case Events.MOVE_DONE: 
             {
                 this.gameSequence.newMove();
-                console.log('YOYOYO',this.gameSequence);
                 this.event=Events.WAITING;
+                break;
+            }
+            case Events.PAUSE: 
+            {
+                
+                if(this.startPause==null){
+                    this.startPause=time;
+                }
+                this.pauseTime = time;
                 break;
             }
             default:
@@ -184,8 +223,23 @@ class GameOrchestrator {
         return this.gameSequence;
     }
 
+    startGame(){
+        this.event=Events.WAITING;
+        this.roundTime=90;
+        this.startTime = null;
+        this.pauseTime = null;
+        this.startPause = null;
+        this.pauseSum = 0;
+        this.board.updateRoundTime(this.roundTime.toString());
+    }
+
     changeTurn(rotate) {
         let out = false;
+
+        this.startTime = null;
+        this.pauseTime = null;
+        this.startPause = null;
+        this.pauseSum = 0;
 
         if(rotate){
             if (this.player1.type == playerType.human && (this.player0.type == playerType.human || !this.wasAdjusted)) {
@@ -284,7 +338,6 @@ class GameOrchestrator {
     movePiece(piece, tile) {
         this.gameStateSeq.addPrologState(this.gameState);
         this.gameStateSeq.addPlay(new GameMove(piece, null, tile, piece.getCenterCoords(), tile.getCenterCoords(), this.board));
-        console.log('GAMESTATESEQ',this.gameStateSeq);
         this.board.movePieceToBoard(piece, tile);
         this.event=Events.APLLYING;
         //console.log(this.generateGameState());
@@ -313,7 +366,20 @@ class GameOrchestrator {
         }
 
     }
+
+    pause(){
+        if(this.event==Events.WAITING){
+            this.event=Events.PAUSE;
+        }
+        else if(this.event==Events.PAUSE){
+            this.pauseSum += Math.floor((this.pauseTime-this.startPause)/1000);
+            this.pauseTime = null;
+            this.startPause = null;
+            this.event=Events.WAITING;
+        }
+    }
 }
+
 
 const playerType = {
     human: 0,
@@ -331,5 +397,7 @@ const Events = {
     MOVE_DONE: 5,
     END: 6,
     REWINDING: 7,
-    ROTATE_CAM: 8
+    ROTATE_CAM: 8,
+    MOVIE: 9,
+    PAUSE: 10,
 }
