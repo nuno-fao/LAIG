@@ -71,6 +71,7 @@ class MyInterface extends CGFinterface {
         folder.add({pause : this.scene.gameOrchestrator.pause.bind(this.scene.gameOrchestrator)},'pause').name('Pause');
         folder.add(this.scene.gameOrchestrator.player0, 'type', playerType).name('Player 1');
         folder.add(this.scene.gameOrchestrator.player1, 'type', playerType).name('Player 2');
+        folder.add({move : this.scene.gameOrchestrator.playMovie.bind(this.scene.gameOrchestrator)},'move').name('Play Movie');
         folder.add({resetCam : this.scene.resetCamera.bind(this.scene)},'resetCam').name('Reset Camera');
         folder.add({reset : this.scene.gameOrchestrator.resetGame.bind(this.scene.gameOrchestrator)},'reset').name('Restart Game');
         folder.open();

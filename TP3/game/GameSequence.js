@@ -22,6 +22,12 @@ class GameSequence{
             }
         }
     }
+
+    undoAll(){
+        for(let i = this.moves.length - 1;i>=0;i--){
+            this.applyChangesToOrchestrator(this.moves[i]);
+        }
+    }
     // moveReplay(){
     // }
 
@@ -102,6 +108,7 @@ class GameState{
         this.points = [];
         this.prologState = null;
         this.newPoints = null;
+        this.newPrologState = null;
     }
 
     addPlay(play){
@@ -126,6 +133,10 @@ class GameState{
 
     addNewPoints(newPoints){
         this.newPoints = newPoints;
+    }
+
+    addNewPrologState(newState){
+        this.newPrologState = newState;
     }
 
     updateRemovals(){

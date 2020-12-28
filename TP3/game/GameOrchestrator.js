@@ -27,6 +27,9 @@ class GameOrchestrator {
         this.pauseTime = null;
         this.startPause = null;
         this.pauseSum = 0;
+
+        this.playingMovie = -1;
+
     }
 
     display() {
@@ -38,6 +41,10 @@ class GameOrchestrator {
 
         this.scene.camAngle = 0;
         this.scene.rotatingCam = false;
+
+        if(this.playingMovie==-1){
+            this.gameSequence = new GameSequence(this);
+        }
 
         this.wasAdjusted = false;
 
@@ -83,79 +90,98 @@ class GameOrchestrator {
     }
 
     update(time) {
-        //console.log(this.event);
-        switch(this.event){
-            case Events.WAITING: 
-            {
-                if(this.lastPicked!=null && this.lastPicked instanceof Piece){
-                    this.lastPicked.update(time);
+        console.log(this.event);
+
+        if(this.playingMovie == -1){
+            switch(this.event){
+                case Events.WAITING: 
+                {
+                    if(this.lastPicked!=null && this.lastPicked instanceof Piece){
+                        this.lastPicked.update(time);
+                    }
+                    if (this.turnPlayer != null && this.turnPlayer.type != playerType.human && this.event == Events.WAITING) {
+                        this.event = Events.REQUESTING;
+                        this.prologInterface.getAIMove(this.gameState, this.turnPlayer.type);
+                    }
+                    if(this.startTime==null){
+                        this.startTime=time;
+                    }
+                    else{
+                        let seconds = (this.roundTime - Math.floor((time-this.startTime)/1000) + this.pauseSum);
+                        this.board.updateRoundTime(seconds.toString());
+                        if(seconds <= 0){
+                            this.event=Events.END;
+                            if(this.turnPlayer==this.player0){
+                                alert("Player 1 ran out of time. Player 2 wins!");
+                            }
+                            else{
+                                alert("Player 2 ran out of time. Player 1 wins!");
+                            }
+                        }
+                    }
+                    break;
                 }
-                if (this.turnPlayer != null && this.turnPlayer.type != playerType.human && this.event == Events.WAITING) {
-                    this.event = Events.REQUESTING;
-                    this.prologInterface.getAIMove(this.gameState, this.turnPlayer.type);
+                case Events.REQUESTING: 
+                {
+                    //do nothing
+                    break;
                 }
-                if(this.startTime==null){
-                    this.startTime=time;
+                case Events.APLLYING: 
+                {
+                    if(this.gameStateSeq.play.piece.update(time) == 0){
+                        this.event=Events.MOVING;
+    
+                        for(let i in this.gameStateSeq.changes){
+                            this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                        }
+                    }
+                    break;
                 }
-                else{
-                    let seconds = (this.roundTime - Math.floor((time-this.startTime)/1000) + this.pauseSum);
-                    this.board.updateRoundTime(seconds.toString());
-                    if(seconds <= 0){
-                        this.event=Events.END;
-                        if(this.turnPlayer==this.player0){
-                            alert("Player 1 ran out of time. Player 2 wins!");
+                case Events.MOVING: 
+                {
+                    let ended = true; 
+                    for(let i in this.gameStateSeq.changes){
+                        if(this.gameStateSeq.changes[i].piece.update(time) != 0){
+                            ended = false;
+                        }
+                    }
+                    if(ended){
+                        this.gameStateSeq.updateRemovals();
+                        this.event=Events.REMOVING;
+                        for(let i in this.gameStateSeq.removed){
+                            this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
+                            //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                        }
+                    }
+                    break;
+                }
+                case Events.REMOVING: 
+                {
+                    let ended = true; 
+                    for(let i in this.gameStateSeq.removed){
+                        if(this.gameStateSeq.removed[i].piece.update(time) != 0){
+                            ended = false;
+                        }
+                    }
+                    if(ended){
+                        this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
+                        
+                        if(this.changeTurn(true)){
+                            this.event=Events.ROTATE_CAM;
                         }
                         else{
-                            alert("Player 2 ran out of time. Player 1 wins!");
+                            this.event=Events.MOVE_DONE;
                         }
                     }
+                    break;
                 }
-                break;
-            }
-            case Events.REQUESTING: 
-            {
-                //do nothing
-                break;
-            }
-            case Events.APLLYING: 
-            {
-                if(this.gameStateSeq.play.piece.update(time) == 0){
-                    this.event=Events.MOVING;
-
-                    for(let i in this.gameStateSeq.changes){
-                        this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
-                    }
+                case Events.ROTATE_CAM: 
+                {
+                    //do nothing
+                    break;
                 }
-                break;
-            }
-            case Events.MOVING: 
-            {
-                let ended = true; 
-                for(let i in this.gameStateSeq.changes){
-                    if(this.gameStateSeq.changes[i].piece.update(time) != 0){
-                        ended = false;
-                    }
-                }
-                if(ended){
-                    this.gameStateSeq.updateRemovals();
-                    this.event=Events.REMOVING;
-                    for(let i in this.gameStateSeq.removed){
-                        this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
-                        //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
-                    }
-                }
-                break;
-            }
-            case Events.REMOVING: 
-            {
-                let ended = true; 
-                for(let i in this.gameStateSeq.removed){
-                    if(this.gameStateSeq.removed[i].piece.update(time) != 0){
-                        ended = false;
-                    }
-                }
-                if(ended){
-                    this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
+                case Events.MOVE_DONE: 
+                {
                     if (this.gameStateSeq.newPoints[0] != "-1") {
                         if (this.gameStateSeq.newPoints[0] == "0") {
                             alert("Player 1 wins!");
@@ -167,56 +193,117 @@ class GameOrchestrator {
                         this.event=Events.END;
                     }
                     else{
-                        if(this.changeTurn(true)){
-                            this.event=Events.ROTATE_CAM;
+                        this.event=Events.WAITING;
+                    }
+                    this.gameSequence.newMove();
+                    break;
+                }
+                case Events.PAUSE: 
+                {
+                    
+                    if(this.startPause==null){
+                        this.startPause=time;
+                    }
+                    this.pauseTime = time;
+                    break;
+                }
+                default:
+                    
+                    break;
+            }
+        }
+
+
+        //MOVIE
+        else {
+            switch(this.event){
+                case Events.WAITING: 
+                {
+                    //make move
+                    this.gameStateSeq=this.gameSequence.moves[this.playingMovie];
+                    this.movePieceReplay(this.gameStateSeq.play.piece,this.gameStateSeq.play.destination);
+                    console.log(this.gameStateSeq);
+                    break;
+                }
+                case Events.APLLYING: 
+                {
+                    if(this.gameStateSeq.play.piece.update(time) == 0){
+                        this.event=Events.MOVING;
+    
+                        for(let i in this.gameStateSeq.changes){
+                            this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                        }
+                    }
+                    break;
+                }
+                case Events.MOVING: 
+                {
+                    let ended = true; 
+                    for(let i in this.gameStateSeq.changes){
+                        if(this.gameStateSeq.changes[i].piece.update(time) != 0){
+                            ended = false;
+                        }
+                    }
+                    if(ended){
+                        this.gameStateSeq.updateRemovals();
+                        this.event=Events.REMOVING;
+                        for(let i in this.gameStateSeq.removed){
+                            this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
+                            //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                        }
+                    }
+                    break;
+                }
+                case Events.REMOVING: 
+                {
+                    let ended = true; 
+                    for(let i in this.gameStateSeq.removed){
+                        if(this.gameStateSeq.removed[i].piece.update(time) != 0){
+                            ended = false;
+                        }
+                    }
+                    if(ended){
+                        this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
+                        if (this.gameStateSeq.newPoints[0] != "-1") {
+                            if (this.gameStateSeq.newPoints[0] == "0") {
+                                alert("Player 1 wins!");
+                            } else if (this.gameStateSeq.newPoints[0] == "1") {
+                                alert("Player 2 wins!");
+                            } else {
+                                alert("The game ended in a tie!");
+                            }
+                            this.event=Events.END;
                         }
                         else{
+                            this.changeTurn(false);
                             this.event=Events.MOVE_DONE;
                         }
                     }
+                    break;
                 }
-                break;
-            }
-            case Events.ROTATE_CAM: 
-            {
-                //do nothing
-                break;
-            }
-            case Events.MOVE_DONE: 
-            {
-                this.gameSequence.newMove();
-                this.event=Events.WAITING;
-                break;
-            }
-            case Events.PAUSE: 
-            {
-                
-                if(this.startPause==null){
-                    this.startPause=time;
+                case Events.ROTATE_CAM: 
+                {
+                    //do nothing
+                    break;
                 }
-                this.pauseTime = time;
-                break;
+                case Events.MOVE_DONE: 
+                {
+                    //this.gameSequence.newMove();
+                    if(this.gameSequence.moves.length==this.playingMovie+1){
+                        this.playingMovie=-1;
+                    }
+                    else{
+                        this.playingMovie++;
+                        
+                    }
+                    this.event=Events.WAITING;
+                    break;
+                }
+                default:
+                    
+                    break;
             }
-            default:
-                
-                break;
         }
-        // for (let i = 0; i < this.board.P1pieces.length; i++) {
-        //     this.board.P1pieces[i].update(time);
-        // }
-        // for (let i = 0; i < this.board.P2pieces.length; i++) {
-        //     this.board.P2pieces[i].update(time);
-        // }
-        //console.log(this.board);
-        /*for (let i = 0; i < this.board.board.length; i++) {
-            this.board.board[i].update(time);
-        }*/
-        // if (this.event == Events.MOVE_DONE) {
-        //     this.changeTurn();
-        //     this.event = Events.WAITING;
-        // }
-        
-        //console.log(this.gameState);
     }
 
     getGameSequence() {
@@ -264,7 +351,7 @@ class GameOrchestrator {
             this.turnPlayer.makePiecesSelectable(false);
         }
 
-        if(!rotate){
+        if(!rotate && this.playingMovie==-1){
             this.scene.resetCamera();
         }
 
@@ -343,6 +430,11 @@ class GameOrchestrator {
         //console.log(this.generateGameState());
     }
 
+    movePieceReplay(piece, tile){
+        this.board.movePieceToBoard(piece, tile);
+        this.event=Events.APLLYING;
+    }
+
     generateGameState() {
         return [this.board.buildBoardString(), [this.player0.getRedPieces(), this.player0.getBluePieces(), this.player1.getRedPieces(), this.player1.getBluePieces()],
             [this.player0.getBonusPieces(), this.player1.getBonusPieces(), this.player0.getRiskPieces(), this.player1.getRiskPieces()],
@@ -353,7 +445,7 @@ class GameOrchestrator {
 
     undo() {
         if (this.player0.type == playerType.human || this.player1.type == playerType.human) {
-            if (this.event == Events.WAITING) {
+            if (this.event == Events.WAITING || this.event == Events.END) {
                 this.event = Events.REWINDING;
                 this.gameSequence.undo();
                 this.event = Events.WAITING;
@@ -368,7 +460,7 @@ class GameOrchestrator {
     }
 
     pause(){
-        if(this.event==Events.WAITING){
+        if(this.playingMovie==-1 && this.event==Events.WAITING){
             this.event=Events.PAUSE;
         }
         else if(this.event==Events.PAUSE){
@@ -376,6 +468,14 @@ class GameOrchestrator {
             this.pauseTime = null;
             this.startPause = null;
             this.event=Events.WAITING;
+        }
+    }
+
+    playMovie(){
+        if(this.event==Events.END && this.gameSequence.moves.length>0){
+            this.playingMovie=0;
+            this.event=Events.WAITING;
+            this.gameSequence.undoAll();
         }
     }
 }
@@ -398,6 +498,5 @@ const Events = {
     END: 6,
     REWINDING: 7,
     ROTATE_CAM: 8,
-    MOVIE: 9,
-    PAUSE: 10,
+    PAUSE: 9,
 }
