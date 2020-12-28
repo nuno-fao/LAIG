@@ -106,6 +106,7 @@ class GameOrchestrator {
                     }
                 }
                 if(ended){
+                    this.gameStateSeq.updateRemovals();
                     this.event=Events.REMOVING;
                     for(let i in this.gameStateSeq.removed){
                         this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
@@ -234,7 +235,7 @@ class GameOrchestrator {
 
     applyPieceRemoval(originalCol, originalLine, color, type) {
         let originalTile = this.board.getTileFromCoordinate(parseInt(originalCol), parseInt(originalLine));
-        this.gameStateSeq.addRemoved(new GameMove(originalTile.getPiece(), originalTile, null, originalTile.getCenterCoords(), [color, type], this.board));
+        this.gameStateSeq.addRemoved(new GameMove(null, originalTile, null, originalTile.getCenterCoords(), [color, type], this.board));
         //this.board.movePieceToCollectZone(originalTile, color, type);
     }
 

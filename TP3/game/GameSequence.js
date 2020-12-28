@@ -125,4 +125,10 @@ class GameState{
     addNewPoints(newPoints){
         this.newPoints = newPoints;
     }
+
+    updateRemovals(){
+        for (let i in this.removed){
+            this.removed[i].piece = this.removed[i].origin.getPiece();
+        }
+    }
 }
