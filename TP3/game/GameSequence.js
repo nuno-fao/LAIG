@@ -36,8 +36,8 @@ class GameSequence{
             move.removed[i].piece.setTile(move.removed[i].origin);
             move.removed[i].origin.setPiece(move.removed[i].piece);
 
-            move.removed[i].piece.centerX = move.removed[i].origin.getCenterCoords[0];
-            move.removed[i].piece.centerZ = move.removed[i].origin.getCenterCoords[1];
+            move.removed[i].piece.centerX = move.removed[i].origin.getCenterCoords()[0];
+            move.removed[i].piece.centerZ = move.removed[i].origin.getCenterCoords()[1];
 
             if(move.removed[i].destCoords[0]=='red'){
                 if(move.removed[i].destCoords[1]=='risk'){
@@ -59,13 +59,15 @@ class GameSequence{
 
         //update changes on board
         for(let i in move.changes){
+            move.changes[i].destination.removePiece();
+
             move.changes[i].piece.setTile(move.changes[i].origin);
             move.changes[i].origin.setPiece(move.changes[i].piece);
             
-            move.changes[i].piece.centerX = move.changes[i].origin.getCenterCoords[0];
-            move.changes[i].piece.centerZ = move.changes[i].origin.getCenterCoords[1];
+            move.changes[i].piece.centerX = move.changes[i].origin.getCenterCoords()[0];
+            move.changes[i].piece.centerZ = move.changes[i].origin.getCenterCoords()[1];
 
-            move.changes[i].destination.removePiece();
+            
 
             //this.gameOrchestrator.board.movePiece( move.changes[i].destination.getPiece(), move.changes[i].destination,move.changes[i].origin);
         }

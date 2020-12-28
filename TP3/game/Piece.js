@@ -39,7 +39,7 @@ class Piece {
     }
 
     setTile(tile) {
-        this.holdingTile = tile;
+        //this.holdingTile = tile;
         /*let coords = tile.getCenterCoords();
         this.centerX = coords[0];
         this.centerZ = coords[1];*/
