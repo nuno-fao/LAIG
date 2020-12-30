@@ -36,13 +36,18 @@ class GameOrchestrator {
         this.board.display();
     }
 
+    checkProlog() {
+        return this.prologInterface.serverStatus;
+    }
+
+
     resetGame() {
         this.event = Events.LOADING;
 
         this.scene.camAngle = 0;
         this.scene.rotatingCam = false;
 
-        if(this.playingMovie==-1){
+        if (this.playingMovie == -1) {
             this.gameSequence = new GameSequence(this);
         }
 
@@ -92,178 +97,93 @@ class GameOrchestrator {
     update(time) {
         console.log(this.event);
 
-        if(this.playingMovie == -1){
-            switch(this.event){
-                case Events.WAITING: 
-                {
-                    if(this.lastPicked!=null && this.lastPicked instanceof Piece){
-                        this.lastPicked.update(time);
-                    }
-                    if (this.turnPlayer != null && this.turnPlayer.type != playerType.human && this.event == Events.WAITING) {
-                        this.event = Events.REQUESTING;
-                        this.prologInterface.getAIMove(this.gameState, this.turnPlayer.type);
-                    }
-                    if(this.startTime==null){
-                        this.startTime=time;
-                    }
-                    else{
-                        let seconds = (this.roundTime - Math.floor((time-this.startTime)/1000) + this.pauseSum);
-                        this.board.updateRoundTime(seconds.toString());
-                        if(seconds <= 0){
-                            this.event=Events.END;
-                            if(this.turnPlayer==this.player0){
-                                alert("Player 1 ran out of time. Player 2 wins!");
-                            }
-                            else{
-                                alert("Player 2 ran out of time. Player 1 wins!");
-                            }
+        if (this.playingMovie == -1) {
+            switch (this.event) {
+                case Events.WAITING:
+                    {
+                        if (this.lastPicked != null && this.lastPicked instanceof Piece) {
+                            this.lastPicked.update(time);
                         }
-                    }
-                    break;
-                }
-                case Events.REQUESTING: 
-                {
-                    //do nothing
-                    break;
-                }
-                case Events.APLLYING: 
-                {
-                    if(this.gameStateSeq.play.piece.update(time) == 0){
-                        this.event=Events.MOVING;
-    
-                        for(let i in this.gameStateSeq.changes){
-                            this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                        if (this.turnPlayer != null && this.turnPlayer.type != playerType.human && this.event == Events.WAITING) {
+                            this.event = Events.REQUESTING;
+                            this.prologInterface.getAIMove(this.gameState, this.turnPlayer.type);
                         }
-                    }
-                    break;
-                }
-                case Events.MOVING: 
-                {
-                    let ended = true; 
-                    for(let i in this.gameStateSeq.changes){
-                        if(this.gameStateSeq.changes[i].piece.update(time) != 0){
-                            ended = false;
-                        }
-                    }
-                    if(ended){
-                        this.gameStateSeq.updateRemovals();
-                        this.event=Events.REMOVING;
-                        for(let i in this.gameStateSeq.removed){
-                            this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
-                            //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
-                        }
-                    }
-                    break;
-                }
-                case Events.REMOVING: 
-                {
-                    let ended = true; 
-                    for(let i in this.gameStateSeq.removed){
-                        if(this.gameStateSeq.removed[i].piece.update(time) != 0){
-                            ended = false;
-                        }
-                    }
-                    if(ended){
-                        this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
-                        
-                        if(this.changeTurn(true)){
-                            this.event=Events.ROTATE_CAM;
-                        }
-                        else{
-                            this.event=Events.MOVE_DONE;
-                        }
-                    }
-                    break;
-                }
-                case Events.ROTATE_CAM: 
-                {
-                    //do nothing
-                    break;
-                }
-                case Events.MOVE_DONE: 
-                {
-                    if (this.gameStateSeq.newPoints[0] != "-1") {
-                        if (this.gameStateSeq.newPoints[0] == "0") {
-                            alert("Player 1 wins!");
-                        } else if (this.gameStateSeq.newPoints[0] == "1") {
-                            alert("Player 2 wins!");
+                        if (this.startTime == null) {
+                            this.startTime = time;
                         } else {
-                            alert("The game ended in a tie!");
+                            let seconds = (this.roundTime - Math.floor((time - this.startTime) / 1000) + this.pauseSum);
+                            this.board.updateRoundTime(seconds.toString());
+                            if (seconds <= 0) {
+                                this.event = Events.END;
+                                if (this.turnPlayer == this.player0) {
+                                    alert("Player 1 ran out of time. Player 2 wins!");
+                                } else {
+                                    alert("Player 2 ran out of time. Player 1 wins!");
+                                }
+                            }
                         }
-                        this.event=Events.END;
+                        break;
                     }
-                    else{
-                        this.event=Events.WAITING;
+                case Events.REQUESTING:
+                    {
+                        //do nothing
+                        break;
                     }
-                    this.gameSequence.newMove();
-                    break;
-                }
-                case Events.PAUSE: 
-                {
-                    
-                    if(this.startPause==null){
-                        this.startPause=time;
-                    }
-                    this.pauseTime = time;
-                    break;
-                }
-                default:
-                    
-                    break;
-            }
-        }
+                case Events.APLLYING:
+                    {
+                        if (this.gameStateSeq.play.piece.update(time) == 0) {
+                            this.event = Events.MOVING;
 
+                            for (let i in this.gameStateSeq.changes) {
+                                this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                            }
+                        }
+                        break;
+                    }
+                case Events.MOVING:
+                    {
+                        let ended = true;
+                        for (let i in this.gameStateSeq.changes) {
+                            if (this.gameStateSeq.changes[i].piece.update(time) != 0) {
+                                ended = false;
+                            }
+                        }
+                        if (ended) {
+                            this.gameStateSeq.updateRemovals();
+                            this.event = Events.REMOVING;
+                            for (let i in this.gameStateSeq.removed) {
+                                this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
+                                //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                            }
+                        }
+                        break;
+                    }
+                case Events.REMOVING:
+                    {
+                        let ended = true;
+                        for (let i in this.gameStateSeq.removed) {
+                            if (this.gameStateSeq.removed[i].piece.update(time) != 0) {
+                                ended = false;
+                            }
+                        }
+                        if (ended) {
+                            this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
 
-        //MOVIE
-        else {
-            switch(this.event){
-                case Events.WAITING: 
-                {
-                    //make move
-                    this.gameStateSeq=this.gameSequence.moves[this.playingMovie];
-                    this.movePieceReplay(this.gameStateSeq.play.piece,this.gameStateSeq.play.destination);
-                    console.log(this.gameStateSeq);
-                    break;
-                }
-                case Events.APLLYING: 
-                {
-                    if(this.gameStateSeq.play.piece.update(time) == 0){
-                        this.event=Events.MOVING;
-    
-                        for(let i in this.gameStateSeq.changes){
-                            this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                            if (this.changeTurn(true)) {
+                                this.event = Events.ROTATE_CAM;
+                            } else {
+                                this.event = Events.MOVE_DONE;
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
-                case Events.MOVING: 
-                {
-                    let ended = true; 
-                    for(let i in this.gameStateSeq.changes){
-                        if(this.gameStateSeq.changes[i].piece.update(time) != 0){
-                            ended = false;
-                        }
+                case Events.ROTATE_CAM:
+                    {
+                        //do nothing
+                        break;
                     }
-                    if(ended){
-                        this.gameStateSeq.updateRemovals();
-                        this.event=Events.REMOVING;
-                        for(let i in this.gameStateSeq.removed){
-                            this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
-                            //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
-                        }
-                    }
-                    break;
-                }
-                case Events.REMOVING: 
-                {
-                    let ended = true; 
-                    for(let i in this.gameStateSeq.removed){
-                        if(this.gameStateSeq.removed[i].piece.update(time) != 0){
-                            ended = false;
-                        }
-                    }
-                    if(ended){
-                        this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
+                case Events.MOVE_DONE:
+                    {
                         if (this.gameStateSeq.newPoints[0] != "-1") {
                             if (this.gameStateSeq.newPoints[0] == "0") {
                                 alert("Player 1 wins!");
@@ -272,35 +192,114 @@ class GameOrchestrator {
                             } else {
                                 alert("The game ended in a tie!");
                             }
-                            this.event=Events.END;
+                            this.event = Events.END;
+                        } else {
+                            this.event = Events.WAITING;
                         }
-                        else{
-                            this.changeTurn(false);
-                            this.event=Events.MOVE_DONE;
+                        this.gameSequence.newMove();
+                        break;
+                    }
+                case Events.PAUSE:
+                    {
+
+                        if (this.startPause == null) {
+                            this.startPause = time;
                         }
+                        this.pauseTime = time;
+                        break;
                     }
-                    break;
-                }
-                case Events.ROTATE_CAM: 
-                {
-                    //do nothing
-                    break;
-                }
-                case Events.MOVE_DONE: 
-                {
-                    //this.gameSequence.newMove();
-                    if(this.gameSequence.moves.length==this.playingMovie+1){
-                        this.playingMovie=-1;
-                    }
-                    else{
-                        this.playingMovie++;
-                        
-                    }
-                    this.event=Events.WAITING;
-                    break;
-                }
                 default:
-                    
+
+                    break;
+            }
+        }
+
+
+        //MOVIE
+        else {
+            switch (this.event) {
+                case Events.WAITING:
+                    {
+                        //make move
+                        this.gameStateSeq = this.gameSequence.moves[this.playingMovie];
+                        this.movePieceReplay(this.gameStateSeq.play.piece, this.gameStateSeq.play.destination);
+                        console.log(this.gameStateSeq);
+                        break;
+                    }
+                case Events.APLLYING:
+                    {
+                        if (this.gameStateSeq.play.piece.update(time) == 0) {
+                            this.event = Events.MOVING;
+
+                            for (let i in this.gameStateSeq.changes) {
+                                this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                            }
+                        }
+                        break;
+                    }
+                case Events.MOVING:
+                    {
+                        let ended = true;
+                        for (let i in this.gameStateSeq.changes) {
+                            if (this.gameStateSeq.changes[i].piece.update(time) != 0) {
+                                ended = false;
+                            }
+                        }
+                        if (ended) {
+                            this.gameStateSeq.updateRemovals();
+                            this.event = Events.REMOVING;
+                            for (let i in this.gameStateSeq.removed) {
+                                this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
+                                //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                            }
+                        }
+                        break;
+                    }
+                case Events.REMOVING:
+                    {
+                        let ended = true;
+                        for (let i in this.gameStateSeq.removed) {
+                            if (this.gameStateSeq.removed[i].piece.update(time) != 0) {
+                                ended = false;
+                            }
+                        }
+                        if (ended) {
+                            this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
+                            if (this.gameStateSeq.newPoints[0] != "-1") {
+                                if (this.gameStateSeq.newPoints[0] == "0") {
+                                    alert("Player 1 wins!");
+                                } else if (this.gameStateSeq.newPoints[0] == "1") {
+                                    alert("Player 2 wins!");
+                                } else {
+                                    alert("The game ended in a tie!");
+                                }
+                                this.event = Events.END;
+                            } else {
+                                this.changeTurn(false);
+                                this.event = Events.MOVE_DONE;
+                            }
+                        }
+                        break;
+                    }
+                case Events.ROTATE_CAM:
+                    {
+                        //do nothing
+                        break;
+                    }
+                case Events.MOVE_DONE:
+                    {
+                        //this.gameSequence.newMove();
+                        if (this.gameSequence.moves.length == this.playingMovie + 1) {
+                            this.playingMovie = -1;
+                        } else {
+                            this.playingMovie++;
+
+                        }
+                        this.event = Events.WAITING;
+                        break;
+                    }
+                default:
+
                     break;
             }
         }
@@ -310,9 +309,9 @@ class GameOrchestrator {
         return this.gameSequence;
     }
 
-    startGame(){
-        this.event=Events.WAITING;
-        this.roundTime=90;
+    startGame() {
+        this.event = Events.WAITING;
+        this.roundTime = 90;
         this.startTime = null;
         this.pauseTime = null;
         this.startPause = null;
@@ -328,12 +327,12 @@ class GameOrchestrator {
         this.startPause = null;
         this.pauseSum = 0;
 
-        if(rotate){
+        if (rotate) {
             if (this.player1.type == playerType.human && (this.player0.type == playerType.human || !this.wasAdjusted)) {
                 this.wasAdjusted = true;
                 this.scene.rotatingCam = true;
                 this.scene.resetCamera();
-                out=true;
+                out = true;
             }
         }
 
@@ -344,14 +343,13 @@ class GameOrchestrator {
             this.turnPlayer = this.player0;
             this.player1.makePiecesSelectable(false);
         }
-        if(this.turnPlayer.type==playerType.human){
+        if (this.turnPlayer.type == playerType.human) {
             this.turnPlayer.makePiecesSelectable(true);
-        }
-        else{
+        } else {
             this.turnPlayer.makePiecesSelectable(false);
         }
 
-        if(!rotate && this.playingMovie==-1){
+        if (!rotate && this.playingMovie == -1) {
             this.scene.resetCamera();
         }
 
@@ -426,13 +424,13 @@ class GameOrchestrator {
         this.gameStateSeq.addPrologState(this.gameState);
         this.gameStateSeq.addPlay(new GameMove(piece, null, tile, piece.getCenterCoords(), tile.getCenterCoords(), this.board));
         this.board.movePieceToBoard(piece, tile);
-        this.event=Events.APLLYING;
+        this.event = Events.APLLYING;
         //console.log(this.generateGameState());
     }
 
-    movePieceReplay(piece, tile){
+    movePieceReplay(piece, tile) {
         this.board.movePieceToBoard(piece, tile);
-        this.event=Events.APLLYING;
+        this.event = Events.APLLYING;
     }
 
     generateGameState() {
@@ -459,22 +457,21 @@ class GameOrchestrator {
 
     }
 
-    pause(){
-        if(this.playingMovie==-1 && this.event==Events.WAITING){
-            this.event=Events.PAUSE;
-        }
-        else if(this.event==Events.PAUSE){
-            this.pauseSum += Math.floor((this.pauseTime-this.startPause)/1000);
+    pause() {
+        if (this.playingMovie == -1 && this.event == Events.WAITING) {
+            this.event = Events.PAUSE;
+        } else if (this.event == Events.PAUSE) {
+            this.pauseSum += Math.floor((this.pauseTime - this.startPause) / 1000);
             this.pauseTime = null;
             this.startPause = null;
-            this.event=Events.WAITING;
+            this.event = Events.WAITING;
         }
     }
 
-    playMovie(){
-        if(this.event==Events.END && this.gameSequence.moves.length>0){
-            this.playingMovie=0;
-            this.event=Events.WAITING;
+    playMovie() {
+        if (this.event == Events.END && this.gameSequence.moves.length > 0) {
+            this.playingMovie = 0;
+            this.event = Events.WAITING;
             this.gameSequence.undoAll();
         }
     }

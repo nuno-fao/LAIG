@@ -10,6 +10,7 @@ class XMLscene extends CGFscene {
         super();
         this.lastTime = Date.now();
         this.interface = myinterface;
+        this.connectionError = false;
         //this.rotateTime = 0;
         //this.target = 1;
     }
@@ -62,6 +63,8 @@ class XMLscene extends CGFscene {
         this.camAngle = 0;
 
         this.gameOrchestrator = new GameOrchestrator(this);
+
+
         this.initTime = Date.now();
 
     }
@@ -160,15 +163,15 @@ class XMLscene extends CGFscene {
 
         this.setUpdatePeriod(20); //50 fps
 
-        this.allNodes={};
-        for(let i in this.graph.sceneIndexes){
+        this.allNodes = {};
+        for (let i in this.graph.sceneIndexes) {
             this.allNodes[i] = i;
         }
 
         this.activeScene = 0;
         this.activeP1Piece = this.graph.P1Names[0];
         this.activeP2Piece = this.graph.P2Names[0];
-        this.activeNormalTile =this.graph.NormalNames[0];
+        this.activeNormalTile = this.graph.NormalNames[0];
         this.activeVoidTile = this.graph.VoidNames[0];
         this.activeHolder = this.graph.HolderNames[0];
 
@@ -180,19 +183,19 @@ class XMLscene extends CGFscene {
 
     }
 
-    loadTemplates(){
+    loadTemplates() {
         this.gameOrchestrator.board.loadTemplates();
     }
 
-    changeScene(){
-        this.sceneInited=false;
-        this.graph.nodes=[];
+    changeScene() {
+        this.sceneInited = false;
+        this.graph.nodes = [];
         this.graph.rootNode = null;
         this.graph.spriteAnimations = [];
         let error;
-        if ((error = this.graph.parseNodes( this.graph.allChildren[this.graph.sceneIndexes[this.activeScene]])) != null)
+        if ((error = this.graph.parseNodes(this.graph.allChildren[this.graph.sceneIndexes[this.activeScene]])) != null)
             return error;
-        this.sceneInited=true;
+        this.sceneInited = true;
     }
 
     update(time) {
@@ -234,6 +237,14 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
+        if (!this.gameOrchestrator.checkProlog() && this.connectionError == false) {
+            this.setPickEnabled(false);
+            this.connectionError = true;
+            alert("Prolog Server not Connected, Scene will be rendered but interaction will be deactivated");
+        } else if (this.gameOrchestrator.checkProlog() && this.connectionError == true) {
+            this.setPickEnabled(true);
+            this.connectionError = false;
+        }
 
         this.gameOrchestrator.managePick(this.pickMode, this.pickResults);
         this.clearPickRegistration();
