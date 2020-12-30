@@ -73,7 +73,12 @@ class MyInterface extends CGFinterface {
 
     initThemeFolder(){
         let folder = this.gui.addFolder("Themes");
-        folder.add(this.scene, 'activeScene', this.scene.allNodes).name('Active Theme').onChange(this.scene.changeScene.bind(this.scene));
+        folder.add(this.scene, 'activeScene', this.scene.allNodes).name('Scene').onChange(this.scene.loadTemplates.bind(this.scene));
+        folder.add(this.scene, 'activeP1Piece', this.scene.graph.P1Names).name('P1 Pieces').onChange(this.scene.loadTemplates.bind(this.scene));
+        folder.add(this.scene, 'activeP2Piece', this.scene.graph.P2Names).name('P2 Pieces').onChange(this.scene.loadTemplates.bind(this.scene));
+        folder.add(this.scene, 'activeNormalTile', this.scene.graph.NormalNames).name('Normal Tile').onChange(this.scene.loadTemplates.bind(this.scene));
+        folder.add(this.scene, 'activeVoidTile', this.scene.graph.VoidNames).name('Void Tile').onChange(this.scene.loadTemplates.bind(this.scene));
+        folder.add(this.scene, 'activeHolder', this.scene.graph.HolderNames).name('Holder').onChange(this.scene.loadTemplates.bind(this.scene));
     }
 
     processKeyDown(event) {

@@ -7,6 +7,7 @@ class MyNode {
         this.descendentes = [];
         this.used = false;
         this.animation = null;
+        this.templateType = null;
         //this.wasReferenced = false;
     }
 

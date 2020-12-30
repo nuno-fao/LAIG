@@ -32,6 +32,13 @@ class MySceneGraph {
         this.sceneIndexes= [];
 
         this.nodes = [];
+        this.templates = [];
+
+        this.P1Names = [];
+        this.P2Names = [];
+        this.NormalNames = [];
+        this.VoidNames = [];
+        this.HolderNames = [];
 
         this.idRoot = null; // The id of the root element.
 
@@ -1109,6 +1116,305 @@ class MySceneGraph {
      * @param {nodes block element} nodesNode
      */
     parseTemplates(nodesNode) {
+
+        let nodesList = nodesNode.children;
+
+        let nodeAtributes = [];
+        let nodeNames = [];
+        let descendants = [];
+        
+        //percorre os nodes e cria as estruturas de dados
+        for (let i = 0; i < nodesList.length; i++) {
+
+            if (nodesList[i].nodeName != "node") {
+                this.onXMLMinorError("unknown tag <" + nodesList[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current node.
+            let nodeID = this.reader.getString(nodesList[i], 'id', false);
+            let type = this.reader.getString(nodesList[i], 'type', false);
+            if (nodeID == null) {
+                this.onXMLError("no ID defined for nodeID number " + i + ", ignoring ");
+                continue;
+            }
+
+            // Checks for repeated IDs.
+            if (this.templates[nodeID] != null) {
+                this.onXMLError("ID must be unique for each node (conflict: ID = " + nodeID + "), using only first node with that id");
+                continue;
+            }
+
+            nodeAtributes = nodesList[i].children;
+
+            nodeNames = [];
+            for (let j = 0; j < nodeAtributes.length; j++) {
+                nodeNames.push(nodeAtributes[j].nodeName);
+            }
+
+            let transformationsIndex = nodeNames.indexOf("transformations");
+            let materialIndex = nodeNames.indexOf("material");
+            let textureIndex = nodeNames.indexOf("texture");
+            let animationIndex = nodeNames.indexOf("animationref");
+            descendants[nodeID] = nodeNames.indexOf("descendants");
+
+            let transformation_matrix;
+            if (transformationsIndex < 0) {
+                this.onXMLMinorError("Transformation block for '" + nodeID + "' not found!")
+                transformation_matrix = null;
+            } else {
+                transformation_matrix = nodesList[i].children[transformationsIndex];
+            }
+            let texture;
+            if (textureIndex < 0) {
+                this.onXMLMinorError("Texture block for '" + nodeID + "' not found, using 'null' value");
+                texture = null;
+            } else {
+                texture = nodesList[i].children[textureIndex];
+            }
+            let material;
+            if (materialIndex < 0) {
+                this.onXMLMinorError("Material block for '" + nodeID + "' not found, using 'null' value")
+                material = null;
+            } else {
+                material = nodesList[i].children[materialIndex];
+            }
+            let animation;
+            if (animationIndex < 0) {
+                animation = null;
+            } else {
+                animation = nodesList[i].children[animationIndex];
+            }
+            this.templates[nodeID] = new MyNode(
+                this.scene,
+                transformation_matrix,
+                texture,
+                material
+            );
+            if(type=="P1"){
+                this.P1Names.push(nodeID);
+            }
+            else if(type=="P2"){
+                this.P2Names.push(nodeID);
+            }
+            else if(type=="normal"){
+                this.NormalNames.push(nodeID);
+            }
+            else if(type=="void"){  
+                this.VoidNames.push(nodeID);
+            }
+            else if(type=="holder"){
+                this.HolderNames.push(nodeID);
+            }
+            else{
+                //nothing
+            }
+
+            if (animation != null) {
+                let animID = this.reader.getString(animation, "id", false);
+                if (this.parsedAnimations[animID] == null) {
+                    this.onXMLError("Animation " + animID + " is not defined!");
+                }
+                this.templates[nodeID].addAnimation(this.parsedAnimations[animID]);
+            }
+            descendants[nodeID] = nodesList[i].children[descendants[nodeID]]
+        }
+
+        // popula estruturas de dados com dados do xml
+        for (let nodeID in this.templates) {
+
+            if (this.templates[nodeID].material != null) {
+                let matID = this.reader.getString(this.templates[nodeID].material, "id", false);
+                if (matID == null) {
+                    this.onXMLMinorError("Material id for node " + nodeID + " is not set, using value null")
+                }
+                if (matID != "null") {
+                    this.templates[nodeID].material = this.materials[matID];
+                    if (this.templates[nodeID].material == null) {
+                        this.onXMLMinorError("MaterialId (" + matID + ") on node '" + nodeID + "' does not reference a valid material")
+                    }
+                } else {
+                    this.templates[nodeID].material = null;
+                }
+            }
+
+
+            //parse texture
+            let afs = null;
+            let aft = null;
+            if (this.templates[nodeID].texture != null) {
+                let textureID = this.reader.getString(this.templates[nodeID].texture, "id", false);
+                if (textureID != "clear") {
+                    if (this.templates[nodeID].texture.children[0] != null) {
+                        afs = this.reader.getString(this.templates[nodeID].texture.children[0], "afs", false);
+                        aft = this.reader.getString(this.templates[nodeID].texture.children[0], "aft", false);
+                    } else {
+                        this.onXMLMinorError("Aplification tag was not defined for node '" + nodeID + "'")
+                    }
+                    if (afs == null) {
+                        afs = 1;
+                        this.onXMLMinorError("Afs info is missing for the node '" + nodeID + "', setting to 1")
+                    }
+                    if (aft == null) {
+                        aft = 1;
+                        this.onXMLMinorError("Aft info is missing for the node '" + nodeID + "', setting to 1")
+                    }
+
+                    if (textureID == null) {
+                        this.onXMLMinorError("Texture id for node " + nodeID + " is not set, using value null");
+                        this.templates[nodeID].texture = null;
+                    } else if (textureID != "null") {
+                        let texture = this.textures[textureID];
+                        this.templates[nodeID].texture = texture;
+                        if (texture == null) {
+                            this.onXMLMinorError("TextureId (" + textureID + ") on node '" + nodeID + "' does not reference a valid texture")
+                        }
+                    } else {
+                        this.templates[nodeID].texture = null;
+                    }
+                } else {
+                    this.templates[nodeID].texture = "clear";
+                }
+            }
+
+            let descendantLength;
+            if (descendants[nodeID] == -1 || descendants[nodeID] == null) {
+                descendantLength = 0;
+                this.onXMLError(nodeID + " does not have a descendants tag, some nodes may not be used");
+            } else {
+                descendantLength = descendants[nodeID].children.length;
+            }
+
+            //add descendants to each node, handles erros such as noderef thar don't exist
+            for (let j = 0; j < descendantLength; j++) {
+                let descendantList = descendants[nodeID].children[j];
+                if (descendantList.nodeName == "noderef") {
+                    let id = this.reader.getString(descendantList, 'id', false);
+                    if (id == null) {
+                        this.onXMLError("Node '" + nodeID + "' has a noderef without an id value");
+                        continue;
+                    }
+                    let node = this.templates[id];
+                    if (node == null) {;
+                        this.onXMLError("Node '" + id + "' referenced but not created!");
+                        continue;
+                    }
+                    if (id == this.idRoot) {
+                        this.onXMLError(this.idRoot + " is defined as root node, however it has parent nodes such as '" + nodeID + "', every node that is not a descendant of this node may not be rendered")
+                    }
+                    /*if (node.wasReferenced == true) {
+                        this.onXMLError("The graph is cyclic!!!! node '" + id + " has " + nodeID + " as a descendant(direct or not)");
+                        continue;
+                    }*/
+                    this.templates[nodeID].addDescendente(node);
+                    //node.wasReferenced = true;
+                    node.used = true;
+                } else {
+                    this.auxiliaryParseLeaf(descendantList, nodeID, afs, aft,this.templates);
+                }
+            }
+
+            this.scene.loadIdentity();
+
+            if (this.templates[nodeID].tg_matrix != null) {
+                for (let j = 0; j < this.templates[nodeID].tg_matrix.children.length; j++) {
+                    let descendantList = this.templates[nodeID].tg_matrix.children[j];
+
+                    //parse transformation
+                    switch (descendantList.nodeName) {
+                        case "translation":
+                            {
+                                let position = this.parseCoordinates3D(descendantList, "");
+                                this.scene.translate(position[0], position[1], position[2]);
+
+                                break;
+                            }
+                        case "rotation":
+                            {
+                                let axis = this.reader.getString(descendantList, "axis", false);
+                                let angle = this.graphGetFloat(descendantList, "angle", false);
+
+                                if (axis == null) {
+                                    this.onXMLError("Axis Value not set on rotation's block at node '" + nodeID + "'")
+                                    break;
+                                }
+                                if (angle == null) {
+                                    this.onXMLError("Angle Value not set on rotation's block at node '" + nodeID + "'")
+                                    break;
+                                }
+                                angle = angle / 180 * Math.PI;
+                                switch (axis) {
+                                    case "x":
+                                        {
+                                            this.scene.rotate(angle, 1, 0, 0);
+                                            break;
+                                        }
+                                    case "y":
+                                        {
+                                            this.scene.rotate(angle, 0, 1, 0);
+                                            break;
+                                        }
+                                    case "z":
+                                        {
+                                            this.scene.rotate(angle, 0, 0, 1);
+                                            break;
+                                        }
+                                    case "xx":
+                                        {
+                                            this.scene.rotate(angle, 1, 0, 0);
+                                            break;
+                                        }
+                                    case "yy":
+                                        {
+                                            this.scene.rotate(angle, 0, 1, 0);
+                                            break;
+                                        }
+                                    case "zz":
+                                        {
+                                            this.scene.rotate(angle, 0, 0, 1);
+                                            break;
+                                        }
+                                    default:
+                                        this.onXMLError("Axis Value for rotation on node '" + nodeID + "' not valid")
+
+                                }
+                                break;
+                            }
+                        case "scale":
+                            {
+                                let sx = this.graphGetFloat(descendantList, "sx", false);
+                                let sy = this.graphGetFloat(descendantList, "sy", false);
+                                let sz = this.graphGetFloat(descendantList, "sz", false);
+                                if (sx == null) {
+                                    this.onXMLMinorError("sx Value not set for scale on node '" + nodeID + "',using sx=1")
+                                    sx = 1;
+                                }
+                                if (sy == null) {
+                                    this.onXMLMinorError("sy Value not set for scale on node '" + nodeID + "',using sy=1")
+                                    sy = 1;
+                                }
+                                if (sz == null) {
+                                    this.onXMLMinorError("sz Value not set for scale on node '" + nodeID + "',using sz=1")
+                                    sz = 1;
+                                }
+
+                                this.scene.scale(sx, sy, sz);
+
+                                break;
+                            }
+                        default:
+                            this.onXMLError("Transformation tag '" + descendantList.nodeName + "' not valid on node '" + nodeID + "'")
+
+                    }
+                }
+            }
+            this.templates[nodeID].tg_matrix = this.scene.getMatrix();
+        }
+
+        if(this.P1Names.length==0 || this.P2Names.length==0 || this.NormalNames.length==0 || this.VoidNames.length==0 || this.HolderNames.length==0){
+            this.onXMLError("Not all templates have been defined!");
+            return -1;
+        }
 
     }
 

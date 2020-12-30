@@ -11,10 +11,8 @@ class BoardTile {
         this.wall = new MyRectangle(this.scene, -0.25, -0.25, 0.25, 0, 1, 1);
 
         if (this.type == tileType.VOID) {
-            this.nodeID = "voidTile";
             this.selectable = false;
         } else {
-            this.nodeID = "normalTile";
             this.selectable = true;
         }
 
@@ -23,7 +21,12 @@ class BoardTile {
     }
 
     loadTextures() {
-        this.XMLnode = this.scene.graph.nodes[this.nodeID];
+        if (this.type == tileType.VOID) {
+            this.XMLnode = this.scene.graph.templates[this.scene.activeVoidTile];
+        } else {
+            this.XMLnode = this.scene.graph.templates[this.scene.activeNormalTile];
+        }
+        
         this.scene.loadIdentity();
 
 

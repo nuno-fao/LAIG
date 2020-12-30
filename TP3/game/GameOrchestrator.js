@@ -61,7 +61,7 @@ class GameOrchestrator {
         this.player1.setPieces(this.board.P2pieces);
 
 
-        this.board.loadXMLNodes();
+        this.board.loadTemplates();
         this.turnPlayer = this.player0;
         this.scene.resetCamera();
         this.turnPlayer.makePiecesSelectable(true);
@@ -77,7 +77,7 @@ class GameOrchestrator {
     }
 
     onGraphLoaded() {
-        this.board.loadXMLNodes();
+        this.board.loadTemplates();
 
         this.player0 = new Player(this.board.P1pieces, playerType.human, 0);
         this.player1 = new Player(this.board.P2pieces, playerType.human, 1);

@@ -160,21 +160,28 @@ class XMLscene extends CGFscene {
 
         this.setUpdatePeriod(20); //50 fps
 
-        this.gameOrchestrator.onGraphLoaded();
-        this.interface.initGameFolder();
-        
-
-        this.sceneInited = true;
-
         this.allNodes={};
         for(let i in this.graph.sceneIndexes){
             this.allNodes[i] = i;
         }
 
         this.activeScene = 0;
+        this.activeP1Piece = this.graph.P1Names[0];
+        this.activeP2Piece = this.graph.P2Names[0];
+        this.activeNormalTile =this.graph.NormalNames[0];
+        this.activeVoidTile = this.graph.VoidNames[0];
+        this.activeHolder = this.graph.HolderNames[0];
 
+        this.gameOrchestrator.onGraphLoaded();
+        this.interface.initGameFolder();
         this.interface.initThemeFolder();
 
+        this.sceneInited = true;
+
+    }
+
+    loadTemplates(){
+        this.gameOrchestrator.board.loadTemplates();
     }
 
     changeScene(){

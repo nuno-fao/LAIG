@@ -10,12 +10,7 @@ class Piece {
 
         this.y = 0;
 
-        if (this.type == pieceType.RED) {
-            this.nodeID = "P1piece";
-        } else {
-            this.nodeID = "P2piece";
-        }
-
+        
         //pointer to holding tile if any
         this.holdingTile = null;
         this.wasMoved = false;
@@ -27,7 +22,13 @@ class Piece {
     }
 
     loadTextures() {
-        this.XMLnode = this.scene.graph.nodes[this.nodeID];
+        if (this.type == pieceType.RED) {
+            this.XMLnode = this.scene.graph.templates[this.scene.activeP1Piece];
+        } else {
+            this.XMLnode = this.scene.graph.templates[this.scene.activeP2Piece];
+        }
+
+        
     }
 
     getType() {
