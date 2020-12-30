@@ -60,12 +60,6 @@ class MyInterface extends CGFinterface {
     }
 
     initGameFolder(){
-        // var undoFunc = {
-        //     undo: function(){
-        //             this.scene.gameOrchestrator.undo();
-        //         }
-        // };
-        
         let folder = this.gui.addFolder("Game");
         folder.add({undo : this.scene.gameOrchestrator.undo.bind(this.scene.gameOrchestrator)},'undo').name('Undo');
         folder.add({pause : this.scene.gameOrchestrator.pause.bind(this.scene.gameOrchestrator)},'pause').name('Pause');
@@ -73,9 +67,15 @@ class MyInterface extends CGFinterface {
         folder.add(this.scene.gameOrchestrator.player1, 'type', playerType).name('Player 2');
         folder.add({move : this.scene.gameOrchestrator.playMovie.bind(this.scene.gameOrchestrator)},'move').name('Play Movie');
         folder.add({resetCam : this.scene.resetCamera.bind(this.scene)},'resetCam').name('Reset Camera');
-        folder.add({reset : this.scene.gameOrchestrator.resetGame.bind(this.scene.gameOrchestrator)},'reset').name('Restart Game');
+        folder.add({reset : this.scene.gameOrchestrator.resetGame.bind(this.scene.gameOrchestrator)},'reset').name('New Game');
         folder.open();
     }
+
+    initThemeFolder(){
+        let folder = this.gui.addFolder("Themes");
+        folder.add(this.scene, 'activeScene', this.scene.allNodes).name('Active Theme').onChange(this.scene.changeScene.bind(this.scene));
+    }
+
     processKeyDown(event) {
         this.activeKeys[event.code] = true;
     };

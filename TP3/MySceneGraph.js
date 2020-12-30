@@ -9,7 +9,8 @@ let TEXTURES_INDEX = 4;
 let SPRITESHEETS_INDEX = 5;
 let MATERIALS_INDEX = 6;
 let ANIMATIONS_INDEX = 7;
-let NODES_INDEX = 8;
+let TEMPLATES_INDEX = 8;
+let NODES_INDEX = 9;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -27,6 +28,8 @@ class MySceneGraph {
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
         scene.graph = this;
+
+        this.sceneIndexes= [];
 
         this.nodes = [];
 
@@ -106,6 +109,7 @@ class MySceneGraph {
             return "root tag <lsf> missing";
 
         let nodes = rootElement.children;
+        this.allChildren=nodes;
 
         // Reads the names of the nodes to an auxiliary buffer.
         let nodeNames = [];
@@ -212,17 +216,37 @@ class MySceneGraph {
                 return error;
         }
 
+        // templates
+        if ((index = nodeNames.indexOf("templates")) == -1)
+            return "tag <templates> missing";
+        else {
+            if (index != TEMPLATES_INDEX - offset)
+                this.onXMLMinorError("tag <templates> out of order");
+
+            //Parse nodes block
+            if ((error = this.parseTemplates(nodes[index])) != null)
+                return error;
+        }
+
         // <nodes>
         if ((index = nodeNames.indexOf("nodes")) == -1)
             return "tag <nodes> missing";
         else {
-            if (index != NODES_INDEX - offset)
-                this.onXMLMinorError("tag <nodes> out of order");
 
-            //Parse nodes block
-            if ((error = this.parseNodes(nodes[index])) != null)
+            while(index!=-1){
+                //Parse nodes block
+                this.sceneIndexes.push(index);
+                
+                index = nodeNames.indexOf("nodes",index+1);
+            }
+
+            if ((error = this.parseNodes( nodes[this.sceneIndexes[0]])) != null)
                 return error;
+            if (index < NODES_INDEX - offset)
+                this.onXMLMinorError("tag <nodes> out of order")
         }
+
+        
 
 
         this.log("all parsed");
@@ -771,7 +795,7 @@ class MySceneGraph {
         let nodeAtributes = [];
         let nodeNames = [];
         let descendants = [];
-
+        
         //percorre os nodes e cria as estruturas de dados
         for (let i = 0; i < nodesList.length; i++) {
 
@@ -939,7 +963,7 @@ class MySceneGraph {
                     //node.wasReferenced = true;
                     node.used = true;
                 } else {
-                    this.auxiliaryParseLeaf(descendantList, nodeID, afs, aft);
+                    this.auxiliaryParseLeaf(descendantList, nodeID, afs, aft,this.nodes);
                 }
             }
 
@@ -1079,6 +1103,16 @@ class MySceneGraph {
         this.rootNode = rootNodeInstance;
     }
 
+
+    /**
+     * Parses the <templates> block.
+     * @param {nodes block element} nodesNode
+     */
+    parseTemplates(nodesNode) {
+
+    }
+
+
     /**
      * Create the leafs instances
      * @param {block element} leaf
@@ -1086,7 +1120,7 @@ class MySceneGraph {
      * @param {amplification value for s} afs
      * @param {amplification value for t} aft
      */
-    auxiliaryParseLeaf(leaf, nodeID, afs, aft) {
+    auxiliaryParseLeaf(leaf, nodeID, afs, aft,holder) {
         switch (this.reader.getString(leaf, 'type', false)) {
             case "triangle":
                 {
@@ -1127,7 +1161,7 @@ class MySceneGraph {
                     }
 
                     let t = new MyTriangle(this.scene, x1, y1, x2, y2, x3, y3, afs, aft);
-                    this.nodes[nodeID].addDescendente(t);
+                    holder[nodeID].addDescendente(t);
                     break;
 
                 }
@@ -1158,7 +1192,7 @@ class MySceneGraph {
                     }
 
                     let r = new MyRectangle(this.scene, x1, y1, x2, y2, afs, aft);
-                    this.nodes[nodeID].addDescendente(r);
+                    holder[nodeID].addDescendente(r);
                     break;
                 }
             case "cylinder":
@@ -1188,7 +1222,7 @@ class MySceneGraph {
                         this.onXMLMinorError("slices value not set for cylinder on node " + nodeID + ", using value 30");
                         slices = 30;
                     }
-                    this.nodes[nodeID].addDescendente(new MyCylinder(this.scene, bottomRadius, topRadius, height, slices, stacks));
+                    holder[nodeID].addDescendente(new MyCylinder(this.scene, bottomRadius, topRadius, height, slices, stacks));
                     break;
                 }
             case "sphere":
@@ -1208,7 +1242,7 @@ class MySceneGraph {
                         this.onXMLMinorError("slices value not set for sphere on node " + nodeID + ", using value 30");
                         slices = 30;
                     }
-                    this.nodes[nodeID].addDescendente(new MySphere(this.scene, radius, slices, stacks));
+                    holder[nodeID].addDescendente(new MySphere(this.scene, radius, slices, stacks));
                     break;
                 }
             case "torus":
@@ -1233,12 +1267,12 @@ class MySceneGraph {
                         this.onXMLMinorError("loops value not set for torus on node " + nodeID + ", using value 30");
                         loops = 30;
                     }
-                    this.nodes[nodeID].addDescendente(new MyTorus(this.scene, inner, outer, slices, loops));
+                    holder[nodeID].addDescendente(new MyTorus(this.scene, inner, outer, slices, loops));
                     break;
                 }
             case "hexagon":
                 {
-                    this.nodes[nodeID].addDescendente(new MyHexagon(this.scene));
+                    holder[nodeID].addDescendente(new MyHexagon(this.scene));
                     break;
                 }
             case "spritetext":
@@ -1248,7 +1282,7 @@ class MySceneGraph {
                         this.onXMLMinorError("text not set for spritetext on node " + nodeID + ", using 'Hello World!'");
                         text = "Hello World!";
                     }
-                    this.nodes[nodeID].addDescendente(new MySpriteText(this.scene, text));
+                    holder[nodeID].addDescendente(new MySpriteText(this.scene, text));
                     break;
                 }
             case "spriteanim":
@@ -1280,7 +1314,7 @@ class MySceneGraph {
                     endcell++;
 
                     this.spriteAnimations.push(new MySpriteAnimation(this.scene, this.spritesheets[id], duration, startcell, endcell));
-                    this.nodes[nodeID].addDescendente(this.spriteAnimations[this.spriteAnimations.length - 1]);
+                    holder[nodeID].addDescendente(this.spriteAnimations[this.spriteAnimations.length - 1]);
                     break;
                 }
             case "plane":
@@ -1295,7 +1329,7 @@ class MySceneGraph {
                         this.onXMLMinorError("npartsV not set for plane on node " + nodeID + ", using 20");
                         npartsV = 20;
                     }
-                    this.nodes[nodeID].addDescendente(new Plane(this.scene, npartsU, npartsV));
+                    holder[nodeID].addDescendente(new Plane(this.scene, npartsU, npartsV));
                     break;
                 }
             case "patch":
@@ -1349,7 +1383,7 @@ class MySceneGraph {
                         }
                         controlPoints.push(auxU);
                     }
-                    this.nodes[nodeID].addDescendente(new Patch(this.scene, npointsU, npointsV, npartsU, npartsV, controlPoints));
+                    holder[nodeID].addDescendente(new Patch(this.scene, npointsU, npointsV, npartsU, npartsV, controlPoints));
                     break;
                 }
             case "defbarrel":
@@ -1384,7 +1418,7 @@ class MySceneGraph {
                         angle = 30;
                     }
                     angle = angle * 0.0174532925;
-                    this.nodes[nodeID].addDescendente(new Defbarrel(this.scene, base, middle, height, angle, slices, stacks));
+                    holder[nodeID].addDescendente(new Defbarrel(this.scene, base, middle, height, angle, slices, stacks));
                     break;
                 }
         }

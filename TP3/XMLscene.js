@@ -162,11 +162,30 @@ class XMLscene extends CGFscene {
 
         this.gameOrchestrator.onGraphLoaded();
         this.interface.initGameFolder();
+        
 
         this.sceneInited = true;
 
+        this.allNodes={};
+        for(let i in this.graph.sceneIndexes){
+            this.allNodes[i] = i;
+        }
 
+        this.activeScene = 0;
 
+        this.interface.initThemeFolder();
+
+    }
+
+    changeScene(){
+        this.sceneInited=false;
+        this.graph.nodes=[];
+        this.graph.rootNode = null;
+        this.graph.spriteAnimations = [];
+        let error;
+        if ((error = this.graph.parseNodes( this.graph.allChildren[this.graph.sceneIndexes[this.activeScene]])) != null)
+            return error;
+        this.sceneInited=true;
     }
 
     update(time) {
@@ -239,7 +258,7 @@ class XMLscene extends CGFscene {
             this.defaultAppearance.apply();
             let key;
             // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
+            this.graph.displayScene(this.activeScene);
             // Displays all the game related objects
             //this.rotateCamera(this.target);
             this.gameOrchestrator.display();
