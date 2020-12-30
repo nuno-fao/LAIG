@@ -7,7 +7,8 @@ class Board {
         this.collectZones = null;
         this.P1SS = new MySpriteText(this.scene, "00");
         this.P2SS = new MySpriteText(this.scene, "00");
-        this.time = new MySpriteText(this.scene, "00");;
+        this.time = new MySpriteText(this.scene, "00");
+        this.holderNode = null;
 
         this.initBuffers();
     }
@@ -157,6 +158,8 @@ class Board {
         this.collectZones['RR'].loadTextures();
         this.collectZones['BB'].loadTextures();
         this.collectZones['BR'].loadTextures();
+
+        this.holderNode=this.scene.graph.templates[this.scene.activeHolder];
     }
 
     updateRoundTime(time){
@@ -295,6 +298,18 @@ class Board {
         this.scene.scale(1, 2, 2);
         this.scene.rotate(-Math.PI / 2, 0, 1, 0);
         this.time.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0, -0.125, 3.7);
+        this.scene.scale(5, 0.25, 1.2);
+        this.holderNode.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0, -0.125, -3.7);
+        this.scene.scale(5, 0.25, 1.2);
+        this.holderNode.display();
         this.scene.popMatrix();
 
         for (let i in this.P1pieces) {

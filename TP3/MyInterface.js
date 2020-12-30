@@ -68,7 +68,6 @@ class MyInterface extends CGFinterface {
         folder.add({move : this.scene.gameOrchestrator.playMovie.bind(this.scene.gameOrchestrator)},'move').name('Play Movie');
         folder.add({resetCam : this.scene.resetCamera.bind(this.scene)},'resetCam').name('Reset Camera');
         folder.add({reset : this.scene.gameOrchestrator.resetGame.bind(this.scene.gameOrchestrator)},'reset').name('New Game');
-        folder.open();
     }
 
     initThemeFolder(){
