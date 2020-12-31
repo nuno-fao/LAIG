@@ -29,7 +29,7 @@ class MySceneGraph {
         this.scene = scene;
         scene.graph = this;
 
-        this.sceneIndexes= [];
+        this.sceneIndexes = [];
 
         this.nodes = [];
         this.templates = [];
@@ -116,7 +116,7 @@ class MySceneGraph {
             return "root tag <lsf> missing";
 
         let nodes = rootElement.children;
-        this.allChildren=nodes;
+        this.allChildren = nodes;
 
         // Reads the names of the nodes to an auxiliary buffer.
         let nodeNames = [];
@@ -240,20 +240,20 @@ class MySceneGraph {
             return "tag <nodes> missing";
         else {
 
-            while(index!=-1){
+            while (index != -1) {
                 //Parse nodes block
                 this.sceneIndexes.push(index);
-                
-                index = nodeNames.indexOf("nodes",index+1);
+
+                index = nodeNames.indexOf("nodes", index + 1);
             }
 
-            if ((error = this.parseNodes( nodes[this.sceneIndexes[0]])) != null)
+            if ((error = this.parseNodes(nodes[this.sceneIndexes[0]])) != null)
                 return error;
             if (index < NODES_INDEX - offset)
                 this.onXMLMinorError("tag <nodes> out of order")
         }
 
-        
+
 
 
         this.log("all parsed");
@@ -350,7 +350,7 @@ class MySceneGraph {
                 continue;
             }
         }
-            // Checks for repeated IDs.
+        // Checks for repeated IDs.
         return null;
     }
 
@@ -802,7 +802,7 @@ class MySceneGraph {
         let nodeAtributes = [];
         let nodeNames = [];
         let descendants = [];
-        
+
         //percorre os nodes e cria as estruturas de dados
         for (let i = 0; i < nodesList.length; i++) {
 
@@ -970,7 +970,7 @@ class MySceneGraph {
                     //node.wasReferenced = true;
                     node.used = true;
                 } else {
-                    this.auxiliaryParseLeaf(descendantList, nodeID, afs, aft,this.nodes);
+                    this.auxiliaryParseLeaf(descendantList, nodeID, afs, aft, this.nodes);
                 }
             }
 
@@ -1073,12 +1073,12 @@ class MySceneGraph {
 
         // print which nodes were created but not used
         for (let nodeID in this.nodes) {
-            if(nodeID != "voidTile" && nodeID != "normalTile" && nodeID != "P1piece" && nodeID != "P2piece"){
+            if (nodeID != "voidTile" && nodeID != "normalTile" && nodeID != "P1piece" && nodeID != "P2piece") {
                 if (this.nodes[nodeID].used == false && nodeID != this.idRoot) {
                     this.onXMLError("Node '" + nodeID + "' created but not referenced!");
                 }
             }
-            
+
         }
 
         //if root was not defined, it tries to find a node without any parent and make it root
@@ -1122,7 +1122,7 @@ class MySceneGraph {
         let nodeAtributes = [];
         let nodeNames = [];
         let descendants = [];
-        
+
         //percorre os nodes e cria as estruturas de dados
         for (let i = 0; i < nodesList.length; i++) {
 
@@ -1191,22 +1191,17 @@ class MySceneGraph {
                 texture,
                 material
             );
-            if(type=="P1"){
+            if (type == "P1") {
                 this.P1Names.push(nodeID);
-            }
-            else if(type=="P2"){
+            } else if (type == "P2") {
                 this.P2Names.push(nodeID);
-            }
-            else if(type=="normal"){
+            } else if (type == "normal") {
                 this.NormalNames.push(nodeID);
-            }
-            else if(type=="void"){  
+            } else if (type == "void") {
                 this.VoidNames.push(nodeID);
-            }
-            else if(type=="holder"){
+            } else if (type == "holder") {
                 this.HolderNames.push(nodeID);
-            }
-            else{
+            } else {
                 //nothing
             }
 
@@ -1310,7 +1305,7 @@ class MySceneGraph {
                     //node.wasReferenced = true;
                     node.used = true;
                 } else {
-                    this.auxiliaryParseLeaf(descendantList, nodeID, afs, aft,this.templates);
+                    this.auxiliaryParseLeaf(descendantList, nodeID, afs, aft, this.templates);
                 }
             }
 
@@ -1319,7 +1314,7 @@ class MySceneGraph {
             if (this.templates[nodeID].tg_matrix != null) {
                 for (let j = 0; j < this.templates[nodeID].tg_matrix.children.length; j++) {
                     let descendantList = this.templates[nodeID].tg_matrix.children[j];
-
+                    console.log(this.templates[nodeID] instanceof Piece);
                     //parse transformation
                     switch (descendantList.nodeName) {
                         case "translation":
@@ -1411,7 +1406,7 @@ class MySceneGraph {
             this.templates[nodeID].tg_matrix = this.scene.getMatrix();
         }
 
-        if(this.P1Names.length==0 || this.P2Names.length==0 || this.NormalNames.length==0 || this.VoidNames.length==0 || this.HolderNames.length==0){
+        if (this.P1Names.length == 0 || this.P2Names.length == 0 || this.NormalNames.length == 0 || this.VoidNames.length == 0 || this.HolderNames.length == 0) {
             this.onXMLError("Not all templates have been defined!");
             return -1;
         }
@@ -1426,7 +1421,7 @@ class MySceneGraph {
      * @param {amplification value for s} afs
      * @param {amplification value for t} aft
      */
-    auxiliaryParseLeaf(leaf, nodeID, afs, aft,holder) {
+    auxiliaryParseLeaf(leaf, nodeID, afs, aft, holder) {
         switch (this.reader.getString(leaf, 'type', false)) {
             case "triangle":
                 {
@@ -1725,6 +1720,21 @@ class MySceneGraph {
                     }
                     angle = angle * 0.0174532925;
                     holder[nodeID].addDescendente(new Defbarrel(this.scene, base, middle, height, angle, slices, stacks));
+                    break;
+                }
+            case "Timer":
+                {
+                    holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_time() }));
+                    break;
+                }
+            case "Points":
+                {
+                    holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_points() }));
+                    break;
+                }
+            case "Board":
+                {
+                    holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_board() }));
                     break;
                 }
         }

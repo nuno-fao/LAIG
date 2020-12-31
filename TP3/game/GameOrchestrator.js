@@ -32,8 +32,17 @@ class GameOrchestrator {
 
     }
 
-    display() {
-        this.board.display();
+    display_time() {
+        if (this.board)
+            this.board.displayTime();
+    }
+    display_points() {
+        if (this.board)
+            this.board.displayPoints();
+    }
+    display_board() {
+        if (this.board)
+            this.board.display();
     }
 
     checkProlog() {
@@ -403,7 +412,7 @@ class GameOrchestrator {
         if (this.lastPicked instanceof Piece)
             this.lastPicked.setPicked(false);
         if (obj instanceof BoardTile) {
-            if (this.event==Events.WAITING && this.lastPicked instanceof Piece && obj.getPiece() == null) {
+            if (this.event == Events.WAITING && this.lastPicked instanceof Piece && obj.getPiece() == null) {
 
                 this.movePiece(this.lastPicked, obj);
 

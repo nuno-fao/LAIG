@@ -93,9 +93,9 @@ class Piece {
     stopPiece(tile) {
         this.pieceAnimation = null;
         let coords = tile.getCenterCoords();
-        this.centerX = coords[0] - this.XMLnode.tg_matrix[12];
-        this.centerZ = coords[1] - this.XMLnode.tg_matrix[13];
-        this.centerY = this.XMLnode.tg_matrix[14];
+        this.centerX = coords[0] - this.XMLnode.tg_matrix[12] - tile.XMLnode.tg_matrix[12];
+        this.centerZ = coords[1] - this.XMLnode.tg_matrix[13] - tile.XMLnode.tg_matrix[13];
+        this.centerY = this.XMLnode.tg_matrix[14] + tile.XMLnode.tg_matrix[14];
     }
     update(time) {
         if (this.pieceAnimation != null)
@@ -113,10 +113,9 @@ class PieceAnimation {
         //console.log(this.endP);
         this.endP = destinationTile.getCenterCoords();
         this.bias = piece.XMLnode.tg_matrix;
-        console.log("teste: " + this.bias);
-        this.endP[0] -= this.bias[12];
-        this.endP[1] -= this.bias[13];
-        this.endP.push(this.bias[14]);
+        this.endP[0] -= this.bias[12] + destinationTile.XMLnode.tg_matrix[12];
+        this.endP[1] -= this.bias[13] + destinationTile.XMLnode.tg_matrix[13];
+        this.endP.push(this.bias[14] + destinationTile.XMLnode.tg_matrix[14]);
         this.startTime = 0;
         this.hasYValue = hasYValue;
         this.x = 0;

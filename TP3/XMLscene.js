@@ -279,7 +279,7 @@ class XMLscene extends CGFscene {
             this.graph.displayScene(this.activeScene);
             // Displays all the game related objects
             //this.rotateCamera(this.target);
-            this.gameOrchestrator.display();
+            //this.gameOrchestrator.display();
         } else {
             // Show some "loading" visuals
             this.defaultAppearance.apply();

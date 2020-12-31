@@ -159,12 +159,12 @@ class Board {
         this.collectZones['BB'].loadTextures();
         this.collectZones['BR'].loadTextures();
 
-        this.holderNode=this.scene.graph.templates[this.scene.activeHolder];
+        this.holderNode = this.scene.graph.templates[this.scene.activeHolder];
     }
 
-    updateRoundTime(time){
-        if(time.length==1){
-            time="0"+time;
+    updateRoundTime(time) {
+        if (time.length == 1) {
+            time = "0" + time;
         }
         this.time.updateText(time);
     }
@@ -228,17 +228,40 @@ class Board {
     }
 
     updatePoints(p0, p1) {
-        if(p0.length==1){
-            p0 = "0"+p0;
+        if (p0.length == 1) {
+            p0 = "0" + p0;
         }
-        if(p1.length==1){
-            p1 = "0"+p1;
+        if (p1.length == 1) {
+            p1 = "0" + p1;
         }
         this.P1SS.updateText(p0);
         this.P2SS.updateText(p1);
     }
 
 
+    displayPoints() {
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0, -2.5);
+        this.scene.scale(1, 2, 2);
+        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+        this.P2SS.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0, 3);
+        this.scene.scale(1, 2, 2);
+        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+        this.P1SS.display();
+        this.scene.popMatrix();
+
+    }
+    displayTime() {
+        this.scene.pushMatrix();
+        this.scene.scale(1, 2, 2);
+        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+        this.time.display();
+        this.scene.popMatrix();
+    }
     display() {
         for (let i in this.board) {
             for (let j in this.board[i]) {
@@ -277,27 +300,6 @@ class Board {
         this.scene.scale(-0.5, 1, 0.7);
         this.scene.rotate(Math.PI / 2, 1, 0, 0);
         this.riskSS.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(9, 0.5, -2.5);
-        this.scene.scale(1, 2, 2);
-        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
-        this.P2SS.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(9, 0.5, 3);
-        this.scene.scale(1, 2, 2);
-        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
-        this.P1SS.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(9, 3, 0.35);
-        this.scene.scale(1, 2, 2);
-        this.scene.rotate(-Math.PI / 2, 0, 1, 0);
-        this.time.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
