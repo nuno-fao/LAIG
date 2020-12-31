@@ -322,8 +322,6 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="-2" y="3" z="1"/>
-
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -1322,7 +1320,8 @@
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
-            <transformations>          
+            <transformations>      
+
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
@@ -3692,14 +3691,13 @@
             </texture>
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
-            <transformations>          
+            <transformations>    
+                <translation x="2" y="2" z="2"/>      
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present
              descendants may be mixed, nodes and leafs -->
             <descendants>
-                <noderef id="tampo_mesa" />
-                <noderef id="pernas_mesa" />
                 <noderef id="lata" />
                 <noderef id="laranja" />
                 <noderef id="donut" />

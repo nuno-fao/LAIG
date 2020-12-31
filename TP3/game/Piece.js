@@ -3,6 +3,7 @@ class Piece {
         this.scene = scene;
         this.type = type;
         this.centerX = centerX;
+        this.centerY = 0;
         this.centerZ = centerZ;
         this.objectID = objectID;
         this.pieceAnimation = null;
@@ -10,7 +11,7 @@ class Piece {
 
         this.y = 0;
 
-        
+
         //pointer to holding tile if any
         this.holdingTile = null;
         this.wasMoved = false;
@@ -28,7 +29,7 @@ class Piece {
             this.XMLnode = this.scene.graph.templates[this.scene.activeP2Piece];
         }
 
-        
+
     }
 
     getType() {
@@ -62,7 +63,7 @@ class Piece {
             this.pieceAnimation.display();
         if (this.picked)
             this.pickedAnimation();
-        this.scene.translate(this.centerX, 0.25, this.centerZ);
+        this.scene.translate(this.centerX, 0.25 + this.centerY, this.centerZ);
         this.scene.rotate(Math.PI / 2, 1, 0, 0);
         this.XMLnode.display();
         this.scene.popMatrix();
@@ -92,8 +93,9 @@ class Piece {
     stopPiece(tile) {
         this.pieceAnimation = null;
         let coords = tile.getCenterCoords();
-        this.centerX = coords[0];
-        this.centerZ = coords[1];
+        this.centerX = coords[0] - this.XMLnode.tg_matrix[12];
+        this.centerZ = coords[1] - this.XMLnode.tg_matrix[13];
+        this.centerY = this.XMLnode.tg_matrix[14];
     }
     update(time) {
         if (this.pieceAnimation != null)
@@ -110,6 +112,11 @@ class PieceAnimation {
         this.startP = piece.getCenterCoords();
         //console.log(this.endP);
         this.endP = destinationTile.getCenterCoords();
+        this.bias = piece.XMLnode.tg_matrix;
+        console.log("teste: " + this.bias);
+        this.endP[0] -= this.bias[12];
+        this.endP[1] -= this.bias[13];
+        this.endP.push(this.bias[14]);
         this.startTime = 0;
         this.hasYValue = hasYValue;
         this.x = 0;
@@ -132,8 +139,16 @@ class PieceAnimation {
         // console.log(this.endP);
         // console.log(this.startP);
         this.x = (this.endP[0] - this.startP[0]) * mult;
-        if (this.hasYValue)
-            this.y = ParametricBlend(t * 2000, 2000);
+        if (this.hasYValue) {
+            if (this.endP[2] != 0) {
+                if (t * 2000 >= 500)
+                    this.y = ParametricBlend((t) * 2000 - 500, 1500) + this.endP[2];
+                else {
+                    this.y = this.endP[2] * t * 2000 / 500
+                }
+            } else
+                this.y = ParametricBlend(t * 2000, 2000) + this.endP[2];
+        }
         this.z = (this.endP[1] - this.startP[1]) * mult;
         return 1;
     }
