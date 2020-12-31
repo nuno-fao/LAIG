@@ -403,7 +403,7 @@ class GameOrchestrator {
         if (this.lastPicked instanceof Piece)
             this.lastPicked.setPicked(false);
         if (obj instanceof BoardTile) {
-            if (this.lastPicked instanceof Piece && obj.getPiece() == null) {
+            if (this.event==Events.WAITING && this.lastPicked instanceof Piece && obj.getPiece() == null) {
 
                 this.movePiece(this.lastPicked, obj);
 
