@@ -9,6 +9,7 @@ class Board {
         this.P2SS = new MySpriteText(this.scene, "00");
         this.time = new MySpriteText(this.scene, "00");
         this.holderNode = null;
+        this.message=new MySpriteText(this.scene,"yo wassup");;
 
         this.initBuffers();
     }
@@ -201,6 +202,14 @@ class Board {
         targetTile.setPiece(piece);
     }
 
+    updateMessage(text){
+        this.message = new MySpriteText(this.scene,text);
+    }
+
+    clearMessage(){
+        this.message=null;
+    }
+
     movePiece(piece, startTile, finalTile) {
         if (piece.getTile() == startTile && finalTile.getPiece() == null) {
             piece.movePiece(finalTile, false);
@@ -264,6 +273,15 @@ class Board {
         this.time.display();
         this.scene.popMatrix();
     }
+    displayMessage(){
+        if(this.message!=null){
+            this.scene.pushMatrix();
+            this.scene.scale(1, 2, 2);
+            this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+            this.message.display();
+            this.scene.popMatrix();
+        }
+    }
     display() {
         for (let i in this.board) {
             for (let j in this.board[i]) {
@@ -323,8 +341,6 @@ class Board {
         for (let i in this.P2pieces) {
             this.P2pieces[i].display();
         }
-
-
     }
 }
 

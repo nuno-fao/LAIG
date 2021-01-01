@@ -104,7 +104,7 @@ class GameOrchestrator {
     }
 
     update(time) {
-        console.log(this.event);
+        //console.log(this.event);
 
         if (this.playingMovie == -1) {
             switch (this.event) {
@@ -125,9 +125,9 @@ class GameOrchestrator {
                             if (seconds <= 0) {
                                 this.event = Events.END;
                                 if (this.turnPlayer == this.player0) {
-                                    alert("Player 1 ran out of time. Player 2 wins!");
+                                    this.board.updateMessage("Time Ran Out. Player 2 wins!");
                                 } else {
-                                    alert("Player 2 ran out of time. Player 1 wins!");
+                                    this.board.updateMessage("Time Ran Out. Player 1 wins!");
                                 }
                             }
                         }
@@ -195,11 +195,11 @@ class GameOrchestrator {
                     {
                         if (this.gameStateSeq.newPoints[0] != "-1") {
                             if (this.gameStateSeq.newPoints[0] == "0") {
-                                alert("Player 1 wins!");
+                                this.board.updateMessage("Player 1 wins!");
                             } else if (this.gameStateSeq.newPoints[0] == "1") {
-                                alert("Player 2 wins!");
+                                this.board.updateMessage("Player 2 wins!");
                             } else {
-                                alert("The game ended in a tie!");
+                                this.board.updateMessage("Game ended in a tie!");
                             }
                             this.event = Events.END;
                         } else {
@@ -276,11 +276,11 @@ class GameOrchestrator {
                             this.changeTurn(false);
                             if (this.newGameStateSeq.newPoints[0] != "-1") {
                                 if (this.newGameStateSeq.newPoints[0] == "0") {
-                                    alert("Player 1 wins!");
+                                    this.board.updateMessage("Player 1 wins!");
                                 } else if (this.newGameStateSeq.newPoints[0] == "1") {
-                                    alert("Player 2 wins!");
+                                    this.board.updateMessage("Player 2 wins!");
                                 } else {
-                                    alert("The game ended in a tie!");
+                                    this.board.updateMessage("The game ended in a tie!");
                                 }
                                 this.event = Events.END;
                             } else {
@@ -462,11 +462,10 @@ class GameOrchestrator {
                 this.gameSequence.undo();
                 this.event = Events.WAITING;
             } else {
-                //alert("Wait for previous move to finish");
             }
 
         } else {
-            //alert("Can't undo on AI vs AI mode");
+
         }
 
     }

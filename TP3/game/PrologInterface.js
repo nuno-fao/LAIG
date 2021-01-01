@@ -9,9 +9,7 @@ class PrologInterface {
         this.getPrologRequest(request, function(data) {
             this.gameOrchestrator.gameState = data.target.response;
             this.gameOrchestrator.startGame();
-            console.log(this.gameOrchestrator.gameSequence.moves);
-        });
-        this.getPrologRequest("", () => {}, this.prologServerDown, 0);
+        }, this.prologServerDown,0);
     }
 
     prologServerDown() {
@@ -19,7 +17,6 @@ class PrologInterface {
     }
 
     getAIMove(gameState, difficulty) {
-        console.log("MAKING AI MOVE");
         let level = null;
         if (difficulty == playerType.easyAI) {
             level = 'easy';
@@ -33,8 +30,6 @@ class PrologInterface {
             let targetString = data.target.response.substring(targetIndex + 8, data.target.response.length - 2).split(",");
 
             let restOfReply = data.target.response.substring(1, targetIndex);
-
-            console.log(targetString, restOfReply);
 
             this.gameOrchestrator.movePiece(this.gameOrchestrator.turnPlayer.getUnplayedPiece(targetString[0]), this.gameOrchestrator.board.getTileFromCoordinate(parseInt(targetString[1]), parseInt(targetString[2])));
 
@@ -50,15 +45,11 @@ class PrologInterface {
 
             this.gameOrchestrator.event = Events.APLLYING;
 
-            console.log(this.gameOrchestrator.gameSequence.moves);
-
         });
     }
 
     makeMove(gameState, target) {
-        console.log("MAKING PLAYER MOVE");
         let request = 'move(' + gameState + ',target(' + target.toString() + '))';
-        console.log("request", request);
 
         this.getPrologRequest(request, function(data) {
 
@@ -67,8 +58,6 @@ class PrologInterface {
             let startPointsIndex = data.target.response.indexOf(",points(");
 
             this.gameOrchestrator.gameState = data.target.response.substring(1, startChangeIndex);
-
-            console.log(data.target.response);
             //console.log('Gamestate',this.gameOrchestrator.gameState);
 
             this.applyChanges(data.target.response.substring(startChangeIndex + 10, startRemovalIndex - 2));
@@ -79,14 +68,12 @@ class PrologInterface {
     }
 
     updatePoints(pointsStr) {
-        console.log('Points', pointsStr);
 
         let points = pointsStr.split(",");
         this.gameOrchestrator.updatePoints(points[0], points[1], points[2]);
     }
 
     applyChanges(changesStr) {
-        console.log('Changes', changesStr);
 
         if (changesStr !== "") {
             let changesArr = changesStr.split(",");
@@ -100,7 +87,6 @@ class PrologInterface {
     }
 
     applyRemoval(removalStr) {
-        console.log('Removal', removalStr);
 
         if (removalStr !== "") {
             let aux = removalStr.replace(/[\[\]']+/g, '');

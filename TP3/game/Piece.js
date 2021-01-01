@@ -111,7 +111,7 @@ class Piece {
                 this.pickedRotAngle = 0;
             } else if (t < 1150 && t >= 850) {
                 this.pickedRotAngle = Math.PI * 2 * ParametricBlend(t - 850, 600);
-                console.log(this.pickedRotAngle);
+                //console.log(this.pickedRotAngle);
             } else {
                 this.y = ParametricBlend(t - 300, 1700);
                 this.pickedRotAngle = 0;

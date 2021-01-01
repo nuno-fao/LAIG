@@ -86,10 +86,11 @@ class GameSequence{
         move.play.piece.centerZ=move.play.originCoords[1];
         move.play.piece.selectable=true;
         move.play.destination.removePiece();
-        
 
         //update points
         this.gameOrchestrator.board.updatePoints(move.points[0],move.points[1]);
+
+        this.gameOrchestrator.board.clearMessage();
 
         //update gamestate
         if(changeState){
