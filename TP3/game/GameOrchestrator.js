@@ -203,6 +203,7 @@ class GameOrchestrator {
                             }
                             this.event = Events.END;
                         } else {
+                            this.board.clearMessage();
                             this.event = Events.WAITING;
                         }
                         this.gameSequence.newMove();
@@ -487,6 +488,7 @@ class GameOrchestrator {
 
     playMovie() {
         if ((this.event == Events.WAITING || this.event == Events.END) && this.gameSequence.moves.length > 0 && this.playingMovie==-1) {
+            this.board.updateMessage("Playing movie");
             this.playingMovie = 0;
             this.event = Events.WAITING;
             this.gameSequence.undoAll();
