@@ -293,17 +293,4 @@ class XMLscene extends CGFscene {
         this.popMatrix();
         setTimeout(() => {}, 200);
     }
-
-    rotateCamera(targetPosition) {
-        let targetTime = 2000;
-        if (targetPosition == 1) {
-            this.rotate(3.1415 * (this.rotateTime - this.initTime) / targetTime, 0, 1, 0);
-        } else if (targetPosition == 0) {
-            this.rotate(3.1415 - 3.1415 * (this.rotateTime - this.initTime) / targetTime, 0, 1, 0);
-        }
-        if (this.rotateTime - this.initTime >= targetTime) {
-            this.initTime = this.rotateTime;
-            //this.target = (this.target == 0) ? 1 : 0; // comentar para retirar o movimento automatico
-        }
-    }
 }
