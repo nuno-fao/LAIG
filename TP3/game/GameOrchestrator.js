@@ -280,7 +280,7 @@ class GameOrchestrator {
                                 } else if (this.newGameStateSeq.newPoints[0] == "1") {
                                     this.board.updateMessage("Player 2 wins!");
                                 } else {
-                                    this.board.updateMessage("The game ended in a tie!");
+                                    this.board.updateMessage("Game ended in a tie!");
                                 }
                                 this.event = Events.END;
                             } else {
@@ -340,6 +340,8 @@ class GameOrchestrator {
         this.pauseTime = null;
         this.startPause = null;
         this.pauseSum = 0;
+
+        this.board.clearMessage();
 
         if (rotate) {
             if (this.player1.type == playerType.human && (this.player0.type == playerType.human || !this.wasAdjusted)) {
@@ -473,11 +475,13 @@ class GameOrchestrator {
     pause() {
         if (this.playingMovie == -1 && this.event == Events.WAITING) {
             this.event = Events.PAUSE;
+            this.board.updateMessage("Game paused");
         } else if (this.event == Events.PAUSE) {
             this.pauseSum += Math.floor((this.pauseTime - this.startPause) / 1000);
             this.pauseTime = null;
             this.startPause = null;
             this.event = Events.WAITING;
+            this.board.clearMessage();
         }
     }
 

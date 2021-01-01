@@ -9,7 +9,7 @@ class Board {
         this.P2SS = new MySpriteText(this.scene, "00");
         this.time = new MySpriteText(this.scene, "00");
         this.holderNode = null;
-        this.message=new MySpriteText(this.scene,"yo wassup");;
+        this.message=null;
 
         this.initBuffers();
     }
