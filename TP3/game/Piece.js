@@ -10,6 +10,7 @@ class Piece {
         this.pickedTime = 0;
 
         this.y = 0;
+        this.pickedRotAngle = 0;
 
 
         //pointer to holding tile if any
@@ -61,9 +62,9 @@ class Piece {
         this.scene.pushMatrix();
         if (this.pieceAnimation != null)
             this.pieceAnimation.display();
+        this.scene.translate(this.centerX, 0.25 + this.centerY, this.centerZ);
         if (this.picked)
             this.pickedAnimation();
-        this.scene.translate(this.centerX, 0.25 + this.centerY, this.centerZ);
         this.scene.rotate(Math.PI / 2, 1, 0, 0);
         this.XMLnode.display();
         this.scene.popMatrix();
@@ -78,7 +79,9 @@ class Piece {
     }
 
     pickedAnimation() {
-        this.scene.translate(0, this.y * 0.2, 0);
+        this.scene.translate(0, this.y * 0.4, 0);
+        if (this.pickedRotAngle)
+            this.scene.rotate(this.pickedRotAngle, 0, 0, 1);
     }
 
     setPicked(isPicked) {
@@ -100,8 +103,20 @@ class Piece {
     update(time) {
         if (this.pieceAnimation != null)
             return this.pieceAnimation.update(time);
-        if (this.picked)
-            this.y = ParametricBlend(time - this.pickedTime, 750);
+        if (this.picked) {
+            let t = (time - this.pickedTime) % 2000;
+            //console.log(t)
+            if (t < 850) {
+                this.y = ParametricBlend(t, 1700);
+                this.pickedRotAngle = 0;
+            } else if (t < 1150 && t >= 850) {
+                this.pickedRotAngle = Math.PI * 2 * ParametricBlend(t - 850, 600);
+                console.log(this.pickedRotAngle);
+            } else {
+                this.y = ParametricBlend(t - 300, 1700);
+                this.pickedRotAngle = 0;
+            }
+        }
     }
 }
 

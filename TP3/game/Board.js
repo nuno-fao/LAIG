@@ -166,6 +166,8 @@ class Board {
         if (time.length == 1) {
             time = "0" + time;
         }
+        if (parseInt(time) < 0)
+            time = "00";
         this.time.updateText(time);
     }
 

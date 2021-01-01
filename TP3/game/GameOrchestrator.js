@@ -104,7 +104,7 @@ class GameOrchestrator {
     }
 
     update(time) {
-        console.log(this.event);
+        //console.log(this.event);
 
         if (this.playingMovie == -1) {
             switch (this.event) {
