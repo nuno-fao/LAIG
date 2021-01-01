@@ -104,7 +104,7 @@ class GameOrchestrator {
     }
 
     update(time) {
-        //console.log(this.event);
+        console.log(this.event);
 
         if (this.playingMovie == -1) {
             switch (this.event) {
@@ -230,18 +230,17 @@ class GameOrchestrator {
                 case Events.WAITING:
                     {
                         //make move
-                        this.gameStateSeq = this.gameSequence.moves[this.playingMovie];
-                        this.movePieceReplay(this.gameStateSeq.play.piece, this.gameStateSeq.play.destination);
-                        console.log(this.gameStateSeq);
+                        this.newGameStateSeq = this.gameSequence.moves[this.playingMovie];
+                        this.movePieceReplay(this.newGameStateSeq.play.piece, this.newGameStateSeq.play.destination);
                         break;
                     }
                 case Events.APLLYING:
                     {
-                        if (this.gameStateSeq.play.piece.update(time) == 0) {
+                        if (this.newGameStateSeq.play.piece.update(time) == 0) {
                             this.event = Events.MOVING;
 
-                            for (let i in this.gameStateSeq.changes) {
-                                this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
+                            for (let i in this.newGameStateSeq.changes) {
+                                this.board.movePiece(this.newGameStateSeq.changes[i].origin.getPiece(), this.newGameStateSeq.changes[i].origin, this.newGameStateSeq.changes[i].destination);
                             }
                         }
                         break;
@@ -249,16 +248,16 @@ class GameOrchestrator {
                 case Events.MOVING:
                     {
                         let ended = true;
-                        for (let i in this.gameStateSeq.changes) {
-                            if (this.gameStateSeq.changes[i].piece.update(time) != 0) {
+                        for (let i in this.newGameStateSeq.changes) {
+                            if (this.newGameStateSeq.changes[i].piece.update(time) != 0) {
                                 ended = false;
                             }
                         }
                         if (ended) {
-                            this.gameStateSeq.updateRemovals();
+                            this.newGameStateSeq.updateRemovals();
                             this.event = Events.REMOVING;
-                            for (let i in this.gameStateSeq.removed) {
-                                this.board.movePieceToCollectZone(this.gameStateSeq.removed[i].origin, this.gameStateSeq.removed[i].destCoords[0], this.gameStateSeq.removed[i].destCoords[1]);
+                            for (let i in this.newGameStateSeq.removed) {
+                                this.board.movePieceToCollectZone(this.newGameStateSeq.removed[i].origin, this.newGameStateSeq.removed[i].destCoords[0], this.newGameStateSeq.removed[i].destCoords[1]);
                                 //this.board.movePiece(this.gameStateSeq.changes[i].origin.getPiece(), this.gameStateSeq.changes[i].origin, this.gameStateSeq.changes[i].destination);
                             }
                         }
@@ -267,24 +266,24 @@ class GameOrchestrator {
                 case Events.REMOVING:
                     {
                         let ended = true;
-                        for (let i in this.gameStateSeq.removed) {
-                            if (this.gameStateSeq.removed[i].piece.update(time) != 0) {
+                        for (let i in this.newGameStateSeq.removed) {
+                            if (this.newGameStateSeq.removed[i].piece.update(time) != 0) {
                                 ended = false;
                             }
                         }
                         if (ended) {
-                            this.board.updatePoints(this.gameStateSeq.newPoints[1], this.gameStateSeq.newPoints[2]);
-                            if (this.gameStateSeq.newPoints[0] != "-1") {
-                                if (this.gameStateSeq.newPoints[0] == "0") {
+                            this.board.updatePoints(this.newGameStateSeq.newPoints[1], this.newGameStateSeq.newPoints[2]);
+                            this.changeTurn(false);
+                            if (this.newGameStateSeq.newPoints[0] != "-1") {
+                                if (this.newGameStateSeq.newPoints[0] == "0") {
                                     alert("Player 1 wins!");
-                                } else if (this.gameStateSeq.newPoints[0] == "1") {
+                                } else if (this.newGameStateSeq.newPoints[0] == "1") {
                                     alert("Player 2 wins!");
                                 } else {
                                     alert("The game ended in a tie!");
                                 }
                                 this.event = Events.END;
                             } else {
-                                this.changeTurn(false);
                                 this.event = Events.MOVE_DONE;
                             }
                         }
@@ -305,6 +304,12 @@ class GameOrchestrator {
 
                         }
                         this.event = Events.WAITING;
+                        break;
+                    }
+                case Events.END:
+                    {
+                        //this.gameSequence.newMove();
+                        this.playingMovie = -1;
                         break;
                     }
                 default:
@@ -457,11 +462,11 @@ class GameOrchestrator {
                 this.gameSequence.undo();
                 this.event = Events.WAITING;
             } else {
-                alert("Wait for previous move to finish");
+                //alert("Wait for previous move to finish");
             }
 
         } else {
-            alert("Can't undo on AI vs AI mode");
+            //alert("Can't undo on AI vs AI mode");
         }
 
     }
@@ -478,7 +483,7 @@ class GameOrchestrator {
     }
 
     playMovie() {
-        if (this.event == Events.END && this.gameSequence.moves.length > 0) {
+        if ((this.event == Events.WAITING || this.event == Events.END) && this.gameSequence.moves.length > 0 && this.playingMovie==-1) {
             this.playingMovie = 0;
             this.event = Events.WAITING;
             this.gameSequence.undoAll();

@@ -14,10 +14,10 @@ class GameSequence{
         }
         else{
             console.log(this.moves);
-            this.applyChangesToOrchestrator(this.moves[this.moves.length-1]);
+            this.applyChangesToOrchestrator(this.moves[this.moves.length-1],true);
             this.moves.pop();
             if(this.gameOrchestrator.turnPlayer.type != playerType.human){
-                this.applyChangesToOrchestrator(this.moves[this.moves.length-1]);
+                this.applyChangesToOrchestrator(this.moves[this.moves.length-1],true);
                 this.moves.pop();
             }
         }
@@ -25,13 +25,14 @@ class GameSequence{
 
     undoAll(){
         for(let i = this.moves.length - 1;i>=0;i--){
-            this.applyChangesToOrchestrator(this.moves[i]);
+            this.applyChangesToOrchestrator(this.moves[i],false);
         }
     }
+
     // moveReplay(){
     // }
 
-    applyChangesToOrchestrator(move){
+    applyChangesToOrchestrator(move,changeState){
         if(this.gameOrchestrator.lastPicked instanceof Piece){
             this.gameOrchestrator.lastPicked.picked = false;
         }
@@ -91,8 +92,9 @@ class GameSequence{
         this.gameOrchestrator.board.updatePoints(move.points[0],move.points[1]);
 
         //update gamestate
-        this.gameOrchestrator.gameState=move.prologState;
-
+        if(changeState){
+            this.gameOrchestrator.gameState=move.prologState;
+        }
         //change turn
         this.gameOrchestrator.changeTurn(false);
 
@@ -107,6 +109,14 @@ class GameState{
         this.removed = [];
         this.points = [];
         this.prologState = null;
+        this.newPoints = null;
+        this.newPrologState = null;
+    }
+
+    clear(){
+        this.play = null;
+        this.changes = [];
+        this.removed = [];
         this.newPoints = null;
         this.newPrologState = null;
     }
