@@ -97,13 +97,16 @@ class GameOrchestrator {
     onGraphLoaded() {
         this.board.loadTemplates();
 
-        this.player0 = new Player(this.board.P1pieces, playerType.human, 0);
-        this.player1 = new Player(this.board.P2pieces, playerType.human, 1);
-        this.turnPlayer = this.player0;
-        this.turnPlayer.makePiecesSelectable(true);
-        this.player1.makePiecesSelectable(false);
+        if (this.scene.graph.first) {
+            this.player0 = new Player(this.board.P1pieces, playerType.human, 0);
+            this.player1 = new Player(this.board.P2pieces, playerType.human, 1);
+            this.turnPlayer = this.player0;
+            this.turnPlayer.makePiecesSelectable(true);
+            this.player1.makePiecesSelectable(false);
 
-        this.prologInterface.setInitialState();
+            this.prologInterface.setInitialState();
+        }
+        this.scene.resetCamera();
 
     }
 

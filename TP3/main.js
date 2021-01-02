@@ -63,14 +63,16 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
         // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 
+
+        var filenames = ["LAIG_TP2_T2_G05.xml", "1.xml"];
+        myInterface.setFilenames(filenames);
         var filename = getUrlVars()['file'] || "LAIG_TP2_T2_G05.xml";
 
         // create and load graph, and associate it to scene. 
         // Check console for loading errors
-        var myGraph = new MySceneGraph(filename, myScene);
+        new MySceneGraph(filenames[0], myScene, true);
 
         // start
         app.run();
     }
-
 ]);

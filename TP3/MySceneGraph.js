@@ -22,12 +22,13 @@ class MySceneGraph {
      * @param {string} filename - File that defines the 3D scene
      * @param {XMLScene} scene
      */
-    constructor(filename, scene) {
+    constructor(filename, scene, first) {
         this.loadedOk = null;
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
         scene.graph = this;
+        this.first = first;
 
         this.sceneIndexes = [];
 

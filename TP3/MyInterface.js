@@ -7,6 +7,8 @@ class MyInterface extends CGFinterface {
      */
     constructor() {
         super();
+        this.filenames = [];
+        this.items = [];
     }
 
     /**
@@ -25,9 +27,20 @@ class MyInterface extends CGFinterface {
 
         this.initKeys();
 
-        
+
 
         return true;
+    }
+
+    destroy() {
+        for (let i in this.items) {
+            try {
+                this.gui.removeFolder(this.items[i]);
+            } catch (err) {
+                this.gui.remove(this.items[i]);
+            }
+        }
+        this.items = [];
     }
 
     /**
@@ -40,13 +53,16 @@ class MyInterface extends CGFinterface {
         for (let key in this.scene.graph.views) {
             this.scene.cameraKeys.push(key)
         }
-        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraKeys).name('Selected camera').onChange(this.scene.setCamera.bind(this.scene));
-        this.gui.add(this.scene, 'seeLights').name("See Lights");
+        let cam = this.gui.add(this.scene, 'selectedCamera', this.scene.cameraKeys).name('Selected camera').onChange(this.scene.setCamera.bind(this.scene));
+        let lights = this.gui.add(this.scene, 'seeLights').name("See Lights");
+        this.items.push(cam);
+        this.items.push(lights);
     }
 
     initLights() {
         let i = 0;
         let folder = this.gui.addFolder("Lights");
+        this.items.push(folder);
         for (let key in this.scene.graph.lights) {
             folder.add(this.scene.lights[i], 'enabled').name(this.scene.lights[i].idLight)
             i++;
@@ -59,26 +75,37 @@ class MyInterface extends CGFinterface {
         this.activeKeys = {};
     }
 
-    initGameFolder(){
+    initGameFolder() {
         let folder = this.gui.addFolder("Game");
-        folder.add({undo : this.scene.gameOrchestrator.undo.bind(this.scene.gameOrchestrator)},'undo').name('Undo');
-        folder.add({pause : this.scene.gameOrchestrator.pause.bind(this.scene.gameOrchestrator)},'pause').name('Pause');
+        this.items.push(folder);
+        folder.add({ undo: this.scene.gameOrchestrator.undo.bind(this.scene.gameOrchestrator) }, 'undo').name('Undo');
+        folder.add({ pause: this.scene.gameOrchestrator.pause.bind(this.scene.gameOrchestrator) }, 'pause').name('Pause');
         folder.add(this.scene.gameOrchestrator.player0, 'type', playerType).name('Player 1');
         folder.add(this.scene.gameOrchestrator.player1, 'type', playerType).name('Player 2');
-        folder.add({move : this.scene.gameOrchestrator.playMovie.bind(this.scene.gameOrchestrator)},'move').name('Play Movie');
-        folder.add({resetCam : this.scene.resetCamera.bind(this.scene)},'resetCam').name('Reset Camera');
-        folder.add({reset : this.scene.gameOrchestrator.resetGame.bind(this.scene.gameOrchestrator)},'reset').name('New Game');
+        folder.add({ move: this.scene.gameOrchestrator.playMovie.bind(this.scene.gameOrchestrator) }, 'move').name('Play Movie');
+        folder.add({ resetCam: this.scene.resetCamera.bind(this.scene) }, 'resetCam').name('Reset Camera');
+        folder.add({ reset: this.scene.gameOrchestrator.resetGame.bind(this.scene.gameOrchestrator) }, 'reset').name('New Game');
     }
 
-    initThemeFolder(){
+    initThemeFolder() {
         let folder = this.gui.addFolder("Themes");
-        folder.add(this.scene, 'activeScene', this.scene.allNodes).name('Scene').onChange(this.scene.changeScene.bind(this.scene));
+        this.items.push(folder);
+        folder.add(this.scene, 'activeScene', this.filenames).name('Scene').onChange((scene) => {
+            this.destroy();
+            this.scene.sceneInited = false;
+            new MySceneGraph(scene, this.scene, false);
+        });
         folder.add(this.scene, 'activeP1Piece', this.scene.graph.P1Names).name('P1 Pieces').onChange(this.scene.loadTemplates.bind(this.scene));
         folder.add(this.scene, 'activeP2Piece', this.scene.graph.P2Names).name('P2 Pieces').onChange(this.scene.loadTemplates.bind(this.scene));
         folder.add(this.scene, 'activeNormalTile', this.scene.graph.NormalNames).name('Normal Tile').onChange(this.scene.loadTemplates.bind(this.scene));
         folder.add(this.scene, 'activeVoidTile', this.scene.graph.VoidNames).name('Void Tile').onChange(this.scene.loadTemplates.bind(this.scene));
         folder.add(this.scene, 'activeHolder', this.scene.graph.HolderNames).name('Holder').onChange(this.scene.loadTemplates.bind(this.scene));
     }
+    setFilenames(filenames) {
+        this.filenames = filenames;
+    }
+
+
 
     processKeyDown(event) {
         this.activeKeys[event.code] = true;

@@ -35,7 +35,7 @@
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />            <!-- specular component -->
         </light>
         <light id="luz_candeeiro">           <!-- light identifier -->
-            <enable value="0" /> 
+            <enable value="1" /> 
             <!-- enable/disable -->
             <position x="-2.5" y="5.1" z="-2" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
             <ambient r="0" g="0" b="0" a="1.0" />                   <!-- ambient component -->
@@ -43,7 +43,7 @@
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />            <!-- specular component -->
         </light>
         <light id="luz_por_do_sol">           <!-- light identifier -->
-            <enable value="0" /> 
+            <enable value="1" /> 
             <!-- enable/disable -->
             <position x="25" y="20" z="20" w="1" /><!-- light position; w=1: point light; w=0: directional light -->
             <ambient r="0.97" g="0.83" b="0.64" a="1.0" />                   <!-- ambient component -->
@@ -579,8 +579,6 @@
                 <noderef id="bbq"/>
                 <noderef id="chao" />
                 <noderef id="mesa" />
-                <noderef id="parede" />
-                <noderef id="candeeiro"/>
                 <noderef id="relva"/>
                 <noderef id="textoTasca"/>
                 <noderef id="balcao"/>
