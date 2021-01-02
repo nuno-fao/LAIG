@@ -9,7 +9,7 @@ class Board {
         this.P2SS = new MySpriteText(this.scene, "00");
         this.time = new MySpriteText(this.scene, "00");
         this.holderNode = null;
-        this.message=null;
+        this.message = null;
 
         this.initBuffers();
     }
@@ -202,12 +202,12 @@ class Board {
         targetTile.setPiece(piece);
     }
 
-    updateMessage(text){
-        this.message = new MySpriteText(this.scene,text);
+    updateMessage(text) {
+        this.message = new MySpriteText(this.scene, text);
     }
 
-    clearMessage(){
-        this.message=null;
+    clearMessage() {
+        this.message = null;
     }
 
     movePiece(piece, startTile, finalTile) {
@@ -273,8 +273,8 @@ class Board {
         this.time.display();
         this.scene.popMatrix();
     }
-    displayMessage(){
-        if(this.message!=null){
+    displayMessage() {
+        if (this.message != null) {
             this.scene.pushMatrix();
             this.scene.scale(1, 2, 2);
             this.scene.rotate(-Math.PI / 2, 0, 1, 0);

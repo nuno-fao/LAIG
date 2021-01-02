@@ -117,6 +117,8 @@ class GameOrchestrator {
     update(time) {
         //console.log(this.event);
 
+        this.optionsBox.update(time);
+
         if (this.playingMovie == -1) {
             switch (this.event) {
                 case Events.WAITING:
@@ -427,7 +429,7 @@ class GameOrchestrator {
     }
 
     onObjectSelected(obj, id) {
-        console.log("Picked object: " + obj + ", with pick id " + id);
+        //console.log("Picked object: " + obj + ", with pick id " + id);
         if (this.lastPicked instanceof Piece)
             this.lastPicked.setPicked(false);
         if (obj instanceof BoardTile) {
@@ -443,8 +445,11 @@ class GameOrchestrator {
             obj.setPicked(true);
             obj.pickedAnimation();
             this.lastPicked = obj;
-        } else {
-            //nothing happens
+        } else if (obj instanceof Button) {
+            obj.setPicked();
+            obj.pickedAnimation()
+        } else if (obj instanceof CBox) {
+            obj.setPicked();
         }
     }
 

@@ -1746,6 +1746,9 @@ class MySceneGraph {
             case "Options":
                 {
                     holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_options_box() }));
+                    let texture = this.reader.getString(leaf, 'buttontexture', false);
+                    if (texture != null)
+                        this.scene.graph.buttonTexture = this.textures[texture];
                     break;
                 }
         }

@@ -35,7 +35,7 @@
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />            <!-- specular component -->
         </light>
         <light id="luz_candeeiro">           <!-- light identifier -->
-            <enable value="0" /> 
+            <enable value="1" /> 
             <!-- enable/disable -->
             <position x="-2.5" y="5.1" z="-2" w="1.0" /><!-- light position; w=1: point light; w=0: directional light -->
             <ambient r="0" g="0" b="0" a="1.0" />                   <!-- ambient component -->
@@ -43,7 +43,7 @@
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />            <!-- specular component -->
         </light>
         <light id="luz_por_do_sol">           <!-- light identifier -->
-            <enable value="0" /> 
+            <enable value="1" /> 
             <!-- enable/disable -->
             <position x="25" y="20" z="20" w="1" /><!-- light position; w=1: point light; w=0: directional light -->
             <ambient r="0.97" g="0.83" b="0.64" a="1.0" />                   <!-- ambient component -->
@@ -75,7 +75,7 @@
         <texture id="backWood" path="./scenes/images/backWood.jpg" />
         <texture id="redTexture" path="./scenes/images/red.png" />
         <texture id="blueTexture" path="./scenes/images/blue.jpg" />
-        <texture id="tampoTex" path="./scenes/images/table.jpg" />
+        <texture id="tampoTex" path="./scenes/images/table.png" />
     </textures>
 
     <!-- spritesheets -->
@@ -1479,8 +1479,31 @@
                 <noderef id="timer_holder"/>
                 <noderef id="points_holder"/>
                 <noderef id="message_holder"/>
+                <noderef id="Options"/>
             </descendants>
         </node>
+        <node id="Options">         <!-- defines one intermediate node; may be repeated as necessary -->
+            <!-- next two lines are mandatory -->
+            <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
+
+            <texture id="tampoTex"><!-- declared texture superimposes the texture received from parent node id="null" maintains texture from parent node id="clear" clears texture declaration received from parent node -->
+                <amplification afs="1.0" aft="1.0" /><!-- for primitives = dx/afs, dy/aft -->
+            </texture>
+
+            <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
+            <transformations>
+                <translation x="-34.6" y="0" z="0"/>
+                <rotation angle="90" axis="y"/>
+                <scale sx="3" sy="3" sz="3"/>
+            </transformations>
+
+            <!-- declaring descendants, at least one node or one leaf must be present
+             descendants may be mixed, nodes and leafs -->
+            <descendants>
+                <leaf type="Options" buttontexture="chrome"/>
+            </descendants>
+        </node>
+
         <node id="info_holder">         <!-- defines one intermediate node; may be repeated as necessary -->
             <!-- next two lines are mandatory -->
             <material id="null" /><!-- this superimposes the material received from parent node id="null" maintains material from parent node -->
@@ -1520,7 +1543,6 @@
              descendants may be mixed, nodes and leafs -->
             <descendants>
                 <leaf type="Board"/>
-                <leaf type="Options"/>
             </descendants>
         </node>
         <node id="timer_holder">         <!-- defines one intermediate node; may be repeated as necessary -->
@@ -1553,8 +1575,8 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <scale sx="0.8" sy="0.8" sz="0.5"/>
-                <translation y="-3" x="0" z="0.4"/>
+                <scale sx="0.5" sy="0.5" sz="0.35"/>
+                <translation y="-7" x="0" z="0.4"/>
             </transformations>
 
             <!-- declaring descendants, at least one node or one leaf must be present

@@ -13,10 +13,10 @@ class MySpriteText {
 
     }
 
-    updateText(text){
-        this.letters=[];
+    updateText(text) {
+        this.letters = [];
         this.offset = text.length / 2;
-        this.text=text;
+        this.text = text;
         for (let i = 0; i < this.text.length; i++) {
             let rect = new MyRectangle(this.scene, 0 + i - this.offset, -0.5, 1 + i - this.offset, 0.5, 1, 1);
             this.letters.push(rect);
@@ -32,26 +32,30 @@ class MySpriteText {
         }
     }
 
-    getText(){
+    getText() {
         return this.text;
     }
 
     display() {
+        this.T = {...this.scene.activeTexture };
         this.spritesheet.texture.bind();
         this.scene.gl.enable(this.scene.gl.BLEND); // enables blending
         this.scene.gl.blendFunc(this.scene.gl.SRC_ALPHA, this.scene.gl.ONE_MINUS_SRC_ALPHA); // defines the blending function
         this.spritesheet.texture.bind(1);
         this.scene.setActiveShaderSimple(this.spritesheet.spriteShader);
-        
+
         for (let i in this.letters) {
             this.spritesheet.activateCellP(this.getCharacterPosition(this.text[i]));
             this.spritesheet.updateUniforms();
             this.letters[i].display();
         }
-        
+
         this.scene.setActiveShader(this.scene.defaultShader);
         this.scene.gl.disable(this.scene.gl.BLEND); // disables blending
 
-
+        if (this.T.texID) {
+            this.T.bind = this.scene.activeTexture.bind;
+            this.T.bind();
+        }
     }
 }

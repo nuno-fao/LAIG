@@ -26,7 +26,7 @@ class BoardTile {
         } else {
             this.XMLnode = this.scene.graph.templates[this.scene.activeNormalTile];
         }
-        
+
         this.scene.loadIdentity();
 
 

@@ -64,7 +64,6 @@ class XMLscene extends CGFscene {
 
         this.gameOrchestrator = new GameOrchestrator(this);
 
-
         this.initTime = Date.now();
 
     }
