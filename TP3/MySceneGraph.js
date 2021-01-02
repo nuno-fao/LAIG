@@ -1733,6 +1733,11 @@ class MySceneGraph {
                     holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_points() }));
                     break;
                 }
+            case "Message":
+                {
+                    holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_message() }));
+                    break;
+                }
             case "Board":
                 {
                     holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_board() }));
