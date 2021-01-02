@@ -1737,6 +1737,11 @@ class MySceneGraph {
                     holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_board() }));
                     break;
                 }
+            case "Options":
+                {
+                    holder[nodeID].addDescendente(new DisplayInterface(() => { this.scene.gameOrchestrator.display_options_box() }));
+                    break;
+                }
         }
     }
 

@@ -2,6 +2,7 @@ class GameOrchestrator {
     constructor(scene) {
         this.scene = scene;
         this.board = new Board(this.scene);
+        this.optionsBox = new OptionsMenu(scene);
         this.gameSequence = new GameSequence(this);
         this.animator = new Animator(this);
         this.prologInterface = new PrologInterface(this);
@@ -43,6 +44,9 @@ class GameOrchestrator {
     display_board() {
         if (this.board)
             this.board.display();
+    }
+    display_options_box() {
+        this.optionsBox.display();
     }
 
     checkProlog() {
@@ -464,8 +468,7 @@ class GameOrchestrator {
                 this.event = Events.REWINDING;
                 this.gameSequence.undo();
                 this.event = Events.WAITING;
-            } else {
-            }
+            } else {}
 
         } else {
 
@@ -487,7 +490,7 @@ class GameOrchestrator {
     }
 
     playMovie() {
-        if ((this.event == Events.WAITING || this.event == Events.END) && this.gameSequence.moves.length > 0 && this.playingMovie==-1) {
+        if ((this.event == Events.WAITING || this.event == Events.END) && this.gameSequence.moves.length > 0 && this.playingMovie == -1) {
             this.board.updateMessage("Playing movie");
             this.playingMovie = 0;
             this.event = Events.WAITING;
