@@ -154,7 +154,8 @@ class Button {
 
         this.scene.pushMatrix()
         this.scene.translate(0, 0, -this.z - 0.001);
-        this.scene.graph.buttonTexture.bind();
+        if (this.scene.graph.buttonTexture)
+            this.scene.graph.buttonTexture.bind();
         this.box.display();
         this.scene.popMatrix();
 
