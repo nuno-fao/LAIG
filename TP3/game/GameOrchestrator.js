@@ -41,6 +41,10 @@ class GameOrchestrator {
         if (this.board)
             this.board.displayPoints();
     }
+    display_message() {
+        if (this.board)
+            this.board.displayMessage();
+    }
     display_board() {
         if (this.board)
             this.board.display();
