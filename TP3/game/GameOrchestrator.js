@@ -61,6 +61,7 @@ class GameOrchestrator {
 
     resetGame() {
         this.event = Events.LOADING;
+        this.optionsBox.paused = false;
 
         this.scene.camAngle = 0;
         this.scene.rotatingCam = false;
