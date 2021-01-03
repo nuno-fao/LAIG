@@ -35,7 +35,7 @@ class GameOrchestrator {
     }
 
     display_time() {
-        if (this.board)
+        if (this.board && this.turnPlayer.type == 0)
             this.board.displayTime();
     }
     display_points() {
@@ -221,7 +221,7 @@ class GameOrchestrator {
                             }
                             this.event = Events.END;
                         } else {
-                            this.board.clearMessage();
+                            //this.board.clearMessage();
                             this.event = Events.WAITING;
                         }
                         this.gameSequence.newMove();
@@ -364,8 +364,6 @@ class GameOrchestrator {
         this.startPause = null;
         this.pauseSum = 0;
 
-        this.board.clearMessage();
-
         if (rotate) {
             if (this.player1.type == playerType.human && (this.player0.type == playerType.human || !this.wasAdjusted)) {
                 this.wasAdjusted = true;
@@ -378,9 +376,11 @@ class GameOrchestrator {
         if (this.turnPlayer == this.player0) {
             this.turnPlayer = this.player1;
             this.player0.makePiecesSelectable(false);
+            this.board.updateMessage("Player 1 Turn");
         } else if (this.turnPlayer == this.player1) {
             this.turnPlayer = this.player0;
             this.player1.makePiecesSelectable(false);
+            this.board.updateMessage("Player 2 Turn");
         }
         if (this.turnPlayer.type == playerType.human) {
             this.turnPlayer.makePiecesSelectable(true);

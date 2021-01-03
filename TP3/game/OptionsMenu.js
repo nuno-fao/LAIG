@@ -251,46 +251,57 @@ class CheckBox {
         this.scene.pushMatrix();
         this.scene.translate(0, 0, 0.2);
 
-        if (this.selected != 0) {
-            this.scene.pushMatrix();
-            this.scene.translate(-1.5, 0, 0);
-            this.b1.display();
+        let b1In = 0;
+        let b2In = 0;
+        let b3In = 0;
 
-            this.scene.pushMatrix();
-            this.scene.translate(0, 0, 0.101);
-            this.scene.scale(1 / this.t1.text.length, 1 / this.t1.text.length, 1.0 / this.t1.text.length);
-            this.t1.display();
-            this.scene.popMatrix();
-
-            this.scene.popMatrix();
+        if (this.selected == 0) {
+            b1In = -0.15;
+        }
+        if (this.selected == 1) {
+            b2In = -0.15;
+        }
+        if (this.selected == 2) {
+            b3In = -0.15;
         }
 
-        if (this.selected != 1) {
-            this.scene.pushMatrix();
-            this.b2.display();
+        this.scene.pushMatrix();
+        this.scene.translate(-1.5, 0, b1In);
+        this.b1.display();
 
-            this.scene.pushMatrix();
-            this.scene.translate(0, 0, 0.101);
-            this.scene.scale(1 / this.t2.text.length, 1 / this.t2.text.length, 1.0 / this.t2.text.length);
-            this.t2.display();
-            this.scene.popMatrix();
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0, 0.101);
+        this.scene.scale(1 / this.t1.text.length, 1 / this.t1.text.length, 1.0 / this.t1.text.length);
+        this.t1.display();
+        this.scene.popMatrix();
 
-            this.scene.popMatrix();
-        }
+        this.scene.popMatrix();
 
-        if (this.selected != 2) {
-            this.scene.pushMatrix();
-            this.scene.translate(1.5, 0, 0);
-            this.b3.display();
 
-            this.scene.pushMatrix();
-            this.scene.translate(0, 0, 0.101);
-            this.scene.scale(1 / this.t3.text.length, 1 / this.t3.text.length, 1.0 / this.t3.text.length);
-            this.t3.display();
-            this.scene.popMatrix();
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0, b2In);
+        this.b2.display();
 
-            this.scene.popMatrix();
-        }
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0, 0.101);
+        this.scene.scale(1 / this.t2.text.length, 1 / this.t2.text.length, 1.0 / this.t2.text.length);
+        this.t2.display();
+        this.scene.popMatrix();
+
+        this.scene.popMatrix();
+
+
+        this.scene.pushMatrix();
+        this.scene.translate(1.5, 0, b3In);
+        this.b3.display();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0, 0.101);
+        this.scene.scale(1 / this.t3.text.length, 1 / this.t3.text.length, 1.0 / this.t3.text.length);
+        this.t3.display();
+        this.scene.popMatrix();
+
+        this.scene.popMatrix();
 
         this.scene.popMatrix();
     }
@@ -305,12 +316,14 @@ class OptionsMenu {
 
         this.Undo = new MySpriteText(this.scene, "Undo");
         this.Pause = new MySpriteText(this.scene, "Pause");
+        this.NewGame = new MySpriteText(this.scene, "New Game");
         this.Play = new MySpriteText(this.scene, "Play");
         this.Player1 = new MySpriteText(this.scene, "Player 1");
         this.Player2 = new MySpriteText(this.scene, "Player 2");
         this.PlayMovie = new MySpriteText(this.scene, "Play Movie");
 
         this.BackBox = new Box(scene, 2.1, 2.5, 0.1);
+        this.NewButton = new Button(scene, 0.5, 0.2, 0.1, 203, () => { this.scene.gameOrchestrator.resetGame() });
         this.UndoButton = new Button(scene, 0.5, 0.2, 0.1, 200, () => { this.scene.gameOrchestrator.undo() });
 
         this.PauseButton = new Button(scene, 0.6, 0.2, 0.1, 201, () => {
@@ -329,6 +342,7 @@ class OptionsMenu {
         this.UndoButton.update(time);
         this.PauseButton.update(time);
         this.PlayMovieButton.update(time);
+        this.NewButton.update(time);
     }
 
 
@@ -341,6 +355,11 @@ class OptionsMenu {
         this.scene.pushMatrix();
         this.scene.translate(-1.4, 1.5, 0);
         this.UndoButton.display(this.Undo);
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(-0.05, 1.5, 0);
+        this.NewButton.display(this.NewGame);
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
