@@ -3,7 +3,7 @@
         <reference length="0" />
         <!-- axis length; "0" means no axis displayed -->
         <root id="root" />
-        <round_time t="5"/>
+        <round_time t="10"/>
         <!-- identifier of root node of the scene graph; this node -->
         <!-- must be defined in one of the following NODE declarations -->
     </initials>

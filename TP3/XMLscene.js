@@ -167,7 +167,7 @@ class XMLscene extends CGFscene {
             this.allNodes[i] = i;
         }
 
-        this.activeScene = 0;
+        this.activeScene = this.graph.SceneFilename;
         this.activeP1Piece = this.graph.P1Names[0];
         this.activeP2Piece = this.graph.P2Names[0];
         this.activeNormalTile = this.graph.NormalNames[0];

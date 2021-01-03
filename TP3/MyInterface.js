@@ -92,6 +92,7 @@ class MyInterface extends CGFinterface {
         this.items.push(folder);
         folder.add(this.scene, 'activeScene', this.filenames).name('Scene').onChange((scene) => {
             this.destroy();
+            this.scene.activeScene = scene;
             this.scene.sceneInited = false;
             new MySceneGraph(scene, this.scene, false);
         });

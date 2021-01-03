@@ -24,6 +24,7 @@ class MySceneGraph {
      */
     constructor(filename, scene, first) {
         this.loadedOk = null;
+        this.SceneFilename = filename;
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
