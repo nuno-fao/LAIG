@@ -30,6 +30,7 @@ class GameOrchestrator {
         this.pauseSum = 0;
 
         this.playingMovie = -1;
+        this.roundMaxTime = 90;
 
     }
 
@@ -115,7 +116,7 @@ class GameOrchestrator {
     }
 
     update(time) {
-        //console.log(this.event);
+        console.log(this.event);
 
         this.optionsBox.update(time);
 
@@ -123,6 +124,10 @@ class GameOrchestrator {
             switch (this.event) {
                 case Events.WAITING:
                     {
+                        if (this.ForcePause) {
+                            this.event = Events.PAUSE;
+                            this.ForcePause = false;
+                        }
                         if (this.lastPicked != null && this.lastPicked instanceof Piece) {
                             this.lastPicked.update(time);
                         }
@@ -243,6 +248,10 @@ class GameOrchestrator {
             switch (this.event) {
                 case Events.WAITING:
                     {
+                        if (this.ForcePause) {
+                            this.event = Events.PAUSE;
+                            this.ForcePause = false;
+                        }
                         //make move
                         this.newGameStateSeq = this.gameSequence.moves[this.playingMovie];
                         this.movePieceReplay(this.newGameStateSeq.play.piece, this.newGameStateSeq.play.destination);
@@ -339,7 +348,7 @@ class GameOrchestrator {
 
     startGame() {
         this.event = Events.WAITING;
-        this.roundTime = 90;
+        this.roundTime = this.roundMaxTime;
         this.startTime = null;
         this.pauseTime = null;
         this.startPause = null;
@@ -429,7 +438,6 @@ class GameOrchestrator {
     }
 
     onObjectSelected(obj, id) {
-        //console.log("Picked object: " + obj + ", with pick id " + id);
         if (this.lastPicked instanceof Piece)
             this.lastPicked.setPicked(false);
         if (obj instanceof BoardTile) {
@@ -489,15 +497,16 @@ class GameOrchestrator {
     }
 
     pause() {
-        if (this.playingMovie == -1 && this.event == Events.WAITING) {
-            this.event = Events.PAUSE;
-            this.board.updateMessage("Game paused");
-        } else if (this.event == Events.PAUSE) {
+        if (this.event == Events.PAUSE) {
             this.pauseSum += Math.floor((this.pauseTime - this.startPause) / 1000);
             this.pauseTime = null;
             this.startPause = null;
             this.event = Events.WAITING;
             this.board.clearMessage();
+            this.ForcePause = false;
+        } else {
+            this.ForcePause = true;
+            this.board.updateMessage("Game paused");
         }
     }
 

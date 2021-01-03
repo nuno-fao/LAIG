@@ -75,12 +75,12 @@ class Piece {
     }
 
     getCenterCoords() {
-        return [this.centerX, this.centerZ];
+        return [this.centerX, this.centerZ, this.centerY];
     }
 
     pickedAnimation() {
         this.scene.translate(0, this.y * 0.4, 0);
-        if (this.pickedRotAngle)
+        if (this.pickedRotAngle && this.XMLnode.tg_matrix[14] == 0)
             this.scene.rotate(this.pickedRotAngle, 0, 0, 1);
     }
 
@@ -131,6 +131,7 @@ class PieceAnimation {
         this.endP[0] -= this.bias[12] + destinationTile.XMLnode.tg_matrix[12];
         this.endP[1] -= this.bias[13] + destinationTile.XMLnode.tg_matrix[13];
         this.endP.push(this.bias[14] + destinationTile.XMLnode.tg_matrix[14]);
+
         this.startTime = 0;
         this.hasYValue = hasYValue;
         this.x = 0;
@@ -153,15 +154,15 @@ class PieceAnimation {
         // console.log(this.endP);
         // console.log(this.startP);
         this.x = (this.endP[0] - this.startP[0]) * mult;
-        if (this.hasYValue) {
+        if (this.hasYValue && this.destinationTile.getType() == 1) {
             if (this.endP[2] != 0) {
-                if (t * 2000 >= 500)
-                    this.y = ParametricBlend((t) * 2000 - 500, 1500) + this.endP[2];
+                if (t * 2000 <= 1000)
+                    this.y = (1 + this.endP[2]) * ParametricBlend((t) * 2000, 2000);
                 else {
-                    this.y = this.endP[2] * t * 2000 / 500
+                    this.y = ParametricBlend((t + 1000) * 2000, 2000) + this.endP[2];
                 }
             } else
-                this.y = ParametricBlend(t * 2000, 2000) + this.endP[2];
+                this.y = ParametricBlend(t * 2000, 2000);
         }
         this.z = (this.endP[1] - this.startP[1]) * mult;
         return 1;

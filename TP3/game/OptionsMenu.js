@@ -127,8 +127,6 @@ class CBox {
         this.scene.translate(0, 0, -this.y * 2.0);
         this.backRectTB.display();
         this.scene.popMatrix();
-
-        this.scene.clearPickRegistration();
     }
 }
 
@@ -166,8 +164,6 @@ class Button {
         this.scene.popMatrix();
 
         this.scene.popMatrix();
-
-        this.scene.clearPickRegistration();
     }
 
     setPicked() {
@@ -321,8 +317,8 @@ class OptionsMenu {
 
         this.PlayMovieButton = new Button(scene, 1, 0.2, 0.1, 202, () => { this.scene.gameOrchestrator.playMovie() });
 
-        this.p1 = new CheckBox(scene, "Human", "Easy AI", "Hard AI", 300, 0);
-        this.p2 = new CheckBox(scene, "Human", "Easy AI", "Hard AI", 400, 1);
+        this.p1 = new CheckBox(scene, "Human", "Easy", "Hard", 300, 0);
+        this.p2 = new CheckBox(scene, "Human", "Easy", "Hard", 400, 1);
     }
 
 
@@ -358,8 +354,25 @@ class OptionsMenu {
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
+        this.scene.scale(0.2, 0.2, 0.2);
+        this.Player1.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0, 0.15);
+        this.scene.scale(0.3, 0.3, 0.3);
+        this.Player1.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
         this.scene.translate(0, -0.5, 0);
         this.p1.display(this.PlayMovie);
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0, -1, 0.15);
+        this.scene.scale(0.3, 0.3, 0.3);
+        this.Player2.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();

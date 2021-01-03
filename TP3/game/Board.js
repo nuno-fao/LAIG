@@ -44,7 +44,7 @@ class Board {
             startX += 0.5;
         }
 
-        startZ = 3.5;
+        startZ = 3.35;
         startX = -1;
 
         for (let i = 0; i < 5; i++) {
@@ -62,7 +62,7 @@ class Board {
             startX += 0.5;
         }
 
-        startZ = -3.5;
+        startZ = -3.35;
         startX = -1;
         for (let i = 0; i < 5; i++) {
             ID++;

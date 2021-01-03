@@ -1492,7 +1492,7 @@
 
             <!-- geom. transf. are optional and may be repeated, in any order, as necessary: -->
             <transformations>
-                <translation x="-34.6" y="0" z="0"/>
+                <translation x="-34.6" y="1" z="0"/>
                 <rotation angle="90" axis="y"/>
                 <scale sx="3" sy="3" sz="3"/>
             </transformations>

@@ -368,6 +368,7 @@ class MySceneGraph {
 
         let rootIndex = nodeNames.indexOf("root");
         let referenceIndex = nodeNames.indexOf("reference");
+        let timeIndex = nodeNames.indexOf("round_time");
 
         // Get root of the scene.
         if (rootIndex == -1)
@@ -391,6 +392,18 @@ class MySceneGraph {
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
 
         this.referenceLength = axis_length;
+
+        // Get round time         
+        if (timeIndex == -1)
+            return null;
+
+        let timeNode = children[timeIndex];
+        let time = this.graphGetFloat(timeNode, 't', false);
+        if (time == null || time == NaN)
+            return null;
+
+        if (time > 0 && time < 99999999)
+            this.scene.gameOrchestrator.roundMaxTime = time;
 
         this.log("Parsed initials");
 
