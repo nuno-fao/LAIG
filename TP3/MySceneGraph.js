@@ -251,8 +251,6 @@ class MySceneGraph {
 
             if ((error = this.parseNodes(nodes[this.sceneIndexes[0]])) != null)
                 return error;
-            if (index < NODES_INDEX - offset)
-                this.onXMLMinorError("tag <nodes> out of order")
         }
 
 
