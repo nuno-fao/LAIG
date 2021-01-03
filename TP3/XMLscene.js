@@ -86,6 +86,9 @@ class XMLscene extends CGFscene {
         this.camera = new CGFcamera(auxCam.fov, auxCam.near, auxCam.far, auxCam.position, auxCam.target);
         this.selectedCamera = cameraKey;
         this.interface.setActiveCamera(this.camera);
+        if(this.gameOrchestrator.turnPlayer!=null){
+            this.resetCamera();
+        }
     }
 
     setCameraMidGame(cameraKey, Player) {
