@@ -127,6 +127,8 @@ class CBox {
         this.scene.translate(0, 0, -this.y * 2.0);
         this.backRectTB.display();
         this.scene.popMatrix();
+
+        this.scene.clearPickRegistration();
     }
 }
 
@@ -164,6 +166,7 @@ class Button {
         this.scene.popMatrix();
 
         this.scene.popMatrix();
+        this.scene.clearPickRegistration();
     }
 
     setPicked() {
